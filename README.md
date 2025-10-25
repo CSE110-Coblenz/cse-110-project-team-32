@@ -3,6 +3,6 @@ Fresh repository with main branch.
 
 To run:
 
-npm install
+npm install  
 npm run dev
 Game will open on browser.

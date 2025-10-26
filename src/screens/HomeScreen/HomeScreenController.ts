@@ -1,4 +1,4 @@
-import type { ScreenSwitcher, View } from "../../types";
+import type { ScreenSwitcher, View } from "../../types"
 import { ScreenController } from "../../types";
 import { HomeScreenView } from "./HomeScreenView";
 
@@ -23,5 +23,17 @@ export class HomeScreenController extends ScreenController {
 
   onExit(): void {
     console.log("Exited Home Screen");
+  }
+
+    private handleResumeClick(): void {
+    // route user to appropriate level
+  }
+
+  private handleLogoutClick(): void {
+    // log user out and redirect to initial game page
+  }
+
+  private handleLevelClick(): void {
+
   }
 }

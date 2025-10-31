@@ -13,7 +13,9 @@ export class UserService {
     }
 
     // Just before logout, save user data back to DB
-    saveUserData(user: User){
+    static async saveUserData(user?: User): Promise<void> {
+        // Save to DB
 
+        // throw error if response is invalid
     }
 }

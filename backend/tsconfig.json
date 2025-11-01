@@ -10,7 +10,10 @@
     "skipLibCheck": true,
 
     "sourceMap": true,
-    "declaration": false
+    "declaration": false,
+    
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }

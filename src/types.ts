@@ -12,7 +12,8 @@ export interface View {
  * - "home": Home menu screen
  */
 export type Screen =
-	| { type: "home" };
+	| { type: "home" }
+	| { type: "login" };
 
 export abstract class ScreenController {
 	abstract getView(): View;

@@ -3,9 +3,11 @@ import { ScreenController } from "../../types";
 import { HomeScreenView } from "./HomeScreenView";
 import { User } from "../../core/models/User";
 import { UserService } from "../../core/Services/UserService";
+import { HomeScreenModel } from "./HomeScreenModel";
 
 export class HomeScreenController extends ScreenController {
   private view: HomeScreenView;
+  private model: HomeScreenModel;
   private screenSwitcher: ScreenSwitcher;
   private user!: User;
   private userId: string;
@@ -13,19 +15,30 @@ export class HomeScreenController extends ScreenController {
   constructor(screenSwitcher: ScreenSwitcher, userId: string) {
     super();
     this.screenSwitcher = screenSwitcher;
-    this.view = new HomeScreenView(()=> {}, ()=> {});
+    this.view = new HomeScreenView();
+    this.model = new HomeScreenModel();
     this.userId = userId;
   }
 
-  getView(): View {
-    return this.view;
-  }
-
   // placeholder lifecycle hooks (optional)
-  async onEnter(): Promise<void> {
-    this.user = await UserService.loadUserData(this.userId);
-    console.log("Entered Home Screen");
-  }
+async onEnter(): Promise<void> {
+  this.user = await UserService.loadUserData(this.userId);
+  console.log("Entered Home Screen");
+  
+  // set the levels
+  this.model.setCurrentLevel();
+  this.view.setLevels(this.model.getCurrLevel());
+
+  // set the user area
+  this.view.createButtons();
+
+  //set mini games
+  this.model.setMiniGames();
+  this.view.setMiniGames(this.model.getMiniGames());
+  
+  // Show the view!
+  this.view.show();
+}
 
   onExit(): void {
     console.log("Exited Home Screen");
@@ -66,5 +79,10 @@ export class HomeScreenController extends ScreenController {
     console.log(`Navigating to level ${clickedLevelNum}...`);
     this.screenSwitcher.switchToScreen({ type: "level", level: clickedLevelNum });
 
+  }
+
+  // get view and display
+  getView(): View {
+    return this.view;
   }
 }

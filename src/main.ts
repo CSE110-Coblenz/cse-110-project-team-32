@@ -17,6 +17,7 @@ class App implements ScreenSwitcher {
 	private stage: Konva.Stage;
 	private layer: Konva.Layer;
 
+	// Add screen controllers here
 	private homeController: HomeScreenController;
 
 	constructor(container: string) {
@@ -27,13 +28,15 @@ class App implements ScreenSwitcher {
 			height: STAGE_HEIGHT,
 		});
 
+		
 		// Create a layer (screens will be added to this layer)
 		this.layer = new Konva.Layer();
 		this.stage.add(this.layer);
 
 		// Initialize all screen controllers
 		// Each controller manages a Model, View, and handles user interactions
-		this.homeController= new HomeScreenController(this);
+		let testUser = "TestUser123";
+		this.homeController = new HomeScreenController(this, testUser);
 
 		// Add all screen groups to the layer
 		// All screens exist simultaneously but only one is visible at a time
@@ -62,7 +65,7 @@ class App implements ScreenSwitcher {
 		// Show the requested screen based on the screen type
 		switch (screen.type) {
 			case "home":
-				this.homeController.show();
+				this.homeController.onEnter();
 				break;
 		}
 	}

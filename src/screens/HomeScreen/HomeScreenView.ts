@@ -1,6 +1,8 @@
 import Konva from "konva";
 import type { View } from "../../types";
-import { STAGE_HEIGHT, STAGE_WIDTH, } from "../../constants";
+import { STAGE_HEIGHT, STAGE_WIDTH, TOTAL_LEVELS } from "../../constants";
+import { HomeScreenController } from "./HomeScreenController";
+import { MiniGameInfo } from "../../types";
 
 /*********************************************/
 // HomeScreenView.ts
@@ -28,13 +30,6 @@ import { STAGE_HEIGHT, STAGE_WIDTH, } from "../../constants";
 interface LevelInfo {
   id: number;
   unlocked: boolean;
-}
-
-// mini game 
-interface MiniGameInfo {
-  name: string;
-  unlocked: boolean;
-  unlockLevel: number;
 }
 
 export class HomeScreenView implements View {
@@ -75,7 +70,7 @@ export class HomeScreenView implements View {
 
 	
 /******fake data for testing of level and mini game buttons****/
-	  this.createUserArea();
+	  /*this.createUserArea();
 
     const testLevels: LevelInfo[] = [
       { id: 1, unlocked: true },
@@ -96,7 +91,12 @@ export class HomeScreenView implements View {
     this.setMiniGames(testMiniGames);
 
     // draw left side levels
-    this.setLevels(testLevels);
+    this.setLevels(testLevels);*/
+  }
+
+  public createButtons(){
+    this.createUserArea();
+    this.createStartGameButton();
   }
 
   /****************** Start Game Button ********************/
@@ -216,8 +216,16 @@ export class HomeScreenView implements View {
     });
   }
 
-  public setLevels(levels: LevelInfo[]): void {
-    this.levels = levels;
+  public setLevels(Currlevel: number): void {
+    const levelInfo: LevelInfo[] = [];
+
+    for (let i = 1; i <= TOTAL_LEVELS; i++) {
+      levelInfo.push({
+        id: i,
+        unlocked: i <= Currlevel,
+      });
+    }
+    this.levels = levelInfo;
     this.createLevelButtons();
   }
 
@@ -279,15 +287,12 @@ export class HomeScreenView implements View {
   }
 
   /******************* Update user name ********************/
-  public updateUserName(name: string): void {
-    if (this.userText) {
-      this.userText.text(`Hello, ${name}`);
-      this.userText.getLayer()?.draw();
-    }
-
-  /**********************************/
-    console.log("HomeScreenView initialized");
+public updateUserName(name: string): void {
+  if (this.userText) {
+    this.userText.text(`Hello, ${name}`);
+    this.userText.getLayer()?.draw();
   }
+}
   
 
   show(): void {

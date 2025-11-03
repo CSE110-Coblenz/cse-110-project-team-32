@@ -1,6 +1,7 @@
 import Konva from "konva";
 import type { ScreenSwitcher, Screen } from "./types";
 import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController";
+import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
 /**
@@ -18,6 +19,7 @@ class App implements ScreenSwitcher {
 	private layer: Konva.Layer;
 
 	private homeController: HomeScreenController;
+	private loginController: LoginScreenController;
 
 	constructor(container: string) {
 		// Initialize Konva stage (the main canvas)
@@ -34,16 +36,18 @@ class App implements ScreenSwitcher {
 		// Initialize all screen controllers
 		// Each controller manages a Model, View, and handles user interactions
 		this.homeController= new HomeScreenController(this);
+		this.loginController = new LoginScreenController(this);
 
 		// Add all screen groups to the layer
 		// All screens exist simultaneously but only one is visible at a time
 		this.layer.add(this.homeController.getView().getGroup());
-
+		this.layer.add(this.loginController.getView().getGroup());
+		
 		// Draw the layer (render everything to the canvas)
 		this.layer.draw();
 
-		// Start with menu screen visible
-		this.homeController.getView().show();
+		// Start with login screen visible
+		this.loginController.getView().show();
 	}
 
 	/**
@@ -58,15 +62,19 @@ class App implements ScreenSwitcher {
 	switchToScreen(screen: Screen): void {
 		// Hide all screens first by setting their Groups to invisible
 		this.homeController.hide();
+		this.loginController.hide();
 
 		// Show the requested screen based on the screen type
 		switch (screen.type) {
 			case "home":
 				this.homeController.show();
 				break;
+			case "login":
+				this.loginController.show();
+				break;
 		}
 	}
 }
 
 // Initialize the application
-new App("container");
+new App("app");

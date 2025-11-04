@@ -1,6 +1,7 @@
 import Konva from "konva";
 import type { ScreenSwitcher, Screen } from "./types";
 import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController";
+import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
 /**
@@ -14,59 +15,66 @@ import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
  * visible at a time. This is managed by the switchToScreen() method.
  */
 class App implements ScreenSwitcher {
-	private stage: Konva.Stage;
-	private layer: Konva.Layer;
+    private stage: Konva.Stage;
+    private layer: Konva.Layer;
 
-	private homeController: HomeScreenController;
+    private homeController: HomeScreenController;
+    private loginController: LoginScreenController;
 
-	constructor(container: string) {
-		// Initialize Konva stage (the main canvas)
-		this.stage = new Konva.Stage({
-			container,
-			width: STAGE_WIDTH,
-			height: STAGE_HEIGHT,
-		});
+    constructor(container: string) {
+        // Initialize Konva stage (the main canvas)
+        this.stage = new Konva.Stage({
+            container,
+            width: STAGE_WIDTH,
+            height: STAGE_HEIGHT,
+        });
 
-		// Create a layer (screens will be added to this layer)
-		this.layer = new Konva.Layer();
-		this.stage.add(this.layer);
+        // Create a layer (screens will be added to this layer)
+        this.layer = new Konva.Layer();
+        this.stage.add(this.layer);
 
-		// Initialize all screen controllers
-		// Each controller manages a Model, View, and handles user interactions
-		this.homeController= new HomeScreenController(this);
+        // Initialize all screen controllers
+        // Each controller manages a Model, View, and handles user interactions
+        this.homeController= new HomeScreenController(this);
+        this.loginController = new LoginScreenController(this);
 
-		// Add all screen groups to the layer
-		// All screens exist simultaneously but only one is visible at a time
-		this.layer.add(this.homeController.getView().getGroup());
+        // Add all screen groups to the layer
+        // All screens exist simultaneously but only one is visible at a time
+        this.layer.add(this.homeController.getView().getGroup());
+        this.layer.add(this.loginController.getView().getGroup());
+        
+        // Draw the layer (render everything to the canvas)
+        this.layer.draw();
 
-		// Draw the layer (render everything to the canvas)
-		this.layer.draw();
+        // Start with login screen visible
+        this.loginController.getView().show();
+    }
 
-		// Start with menu screen visible
-		this.homeController.getView().show();
-	}
+    /**
+     * Switch to a different screen
+     *
+     * This method implements screen management by:
+     * 1. Hiding all screens (setting their Groups to invisible)
+     * 2. Showing only the requested screen
+     *
+     * This pattern ensures only one screen is visible at a time.
+     */
+    switchToScreen(screen: Screen): void {
+        // Hide all screens first by setting their Groups to invisible
+        this.homeController.hide();
+        this.loginController.hide();
 
-	/**
-	 * Switch to a different screen
-	 *
-	 * This method implements screen management by:
-	 * 1. Hiding all screens (setting their Groups to invisible)
-	 * 2. Showing only the requested screen
-	 *
-	 * This pattern ensures only one screen is visible at a time.
-	 */
-	switchToScreen(screen: Screen): void {
-		// Hide all screens first by setting their Groups to invisible
-		this.homeController.hide();
-
-		// Show the requested screen based on the screen type
-		switch (screen.type) {
-			case "home":
-				this.homeController.show();
-				break;
-		}
-	}
+        // Show the requested screen based on the screen type
+        switch (screen.type) {
+            case "home":
+                this.homeController.show();
+                break;
+            case "login":
+                this.loginController.show();
+                break;
+        }
+    }
 }
 
 // Initialize the application
-new App("container");
+new App("app");

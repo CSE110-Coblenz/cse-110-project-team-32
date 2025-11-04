@@ -33,11 +33,9 @@ class App implements ScreenSwitcher {
         this.layer = new Konva.Layer();
         this.stage.add(this.layer);
 
-        //test User
-        const testUserId = "TestUser";
         // Initialize all screen controllers
         // Each controller manages a Model, View, and handles user interactions
-        this.homeController = new HomeScreenController(this, testUserId, this.layer);
+        this.homeController= new HomeScreenController(this);
         this.loginController = new LoginScreenController(this);
 
         // Add all screen groups to the layer
@@ -49,25 +47,7 @@ class App implements ScreenSwitcher {
         this.layer.draw();
 
         // Start with login screen visible
-         this.initializeScreens();
-    }
-
-    /**
-    * Initializes all screens, adds them to the layer, and sets the starting screen.
-    */
-    private initializeScreens(): void{
-      // Initialize home screen (loads user data, levels, etc.)
-      this.homeController.init();
-
-      // Add all screen groups to the shared layer
-      this.layer.add(this.homeController.getView().getGroup());
-
-      // Render the layer
-      this.layer.draw();
-
-      // Show starting screen
-      this.homeController.getView().show();
-      this.loginController.getView().show();
+        this.loginController.getView().show();
     }
 
     /**

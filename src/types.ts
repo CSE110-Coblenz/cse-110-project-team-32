@@ -30,3 +30,9 @@ export abstract class ScreenController {
 export interface ScreenSwitcher {
 	switchToScreen(screen: Screen): void;
 }
+
+export interface MiniGameInfo {
+  name: string;
+  unlocked: boolean;
+  unlockLevel: number;
+}

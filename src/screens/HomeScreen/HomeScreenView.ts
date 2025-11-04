@@ -94,11 +94,6 @@ export class HomeScreenView implements View {
     this.setLevels(testLevels);*/
   }
 
-  public createButtons(){
-    this.createUserArea();
-    this.createStartGameButton();
-  }
-
   /****************** Start Game Button ********************/
   private createStartGameButton(): void {
     const startGroup = new Konva.Group();
@@ -225,19 +220,20 @@ export class HomeScreenView implements View {
         unlocked: i <= Currlevel,
       });
     }
+    console.log("currlevel:", Currlevel);
     this.levels = levelInfo;
     this.createLevelButtons();
   }
 
   /**************Log out Button *****************/
-  private createUserArea(): void {
+  private createUserArea(userId: string): void {
     const padding = 20;
 
     // Use user name placeholder
     this.userText = new Konva.Text({
       x: STAGE_WIDTH - 250,
       y: padding,
-      text: "Hello, User",
+      text: `Hello ${userId}`,
       fontSize: 20,
       fontFamily: "Arial",
       fill: "#1c1717ff",
@@ -310,5 +306,12 @@ public updateUserName(name: string): void {
   getGroup(): Konva.Group {
     console.log("Returning HomeScreen group");
     return this.group;
+  }
+
+  CreateView(userId: string, currLevel: number , minigames: MiniGameInfo[]){
+    this.createStartGameButton();
+    this.createUserArea(userId);
+    this.setLevels(currLevel);
+    this.setMiniGames(minigames);
   }
 }

@@ -1,0 +1,17 @@
+# Node dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Build outputs (if using TypeScript)
+dist/
+
+# OS / editor-specific files
+.DS_Store
+*.log

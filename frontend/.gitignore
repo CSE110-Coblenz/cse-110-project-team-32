@@ -1,0 +1,26 @@
+# Node dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Build output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Editor and system files
+.vscode/
+.DS_Store
+*.log
+
+# Testing / coverage
+coverage/
+*.spec.ts
+
+# Temporary files
+*.tmp
+*.swp

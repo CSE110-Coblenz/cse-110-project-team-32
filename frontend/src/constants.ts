@@ -12,7 +12,7 @@ export const CONTENT_HEIGHT = 600;
 export const TOTAL_LEVELS = 5;
 
 // Game timer for tests and mini games
-export const GAME_DURATION = 10; // seconds
+export const GAME_DURATION = 10;
 
 // minigames
 export const MINI_GAME_UNLOCK_LEVELS = [2,4];

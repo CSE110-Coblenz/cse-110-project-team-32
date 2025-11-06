@@ -54,19 +54,18 @@ class App implements ScreenSwitcher {
         this.layer.draw();
 
         // Start with menu screen visible
-		// COMMENT THIS LINE FOR  TESTING GAME LEVEL SCREEN
-		// this.homeController.getView().show();
+		// COMMENT THIS LINE FOR TESTING GAME LEVEL SCREEN
+		this.homeController.getView().show();
 
 		// UNCOMMENT THESE LINE FOR TESTING GAME LEVEL SCREEN
-		this.gameController.getView().show();
-		this.gameController.startGame();
+		// this.gameController.getView().show();
+		// this.gameController.startGame();
 
 		// Scale the stage to fit window
 		this.scaleStageToFit();
 
 		// Update scale when the window resizes
 		window.addEventListener("resize", () => this.scaleStageToFit());
-
 
         // Start with login screen visible
         this.initializeScreens();
@@ -114,6 +113,7 @@ class App implements ScreenSwitcher {
       // Show starting screen
       this.homeController.getView().show();
       this.loginController.getView().show();
+      this.gameController.getView().show();
     }
 
     /**
@@ -129,6 +129,7 @@ class App implements ScreenSwitcher {
         // Hide all screens first by setting their Groups to invisible
         this.homeController.hide();
         this.loginController.hide();
+        this.gameController.hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {

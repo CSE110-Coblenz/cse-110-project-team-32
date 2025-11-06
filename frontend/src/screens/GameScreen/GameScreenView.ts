@@ -17,7 +17,9 @@ export class GameScreenView implements View {
     private progressBar!: Konva.Rect;
     private progressFill!: Konva.Rect;
 
-    public onSubmit?: (answer: string) => void;
+    onSubmit?: (answer: string) => void;
+    onExit?: () => void;
+
 
 	constructor() {
 		this.group = new Konva.Group({ visible: false });
@@ -94,6 +96,10 @@ export class GameScreenView implements View {
             });
             this.group.add(exitButton);
 
+            exitButton.on("click", () => {
+                if (this.onExit) this.onExit();
+            });
+
             const exitSymbol = new Konva.Text({
                 x: exitButton.x(),
                 y: exitButton.y() + (exitButton.height() - 32) / 2,
@@ -105,6 +111,10 @@ export class GameScreenView implements View {
             });
             this.group.add(exitSymbol);
 
+            exitSymbol.on("click", () => {
+                if (this.onExit) this.onExit();
+            });
+            
             // level box top right
             const levelBoxWidth = 250;
             const levelBoxHeight = 50;

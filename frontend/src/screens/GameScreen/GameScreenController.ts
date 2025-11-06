@@ -18,6 +18,15 @@ export class GameScreenController extends ScreenController {
 		this.model = new GameScreenModel();
 		this.view = new GameScreenView();
 
+		this.view.onExit = () => {
+            console.log("Exit button clicked");
+            this.screenSwitcher.switchToScreen({ type: "home" });
+        };
+
+		this.view.onSubmit = (answer: string) => {
+			this.handleAnswer(answer);
+		};
+
 	}
 
     /**
@@ -34,10 +43,6 @@ export class GameScreenController extends ScreenController {
 		// console.log("Current question:", this.model.getCurrentQuestion());
 
 		this.view.show();
-
-		this.view.onSubmit = (answer: string) => {
-			this.handleAnswer(answer);
-		};
 	}
 
 	async handleAnswer(userAnswer: string) {

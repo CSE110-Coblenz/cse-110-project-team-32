@@ -8,6 +8,8 @@ export class LoginScreenView implements View {
     private passwordInput!: HTMLInputElement;
     private onLogin!: (username: string, password: string) => void;
     private onSignup!: () => void;
+    private signupModalContainer?: HTMLDivElement;
+    private signupCreateCallback?: (username: string, password: string) => void;
 
     constructor(
         onLogInClick: (username: string, password: string) => void,
@@ -213,6 +215,116 @@ export class LoginScreenView implements View {
         this.group.on("show", () => {
             container.style.display = "block";
         });
+        // create signup modal HTML (hidden by default)
+        this.createSignupModal();
+    }
+
+    private createSignupModal(): void {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.left = '0';
+        overlay.style.top = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.display = 'none';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '10';
+        overlay.style.background = 'rgba(0,0,0,0.45)';
+
+        const box = document.createElement('div');
+        box.style.background = '#ffffff';
+        box.style.padding = '24px';
+        box.style.borderRadius = '10px';
+        box.style.minWidth = '320px';
+        box.style.boxShadow = '0 8px 24px rgba(0,0,0,0.35)';
+        box.style.fontFamily = "'Arial', sans-serif";
+        box.style.color = '#222';
+
+        const title = document.createElement('div');
+        title.textContent = 'Create Account';
+        title.style.fontSize = '22px';
+        title.style.marginBottom = '12px';
+        title.style.fontFamily = "'Impact', 'Arial Black', sans-serif";
+        title.style.color = '#cbe537';
+        box.appendChild(title);
+
+        const newUserInput = document.createElement('input');
+        newUserInput.type = 'text';
+        newUserInput.placeholder = 'New username';
+        newUserInput.style.display = 'block';
+        newUserInput.style.width = '100%';
+        newUserInput.style.marginBottom = '10px';
+        newUserInput.style.padding = '10px';
+        newUserInput.style.borderRadius = '6px';
+        newUserInput.style.border = '1px solid #ccc';
+        newUserInput.style.fontSize = '14px';
+        newUserInput.style.fontFamily = "Arial, sans-serif";
+        box.appendChild(newUserInput);
+
+        const newPassInput = document.createElement('input');
+        newPassInput.type = 'password';
+        newPassInput.placeholder = 'New password';
+        newPassInput.style.display = 'block';
+        newPassInput.style.width = '100%';
+        newPassInput.style.marginBottom = '16px';
+        newPassInput.style.padding = '10px';
+        newPassInput.style.borderRadius = '6px';
+        newPassInput.style.border = '1px solid #ccc';
+        newPassInput.style.fontSize = '14px';
+        newPassInput.style.fontFamily = "Arial, sans-serif";
+        box.appendChild(newPassInput);
+
+        const createButton = document.createElement('button');
+        createButton.textContent = 'Create account';
+        createButton.style.padding = '10px';
+        createButton.style.cursor = 'pointer';
+        createButton.style.width = '100%';
+        createButton.style.background = '#cee353';
+        createButton.style.border = '3px solid darkgreen';
+        createButton.style.borderRadius = '8px';
+        createButton.style.fontFamily = 'Arial, sans-serif';
+        createButton.style.fontSize = '16px';
+        createButton.style.color = 'black';
+        createButton.onclick = () => {
+            const u = newUserInput.value.trim();
+            const p = newPassInput.value.trim();
+            if (!u || !p) {
+                alert('Please enter both username and password to create an account');
+                return;
+            }
+            // call controller callback
+            if (this.signupCreateCallback) this.signupCreateCallback(u, p);
+            // hide modal
+            overlay.style.display = 'none';
+            // clear modal inputs
+            newUserInput.value = '';
+            newPassInput.value = '';
+        };
+        box.appendChild(createButton);
+
+        // optional cancel when clicking overlay
+        overlay.onclick = (e) => {
+            if (e.target === overlay) overlay.style.display = 'none';
+        };
+
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        this.signupModalContainer = overlay;
+    }
+
+    showSignupModal(onCreate: (username: string, password: string) => void): void {
+        this.signupCreateCallback = onCreate;
+        if (this.signupModalContainer) this.signupModalContainer.style.display = 'flex';
+    }
+
+    hideSignupModal(): void {
+        if (this.signupModalContainer) this.signupModalContainer.style.display = 'none';
+    }
+
+    prefillLoginFields(username: string, password: string): void {
+        if (this.usernameInput) this.usernameInput.value = username;
+        if (this.passwordInput) this.passwordInput.value = password;
     }
 
     show(): void {

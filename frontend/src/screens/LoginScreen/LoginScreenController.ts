@@ -42,8 +42,25 @@ export class LoginScreenController extends ScreenController {
      * Handle signup request
      */
     private handleSignup(): void {
-        // TODO: Implement signup logic when database is added
-        alert("Sign up functionality will be added soon!");
+        // Show the signup modal and handle created account via callback
+        this.view.showSignupModal((username: string, password: string) => {
+            this.handleCreateAccount(username, password);
+        });
+    }
+
+    /**
+     * Handle account creation (no DB yet) — prefill login and close modal
+     */
+    private handleCreateAccount(username: string, password: string): void {
+        // Store in model (temporarily)
+        this.model.setUsername(username);
+        this.model.setPassword(password);
+        // Prefill the login inputs so the user can log in
+        this.view.prefillLoginFields(username, password);
+        // Hide the signup modal
+        this.view.hideSignupModal();
+        // Optionally notify the user
+        alert('Account created. You can now log in.');
     }
 
     /**

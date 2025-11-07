@@ -50,11 +50,28 @@ export class LoginScreenView implements View {
         title.offsetX(title.width() / 2);
         this.group.add(title);
 
+        // Semi-transparent dark rectangle behind the login area
+        const panelWidth = 420;
+        const panelHeight = 310;
+        const panelX = STAGE_WIDTH / 2 - panelWidth / 2;
+        const panelY = (STAGE_HEIGHT / 2) - 150; // starts above inputs
+        const panelRect = new Konva.Rect({
+            x: panelX,
+            y: panelY,
+            width: panelWidth,
+            height: panelHeight,
+            fill: "#2f2f2f",
+            opacity: 0.6,
+            cornerRadius: 12,
+        });
+        // add behind the buttons/text but above the background
+        this.group.add(panelRect);
+
         // Buttons styled with Konva
         const logInGroup = new Konva.Group();
         const logInButton = new Konva.Rect({
             x: STAGE_WIDTH / 2 - 100,
-            y: 300,
+            y: STAGE_HEIGHT / 2,
             width: 200,
             height: 60,
             fill: "#cee353ff",
@@ -64,7 +81,7 @@ export class LoginScreenView implements View {
         });
         const startText = new Konva.Text({
             x: STAGE_WIDTH / 2,
-            y: 315,
+            y: (STAGE_HEIGHT / 2) + 15,
             text: "Log in",
             fontSize: 24,
             fontFamily: "Arial",
@@ -79,36 +96,67 @@ export class LoginScreenView implements View {
         logInGroup.on("click", () => {
             this.onLogin(this.usernameInput?.value ?? "", this.passwordInput?.value ?? "");
         });
+        // change cursor to pointer on hover
+        logInGroup.on("mouseover", () => {
+            document.body.style.cursor = "pointer";
+        });
+        logInGroup.on("mouseout", () => {
+            document.body.style.cursor = "default";
+        });
         this.group.add(logInGroup);
 
         /*********************************************/
-        // Sign up button
+        // New Player text and Sign up button (placed below the login button)
+        const footerGroup = new Konva.Group({ x: STAGE_WIDTH / 2, y: (STAGE_HEIGHT / 2) + 90 });
+
+        const newPlayerText = new Konva.Text({
+            x: -75,
+            y: 10,
+            text: "New Player?",
+            fontSize: 20,
+            fontFamily: "Arial",
+            fill: "#ffffff",
+            align: "right",
+        });
+        newPlayerText.offsetX(newPlayerText.width() / 2);
+
+        // Sign up button sits to the right of the "New Player?" text
         const signUpGroup = new Konva.Group();
         const signUpButton = new Konva.Rect({
-            x: STAGE_WIDTH / 2 - 100,
-            y: 400,
-            width: 200,
-            height: 60,
+            x: 10,
+            y: 0,
+            width: 140,
+            height: 40,
             fill: "#cee353ff",
-            cornerRadius: 10,
+            cornerRadius: 8,
             stroke: "darkgreen",
             strokeWidth: 3,
         });
         const stopText = new Konva.Text({
-            x: STAGE_WIDTH / 2,
-            y: 415,
+            x: 10 + 70,
+            y: 12,
             text: "Sign up",
-            fontSize: 24,
+            fontSize: 16,
             fontFamily: "Arial",
             fill: "black",
             align: "center",
         });
-
         stopText.offsetX(stopText.width() / 2);
+
         signUpGroup.add(signUpButton);
         signUpGroup.add(stopText);
         signUpGroup.on("click", () => this.onSignup());
-        this.group.add(signUpGroup);
+        // change cursor to pointer on hover
+        signUpGroup.on("mouseover", () => {
+            document.body.style.cursor = "pointer";
+        });
+        signUpGroup.on("mouseout", () => {
+            document.body.style.cursor = "default";
+        });
+
+        footerGroup.add(newPlayerText);
+        footerGroup.add(signUpGroup);
+        this.group.add(footerGroup);
         /*********************************************/
 
         // Create HTML inputs so we can capture username/password (keeps previous behavior)
@@ -129,8 +177,8 @@ export class LoginScreenView implements View {
         const container = document.createElement("div");
         container.style.position = "absolute";
         container.style.left = "50%";
-        // place the inputs centered above the login button (login button y is 300)
-        container.style.top = `${300 - 120}px`; // ~180px
+        // place the inputs centered above the login button (login button y is STAGE_HEIGHT / 2)
+        container.style.top = `${(STAGE_HEIGHT / 2) - 180}px`; // ~180px
         container.style.transform = "translateX(-50%)";
         container.style.zIndex = "2"; // above the canvas background
 

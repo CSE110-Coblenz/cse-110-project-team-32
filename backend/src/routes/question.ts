@@ -5,6 +5,6 @@ import { getQuestion } from "../controllers/question";
 const router = express.Router();
 
 //Create all the routes that you need to handle the user schema
-router.post("/:level", getQuestion);
+router.get("/:level", getQuestion);
 
 export default router;

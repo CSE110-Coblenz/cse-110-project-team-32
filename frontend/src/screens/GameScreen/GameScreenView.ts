@@ -16,6 +16,9 @@ export class GameScreenView implements View {
     private levelText!: Konva.Text;
     private progressBar!: Konva.Rect;
     private progressFill!: Konva.Rect;
+    private feedBack!: Konva.Text;
+    private completeScreen!: Konva.Rect;
+    private completeText!: Konva.Text;
 
     onSubmit?: (answer: string) => void;
     onExit?: () => void;
@@ -23,16 +26,6 @@ export class GameScreenView implements View {
 
 	constructor() {
 		this.group = new Konva.Group({ visible: false });
-        // const contentBox = new Konva.Rect({
-        //         x: (STAGE_WIDTH - CONTENT_WIDTH) / 2,
-        //         y: (STAGE_HEIGHT - CONTENT_HEIGHT) / 2,
-        //         width: CONTENT_WIDTH,
-        //         height: CONTENT_HEIGHT,
-        //         fill: "#ebe8e1",
-        //         opacity: 0.9,
-        //     });
-        //     this.group.add(contentBox);
-        //     this.group.getLayer()?.draw();
 
 		// Background
 		Konva.Image.fromURL("/levelBackdrop.png", (bg: Konva.Image) => {
@@ -141,8 +134,7 @@ export class GameScreenView implements View {
                 fill: "black",
                 });
             this.group.add(this.levelText);
-              
-
+            
             // question text at the top
             this.questionText = new Konva.Text({
                 x: contentBox.x() + 40,
@@ -165,6 +157,7 @@ export class GameScreenView implements View {
                 stroke: "black"
             });
             this.group.add(this.answerBox);
+            
 
             // answer text in box
             this.answerText = new Konva.Text({
@@ -175,6 +168,49 @@ export class GameScreenView implements View {
                 fill: "black",
             });
             this.group.add(this.answerText);
+
+            this.feedBack = new Konva.Text({
+                x: contentBox.x() + contentBox.width()/4, //should be middle of box
+                y: contentBox.y()+contentBox.height()/4, //should be middle of box
+                align: 'center',
+                fontSize: 200,
+                stroke: 'black',
+                strokeWdith: 10,
+                text: "hello",
+                fill: 'green',
+            });
+            this.feedBack.visible(false);
+            this.group.add(this.feedBack);
+
+            this.completeScreen = new Konva.Rect({
+                x: contentBox.x(),
+                y:contentBox.y(),
+                width: contentBox.width(),
+                height: contentBox.height(),
+                fill: "grey",
+                stroke: 'black'
+            });
+            this.completeScreen.visible(false);
+            this.group.add(this.completeScreen);
+
+            this.completeText = new Konva.Text({
+                x: contentBox.x(), //should be middle of box
+                y: contentBox.y()+contentBox.height()/4,
+                width: contentBox.width(),
+                height: contentBox.height(),
+                text: "Congrats! You finished this level!",
+                fontSize: 64,
+                align: "center",
+                fill: "black"
+            });
+            this.group.add(this.completeText);
+            this.completeText.visible(false);
+
+            //set the priority of each shape
+            levelBox.moveToTop();
+            this.levelText.moveToTop();
+            exitButton.moveToTop();
+            exitSymbol.moveToTop();
 
             // constructing answer text by listening for valid key clicks
             window.addEventListener("keydown", (e) => {
@@ -205,6 +241,43 @@ export class GameScreenView implements View {
     updateQuestion(question: Question | null): void {
         this.questionText.text(question ? question.question : "Level Complete!");
         this.group.getLayer()?.draw();
+    }
+
+    showFeedBack():void{
+        if(this.feedBack){
+            this.feedBack.show();
+            this.group.getLayer()?.draw();
+        }
+    }
+    hideFeedBack():void{
+        if(this.feedBack){
+            this.feedBack.hide();
+            this.group.getLayer()?.draw();
+        }
+    }
+    updateFeedBack(rate:number){
+        //rate should be 0,1,2,3 (3 is best, 0 is worst)
+        switch (rate) {
+            case 0:
+                this.feedBack.text("TRY AGAIN!");
+                break;
+            case 1:
+                this.feedBack.text("GOOD JOB!");
+                break;
+            case 2:
+                this.feedBack.text("AWESOME!");
+                break;
+        }
+        this.group.getLayer()?.draw();
+    }
+
+    showComplete():void{
+        this.completeScreen.show();
+        this.completeText.show();
+    }
+    hideComplete():void{
+        this.completeScreen.hide();
+        this.completeText.hide();
     }
 
 	/**

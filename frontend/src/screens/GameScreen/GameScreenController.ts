@@ -21,6 +21,7 @@ export class GameScreenController extends ScreenController {
 		this.view.onExit = () => {
             console.log("Exit button clicked");
             this.screenSwitcher.switchToScreen({ type: "home" });
+			this.view.hideComplete();
         };
 
 		this.view.onSubmit = (answer: string) => {
@@ -34,13 +35,16 @@ export class GameScreenController extends ScreenController {
 	 */
 	async startGame() {
 		this.model.reset();
+		
 		await this.model.loadQuestions(2);
 
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
 
+
 		// console.log("Loaded questions:", this.model.getTotalQuestions());
 		// console.log("Current question:", this.model.getCurrentQuestion());
+		
 
 		this.view.show();
 	}
@@ -51,14 +55,19 @@ export class GameScreenController extends ScreenController {
 		  // move to next question
 		  const nextQuestion = this.model.getNextQuestion();
 		  if (nextQuestion) {
+			this.view.updateFeedBack(1);
 			this.view.updateQuestion(nextQuestion);
 		  } else {
 			this.view.updateQuestion(null);
 			// TODO: Show level completed screen
+			this.view.showComplete();
 		  }
 		} else {
+			this.view.updateFeedBack(0);
 		  // TODO: Feedback for wrong answers
 		}
+		this.view.showFeedBack();
+		setTimeout(()=>this.view.hideFeedBack(), 2000); //hide feedback after 2s
 	  }	  
 
 	/**

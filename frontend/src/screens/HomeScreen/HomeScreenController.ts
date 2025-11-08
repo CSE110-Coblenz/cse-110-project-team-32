@@ -21,6 +21,10 @@ export class HomeScreenController extends ScreenController {
     this.model = new HomeScreenModel();
     this.userId = userId;
     this.layer = layer;
+
+    this.view.onStartGame = () => {
+      this.screenSwitcher.switchToScreen({type: "level", level: 1});
+    }
   }
 
   init(){

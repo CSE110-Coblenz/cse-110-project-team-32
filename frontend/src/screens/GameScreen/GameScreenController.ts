@@ -26,6 +26,10 @@ export class GameScreenController extends ScreenController {
 
 		this.view.onSubmit = (answer: string) => {
 			this.handleAnswer(answer);
+			this.view.updateProgress(
+				this.model.getCurrentQuestionIndex(),
+				this.model.getTotalQuestions(),
+			);
 		};
 
 	}
@@ -35,17 +39,14 @@ export class GameScreenController extends ScreenController {
 	 */
 	async startGame() {
 		this.model.reset();
-		
-		await this.model.loadQuestions(2);
+		this.view.resetProgress();
+		await this.model.loadQuestions(6);
 
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
-
-
 		// console.log("Loaded questions:", this.model.getTotalQuestions());
 		// console.log("Current question:", this.model.getCurrentQuestion());
 		
-
 		this.view.show();
 	}
 

@@ -39,7 +39,7 @@ export class HomeScreenView implements View {
 
   private onLevelSelect?: (levelId: number) => void;
   private onMiniGameSelect?: (gameName: string) => void;
-  private onStartGame?: () => void;
+  onStartGame?: () => void;
   private onLogout?: () => void;
 
   // user info and logout button

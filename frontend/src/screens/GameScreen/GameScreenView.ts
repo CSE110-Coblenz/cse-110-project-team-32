@@ -243,6 +243,27 @@ export class GameScreenView implements View {
         this.group.getLayer()?.draw();
     }
 
+    /**
+	 * Update the progress
+	 */
+    updateProgress(current: number, total: number): void {
+        const progress = total > 0 ? current / total : 0;
+        const maxWidth = this.progressBar.width();
+    
+        this.progressFill.width(maxWidth * progress);
+        this.progressFill.getLayer()?.batchDraw();
+    }
+
+    /**
+	 * Reset the progress after level completed or exit
+	 */
+    resetProgress(): void {
+        this.progressFill.width(0);
+        this.progressFill.fill("green");
+        this.group.getLayer()?.batchDraw();
+    }
+      
+
     showFeedBack():void{
         if(this.feedBack){
             this.feedBack.show();

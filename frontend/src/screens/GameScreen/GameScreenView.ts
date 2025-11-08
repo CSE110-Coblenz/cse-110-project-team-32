@@ -170,16 +170,18 @@ export class GameScreenView implements View {
             this.group.add(this.answerText);
 
             this.feedBack = new Konva.Text({
-                x: contentBox.x() + contentBox.width()/4, //should be middle of box
-                y: contentBox.y()+contentBox.height()/4, //should be middle of box
+                x: contentBox.x(), //should be middle of box
+                y: contentBox.y(), //should be middle of box
+                width: contentBox.width(),
+                height: contentBox.height(),
                 align: 'center',
                 fontSize: 200,
                 stroke: 'black',
-                strokeWdith: 10,
+                strokeWidth: 2,
                 text: "hello",
                 fill: 'green',
             });
-            this.feedBack.visible(false);
+            this.feedBack.visible(true);
             this.group.add(this.feedBack);
 
             this.completeScreen = new Konva.Rect({

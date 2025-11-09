@@ -17,6 +17,7 @@ export class GameScreenView implements View {
     private progressBar!: Konva.Rect;
     private progressFill!: Konva.Rect;
     private feedBack!: Konva.Text;
+    private feedBackBox!: Konva.Rect;
     private completeScreen!: Konva.Rect;
     private completeText!: Konva.Text;
 
@@ -169,19 +170,32 @@ export class GameScreenView implements View {
             });
             this.group.add(this.answerText);
 
+            this.feedBackBox = new Konva.Rect({
+                x: contentBox.x() + contentBox.width()/20,
+                y: contentBox.y() + contentBox.height()/8,
+                width: (contentBox.width()/10)*9,
+                // width: contentBox.width(),
+                height: (contentBox.height()/10)*5,
+                fill: 'green',
+                stroke:'black',
+                opacity: 0.5
+            });
+            this.feedBackBox.visible(false);
+            this.group.add(this.feedBackBox);
+
             this.feedBack = new Konva.Text({
-                x: contentBox.x(), //should be middle of box
-                y: contentBox.y(), //should be middle of box
-                width: contentBox.width(),
-                height: contentBox.height(),
+                x: this.feedBackBox.x(), //should be middle of box
+                y: this.feedBackBox.y() + this.feedBackBox.height()/6, 
+                width: this.feedBackBox.width(),
+                height: this.feedBackBox.height(),
                 align: 'center',
                 fontSize: 200,
                 stroke: 'black',
                 strokeWidth: 2,
-                text: "hello",
+                text: "feedback",
                 fill: 'green',
             });
-            this.feedBack.visible(true);
+            this.feedBack.visible(false);
             this.group.add(this.feedBack);
 
             this.completeScreen = new Konva.Rect({
@@ -248,12 +262,14 @@ export class GameScreenView implements View {
     showFeedBack():void{
         if(this.feedBack){
             this.feedBack.show();
+            this.feedBackBox.show();
             this.group.getLayer()?.draw();
         }
     }
     hideFeedBack():void{
         if(this.feedBack){
             this.feedBack.hide();
+            this.feedBackBox.hide();
             this.group.getLayer()?.draw();
         }
     }

@@ -52,21 +52,25 @@ export const login = async(req: Request, res: Response) => {
         }
         
         //Compare both the password the user entered and the password of the user object they are trying to access
+        /*
         const ok = await bcrypt.compare(password, user.password);
         if(!ok) {
             return res.status(401).json({ error: "Invalid credentials"});
         }
+        */
 
         //Make sure that there exists a JWT_SECRET key in the .env file
         if(!process.env.JWT_SECRET) {
             throw new Error("Missing JWT_SECRET");
         }
 
+        /*
         //Create a new token that the user can use while logged in whenever they want to access their own data again
         const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
         //Send the user object without the password back to the frontend
         res.json({ token, user : { id: user.id, username: user.username }});
+        */
 
     } catch (err) {
         res.status(500).json({ error: (err as Error).message });
@@ -90,7 +94,7 @@ export const getUser = async(req: Request, res: Response) => {
         }
 
         //Send the user back into the frontend
-        res.status(200).json({id: user.id, username: user.username});
+        // res.status(200).json({id: user.id, username: user.username});
 
     } catch (err) {
         res.status(500).json({ error: (err as Error).message });

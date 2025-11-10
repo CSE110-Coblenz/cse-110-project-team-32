@@ -5,11 +5,11 @@
 import type { Question } from "../../types";
 
 export class GameScreenModel {
-	private level = 3;
+	private level;
 	private questions: Question[] = [];
 	private currentQuestionIndex = 0;
 
-	constructor(level: number = 3) {
+	constructor(level: number = 1) {
 		this.level = level;
 	}
 
@@ -55,8 +55,9 @@ export class GameScreenModel {
 		return this.level;
 	}
 
-	reset(level?: number): void {
-		this.level = level ?? 1;
+	reset(level: number): void {
+		// TODO - we want to grab what level the user is on
+		this.level = level;
 		this.currentQuestionIndex = 0;
 		this.questions = [];
 	}

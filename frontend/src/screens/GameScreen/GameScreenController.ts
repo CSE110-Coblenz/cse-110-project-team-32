@@ -19,7 +19,7 @@ export class GameScreenController extends ScreenController {
 		this.view = new GameScreenView();
 
 		this.view.onExit = () => {
-            console.log("Exit button clicked");
+            // console.log("Exit button clicked");
             this.screenSwitcher.switchToScreen({ type: "home" });
 			this.view.hideComplete();
         };
@@ -38,12 +38,13 @@ export class GameScreenController extends ScreenController {
 	 * Start the game
 	 */
 	async startGame() {
-		this.model.reset();
+		this.model.reset(this.model.getLevel());
 		this.view.resetProgress();
 		await this.model.loadQuestions(6);
 
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
+		this.view.updateLevel(this.model.getLevel());
 		// console.log("Loaded questions:", this.model.getTotalQuestions());
 		// console.log("Current question:", this.model.getCurrentQuestion());
 		

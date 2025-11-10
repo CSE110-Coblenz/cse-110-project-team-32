@@ -129,7 +129,7 @@ export class GameScreenView implements View {
                 x: levelBox.x(),
                 y: levelBox.y() + (levelBox.height() - 32) / 2,
                 width: levelBox.width(),
-                text: "Level 100",
+                text: "",
                 fontSize: 32,
                 align: "center",
                 fill: "black",
@@ -176,9 +176,9 @@ export class GameScreenView implements View {
                 width: (contentBox.width()/10)*9,
                 // width: contentBox.width(),
                 height: (contentBox.height()/10)*5,
-                fill: 'green',
+                fill: '',
                 stroke:'black',
-                opacity: 0.5
+                opacity: 0.9
             });
             this.feedBackBox.visible(false);
             this.group.add(this.feedBackBox);
@@ -189,11 +189,11 @@ export class GameScreenView implements View {
                 width: this.feedBackBox.width(),
                 height: this.feedBackBox.height(),
                 align: 'center',
-                fontSize: 200,
+                fontSize: 180,
                 stroke: 'black',
                 strokeWidth: 2,
                 text: "feedback",
-                fill: 'green',
+                fill: 'grey',
             });
             this.feedBack.visible(false);
             this.group.add(this.feedBack);
@@ -278,6 +278,13 @@ export class GameScreenView implements View {
         this.progressFill.fill("green");
         this.group.getLayer()?.batchDraw();
     }
+
+    /**
+	 * Update what level user is on 
+	 */
+    updateLevel(level: number): void {
+        this.levelText.text(`Level ${level}`);
+    }
       
 
     showFeedBack():void{
@@ -299,12 +306,15 @@ export class GameScreenView implements View {
         switch (rate) {
             case 0:
                 this.feedBack.text("TRY AGAIN!");
+                this.feedBackBox.fill('red');
                 break;
             case 1:
                 this.feedBack.text("GOOD JOB!");
+                this.feedBackBox.fill('green');
                 break;
             case 2:
                 this.feedBack.text("AWESOME!");
+                this.feedBackBox.fill('green');
                 break;
         }
         this.group.getLayer()?.draw();

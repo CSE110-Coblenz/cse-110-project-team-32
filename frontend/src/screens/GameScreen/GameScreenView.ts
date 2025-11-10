@@ -9,6 +9,7 @@ import type { Question } from "../../types.ts";
 export class GameScreenView implements View {
 	private group: Konva.Group;
     private questionText!: Konva.Text;
+    private hintText!: Konva.Text;
     private answerBox!: Konva.Rect;
     private answerText!: Konva.Text;
     private currentAnswer: string = "";
@@ -23,7 +24,7 @@ export class GameScreenView implements View {
 
     onSubmit?: (answer: string) => void;
     onExit?: () => void;
-
+    onHint?: () => void;
 
 	constructor() {
 		this.group = new Konva.Group({ visible: false });
@@ -145,21 +146,35 @@ export class GameScreenView implements View {
                 fontSize: 48,
                 align: "center",
               });
-              this.group.add(this.questionText);
+            this.group.add(this.questionText);
 
+            // hint text
+            this.hintText = new Konva.Text({
+                x: contentBox.x() + 40,
+                y: this.questionText.y() + 80,
+                width: CONTENT_WIDTH - 80,
+                text: "BB",
+                fontSize: 32,
+                align: "center",
+                fill: "#333",
+                opacity: 0, 
+            });
+            this.group.add(this.hintText);
+            
             // answer box
             const answerBoxHeight = 60;
+            const hintButtonWidth = 200; 
+            const spacing = 20; 
             this.answerBox = new Konva.Rect({
                 x: contentBox.x() + 60,
                 y: contentBox.y() + CONTENT_HEIGHT - answerBoxHeight - 120,
-                width: CONTENT_WIDTH - 120,
+                width: CONTENT_WIDTH - 120 - hintButtonWidth - spacing,
                 height: answerBoxHeight,
                 cornerRadius: 12,
                 stroke: "black"
             });
             this.group.add(this.answerBox);
             
-
             // answer text in box
             this.answerText = new Konva.Text({
                 x: this.answerBox.x() + 15,
@@ -169,6 +184,38 @@ export class GameScreenView implements View {
                 fill: "black",
             });
             this.group.add(this.answerText);
+
+            // Hint button beside the answer box
+            const hintButton = new Konva.Rect({
+                x: this.answerBox.x() + this.answerBox.width() + spacing,
+                y: this.answerBox.y(),
+                width: hintButtonWidth,
+                height: answerBoxHeight,
+                fill: "#f9d976",
+                stroke: "black",
+                strokeWidth: 2,
+                cornerRadius: 12,
+            });
+            this.group.add(hintButton);
+
+            hintButton.on("click", () => {
+                if (this.onHint) this.onHint();
+            });
+
+            const hintButtonText = new Konva.Text({
+                x: hintButton.x(),
+                y: hintButton.y() + 15,
+                width: hintButton.width(),
+                text: "Hint 💡",
+                fontSize: 32,
+                align: "center",
+                fill: "black",
+            });
+            this.group.add(hintButtonText);
+
+            hintButtonText.on("click", () => {
+                if (this.onHint) this.onHint();
+            });
 
             this.feedBackBox = new Konva.Rect({
                 x: contentBox.x() + contentBox.width()/20,
@@ -285,7 +332,19 @@ export class GameScreenView implements View {
     updateLevel(level: number): void {
         this.levelText.text(`Level ${level}`);
     }
-      
+
+
+    updateHint(hint: string): void {
+        this.hintText.text(`${hint}`);
+    
+        this.hintText.to({
+            opacity: 1,
+            duration: 0.4,
+        });
+    
+        this.group.getLayer()?.batchDraw();
+    }
+    
 
     showFeedBack():void{
         if(this.feedBack){
@@ -294,6 +353,7 @@ export class GameScreenView implements View {
             this.group.getLayer()?.draw();
         }
     }
+
     hideFeedBack():void{
         if(this.feedBack){
             this.feedBack.hide();
@@ -301,6 +361,7 @@ export class GameScreenView implements View {
             this.group.getLayer()?.draw();
         }
     }
+
     updateFeedBack(rate:number){
         //rate should be 0,1,2,3 (3 is best, 0 is worst)
         switch (rate) {
@@ -316,6 +377,14 @@ export class GameScreenView implements View {
                 this.feedBack.text("AWESOME!");
                 this.feedBackBox.fill('green');
                 break;
+            case 3:
+                /*
+                TODO - please add a feedback for restarting level when failing the test question
+
+                this.feedBack.text("Uh-oh! Ran out of retries... restarting level!");
+                this.feedBackBox.fill('red');
+                break;
+                */
         }
         this.group.getLayer()?.draw();
     }
@@ -324,6 +393,7 @@ export class GameScreenView implements View {
         this.completeScreen.show();
         this.completeText.show();
     }
+
     hideComplete():void{
         this.completeScreen.hide();
         this.completeText.hide();

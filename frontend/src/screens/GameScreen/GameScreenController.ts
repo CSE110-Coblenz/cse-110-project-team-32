@@ -32,6 +32,10 @@ export class GameScreenController extends ScreenController {
 			);
 		};
 
+		this.view.onHint = () => {
+			this.handleHint();
+		}
+
 	}
 
     /**
@@ -40,7 +44,7 @@ export class GameScreenController extends ScreenController {
 	async startGame() {
 		this.model.reset(this.model.getLevel());
 		this.view.resetProgress();
-		await this.model.loadQuestions(6);
+		await this.model.loadQuestions();
 
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
@@ -51,27 +55,39 @@ export class GameScreenController extends ScreenController {
 		this.view.show();
 	}
 
-	async handleAnswer(userAnswer: string) {
-		const isCorrect = this.model.checkAnswer(userAnswer);
-		if (isCorrect) {
-		  // move to next question
-		  const nextQuestion = this.model.getNextQuestion();
-		  if (nextQuestion) {
-			this.view.updateFeedBack(1);
-			this.view.updateQuestion(nextQuestion);
-		  } else {
-			this.view.updateQuestion(null);
-			// TODO: Show level completed screen
-			this.view.showComplete();
-		  }
-		} else {
-			this.view.updateFeedBack(0);
-		  // TODO: Feedback for wrong answers
+	handleAnswer(answer: string): void {
+		const result = this.model.checkAnswer(answer);
+
+		switch (result) {
+			case "next":
+				this.view.updateFeedBack(1);
+				this.view.updateQuestion(this.model.getCurrentQuestion());
+				this.view.updateHint("");
+				break;
+
+			case "wrong":
+				this.view.updateFeedBack(0);
+				break;
+
+			case "restart":
+				this.view.updateFeedBack(3);
+				this.model.loadQuestions().then(() => {
+					this.view.updateQuestion(this.model.getCurrentQuestion());
+					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions(),)
+				});
+				break;
+
+			case "complete":
+				this.view.showComplete();
+				break;
 		}
 		this.view.showFeedBack();
 		setTimeout(()=>this.view.hideFeedBack(), 2000); //hide feedback after 2s
-	  }	  
+	}	  
 
+	handleHint() {
+		this.view.updateHint(`Hint: ${this.model.getCurrentQuestion()?.hint}` || "");
+	}
 	/**
 	 * Get the view group
 	 */

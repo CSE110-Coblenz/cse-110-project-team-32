@@ -26,10 +26,6 @@ export class GameScreenController extends ScreenController {
 
 		this.view.onSubmit = (answer: string) => {
 			this.handleAnswer(answer);
-			this.view.updateProgress(
-				this.model.getCurrentQuestionIndex(),
-				this.model.getTotalQuestions(),
-			);
 		};
 
 		this.view.onHint = () => {
@@ -49,10 +45,17 @@ export class GameScreenController extends ScreenController {
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
 		this.view.updateLevel(this.model.getLevel());
+		this.view.initializeAnswer(); //clean the answerbox(it contains user and password)
+		
 		// console.log("Loaded questions:", this.model.getTotalQuestions());
 		// console.log("Current question:", this.model.getCurrentQuestion());
 		
 		this.view.show();
+	}
+
+
+	setLevel(levelNum: number): void {
+		this.model.setLevel(levelNum);
 	}
 
 	handleAnswer(answer: string): void {
@@ -62,7 +65,15 @@ export class GameScreenController extends ScreenController {
 			case "next":
 				this.view.updateFeedBack(1);
 				this.view.updateQuestion(this.model.getCurrentQuestion());
+				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				this.view.updateHint("");
+				//tell the user that it is a test question
+				if(this.model.isTestQuestion()){
+					this.view.showTestTitle();
+				}
+				else{ //maybe not actually necessary, just leave it in case
+					this.view.hideTestTitle();
+				}
 				break;
 
 			case "wrong":
@@ -73,12 +84,19 @@ export class GameScreenController extends ScreenController {
 				this.view.updateFeedBack(3);
 				this.model.loadQuestions().then(() => {
 					this.view.updateQuestion(this.model.getCurrentQuestion());
-					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions(),)
+					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				});
 				break;
 
 			case "complete":
-				this.view.showComplete();
+				
+				// console.log(this.model.getCurrentQuestionIndex());
+				// console.log(this.model.getTotalQuestions());
+				this.view.updateProgress(
+					this.model.getTotalQuestions(),
+					this.model.getTotalQuestions(),
+				);
+				setTimeout(()=>this.view.showComplete(), 1000);
 				break;
 		}
 		this.view.showFeedBack();

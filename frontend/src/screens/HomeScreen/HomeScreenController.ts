@@ -14,18 +14,18 @@ export class HomeScreenController extends ScreenController {
   private userId: string;
   private layer: Konva.Layer;
 
-  constructor(screenSwitcher: ScreenSwitcher, userId: string, layer: Konva.Layer) {
-    super();
-    this.screenSwitcher = screenSwitcher;
-    this.view = new HomeScreenView();
-    this.model = new HomeScreenModel();
-    this.userId = userId;
-    this.layer = layer;
-
-    this.view.onStartGame = () => {
-      this.screenSwitcher.switchToScreen({type: "level", level: 1});
+  constructor(screenSwitcher: ScreenSwitcher, userId: string, layer: Konva.Layer) { 
+    super(); 
+    this.screenSwitcher = screenSwitcher; this.view = new HomeScreenView( 
+      (levelId) => this.handleLevelClicked(levelId), // onLevelSelect 
+      () => this.handleStartGame(), // onStartGame 
+      (gameName) => this.handleMiniGameClicked(gameName), // onMiniGameSelect 
+      () => this.handleLogout() // onLogout 
+      ); 
+      this.model = new HomeScreenModel(); 
+      this.userId = userId; 
+      this.layer = layer; 
     }
-  }
 
   init(){
     console.log("initialising homescreen");
@@ -41,5 +41,21 @@ export class HomeScreenController extends ScreenController {
 
   getView(): View {
     return this.view;
+  }
+
+  private handleLevelClicked(levelNum: number): void { 
+    console.log("Level button clicked:", levelNum); 
+    this.screenSwitcher.switchToScreen({ type: "level", level: levelNum }); 
+  } 
+  
+  private handleStartGame(): void { 
+    console.log("Start Game clicked!"); // You could call: this.screenSwitcher.switchToScreen({ type: "level", level: this.model.getCurrLevel() }); 
+  } 
+  private handleMiniGameClicked(gameName: string): void { 
+    console.log("Mini game selected:", gameName); 
+  } 
+  private handleLogout(): void { 
+    console.log("User logged out"); 
+    this.screenSwitcher.switchToScreen({ type: "login" }); 
   }
 }

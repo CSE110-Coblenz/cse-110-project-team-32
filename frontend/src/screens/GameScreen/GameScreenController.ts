@@ -26,10 +26,6 @@ export class GameScreenController extends ScreenController {
 
 		this.view.onSubmit = (answer: string) => {
 			this.handleAnswer(answer);
-			this.view.updateProgress(
-				this.model.getCurrentQuestionIndex(),
-				this.model.getTotalQuestions(),
-			);
 		};
 
 		this.view.onHint = () => {
@@ -62,6 +58,7 @@ export class GameScreenController extends ScreenController {
 			case "next":
 				this.view.updateFeedBack(1);
 				this.view.updateQuestion(this.model.getCurrentQuestion());
+				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				this.view.updateHint("");
 				break;
 
@@ -73,12 +70,19 @@ export class GameScreenController extends ScreenController {
 				this.view.updateFeedBack(3);
 				this.model.loadQuestions().then(() => {
 					this.view.updateQuestion(this.model.getCurrentQuestion());
-					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions(),)
+					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				});
 				break;
 
 			case "complete":
-				this.view.showComplete();
+				
+				// console.log(this.model.getCurrentQuestionIndex());
+				// console.log(this.model.getTotalQuestions());
+				this.view.updateProgress(
+					this.model.getTotalQuestions(),
+					this.model.getTotalQuestions(),
+				);
+				setTimeout(()=>this.view.showComplete(), 1000);
 				break;
 		}
 		this.view.showFeedBack();

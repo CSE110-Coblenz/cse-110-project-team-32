@@ -302,7 +302,7 @@ export class GameScreenView implements View {
 	 * Update the question
 	 */
     updateQuestion(question: Question | null): void {
-        this.questionText.text(question ? question.question : "Level Complete!");
+        this.questionText.text(question?.question);
         this.group.getLayer()?.draw();
     }
 
@@ -312,9 +312,13 @@ export class GameScreenView implements View {
     updateProgress(current: number, total: number): void {
         const progress = total > 0 ? current / total : 0;
         const maxWidth = this.progressBar.width();
-    
-        this.progressFill.width(maxWidth * progress);
-        this.progressFill.getLayer()?.batchDraw();
+        console.log(`Updating progress to ${progress}`);
+        // animate progress bar
+        this.progressFill.to({
+            width: maxWidth * progress,
+            duration: 0.4,
+            onFinish: () => this.progressFill.getLayer()?.batchDraw(),
+        });
     }
 
     /**

@@ -51,6 +51,11 @@ export class GameScreenController extends ScreenController {
 		this.view.show();
 	}
 
+
+	setLevel(levelNum: number): void {
+		this.model.setLevel(levelNum);
+	}
+
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
 

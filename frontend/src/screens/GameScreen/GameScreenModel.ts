@@ -86,6 +86,10 @@ export class GameScreenModel {
 		return this.level;
 	}
 
+	setLevel(level: number): void {
+    	this.level = level;
+	}
+
 	reset(level: number): void {
 		// TODO - we want to grab what level the user is on
 		this.level = level;

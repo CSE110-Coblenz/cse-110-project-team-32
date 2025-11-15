@@ -393,6 +393,10 @@ export class GameScreenView implements View {
         this.group.getLayer()?.draw();
     }
 
+    showTestResults(percentageScore: number, passed: boolean): void{
+		//show test results
+	}
+
     showComplete():void{
         this.completeScreen.show();
         this.completeText.show();

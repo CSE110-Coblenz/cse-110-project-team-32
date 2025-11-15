@@ -17,7 +17,7 @@ export class GameScreenModel {
 	 * Load questions for this level from the backend
 	 */
 	async loadQuestions(limit?: number): Promise<Question[]> {
-		const res = await fetch(`http://localhost:3000/questions/${this.level}`);
+		const res = await fetch(`http://localhost:3000/api/questions/${this.level}`);
 		const data = (await res.json()) as Question[];
 
 		// limit how many questions we take

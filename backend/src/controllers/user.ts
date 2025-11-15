@@ -42,7 +42,7 @@ export const login = async(req: Request, res: Response) => {
 
         //Make sure the user typed in both their username and their password
         if (!username || !password) {
-            return res.status(400).json({ error: "username and password are required" });
+            return res.status(400).json({ error: "please enter both username and password" });
         }
 
         //Make sure that the database has a user object with the username and password the user entered

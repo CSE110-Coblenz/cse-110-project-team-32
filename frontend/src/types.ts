@@ -24,7 +24,8 @@ export type Screen =
 	| { type: "home" }
 	| { type: "login" }
 	| { type: "start" }
-	| { type: "level"; level: number };
+	| { type: "level"; level: number }
+	| { type: "minigame"; game: string };
 
 export abstract class ScreenController {
 	abstract getView(): View;

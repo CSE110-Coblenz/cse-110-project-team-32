@@ -68,46 +68,8 @@ export class GameScreenController extends ScreenController {
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
 
-<<<<<<< HEAD
-		switch (result) {
-			case "next":
-				this.view.updateFeedBack(1);
-				this.view.updateQuestion(this.model.getCurrentQuestion());
-				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
-				this.view.updateHint("");
-				//tell the user that it is a test question
-				if(this.model.isTestQuestion()){
-					this.view.showTestTitle();
-				}
-				else{ //maybe not actually necessary, just leave it in case
-					this.view.hideTestTitle();
-				}
-				break;
-
-			case "wrong":
-				this.view.updateFeedBack(0);
-				break;
-
-			case "restart":
-				this.view.updateFeedBack(3);
-				this.model.loadQuestions().then(() => {
-					this.view.updateQuestion(this.model.getCurrentQuestion());
-					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
-				});
-				break;
-
-			case "complete":
-				
-				// console.log(this.model.getCurrentQuestionIndex());
-				// console.log(this.model.getTotalQuestions());
-				this.view.updateProgress(
-					this.model.getTotalQuestions(),
-					this.model.getTotalQuestions(),
-				);
-				setTimeout(()=>this.view.showComplete(), 1000);
-				break;
-=======
 		if(this.mode == "practice"){
+			this.view.hideTestTitle();
 			switch (result) {
 				case "next":
 					this.view.updateFeedBack(1);
@@ -145,6 +107,7 @@ export class GameScreenController extends ScreenController {
 		} else if (this.mode == "test") {
 			this.model.updateScore(result === "next"); 
 			this.model.getNextQuestion();
+			this.view.showTestTitle();
 
 			if (this.model.isTestComplete()) {
 				const passed = this.model.checkIfPassed();
@@ -153,7 +116,6 @@ export class GameScreenController extends ScreenController {
 				this.view.updateQuestion(this.model.getCurrentQuestion());
 				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 			}
->>>>>>> 24334da39e234433f2047e60680bcb2a0eaaea0e
 		}
 		this.view.showFeedBack();
 		setTimeout(()=>this.view.hideFeedBack(), 2000); //hide feedback after 2s

@@ -406,24 +406,23 @@ export class GameScreenView implements View {
         this.group.getLayer()?.batchDraw();
     }
 
-<<<<<<< HEAD
+    resetHint(): void {
+        this.hintText.text("");
+        this.group.getLayer()?.batchDraw();
+    }
+
     /*
         Update the location of cursor
     */
     private updateCursor(){
         if(!this.cursor || !this.answerText || !this.measureText) return;
-
         const current = this.currentAnswer.slice(0, this.cursorIndex);
         this.measureText.text(current);
         const length = this.measureText.getTextWidth();
         this.cursor.x(this.answerText.x() + length);
         this.cursor.getLayer()?.batchDraw();
-=======
-    resetHint(): void {
-        this.hintText.text("");
-        this.group.getLayer()?.batchDraw();
->>>>>>> 24334da39e234433f2047e60680bcb2a0eaaea0e
     }
+    
     
 
     showFeedBack():void{

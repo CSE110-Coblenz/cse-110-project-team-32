@@ -406,6 +406,7 @@ export class GameScreenView implements View {
         this.group.getLayer()?.batchDraw();
     }
 
+<<<<<<< HEAD
     /*
         Update the location of cursor
     */
@@ -417,6 +418,11 @@ export class GameScreenView implements View {
         const length = this.measureText.getTextWidth();
         this.cursor.x(this.answerText.x() + length);
         this.cursor.getLayer()?.batchDraw();
+=======
+    resetHint(): void {
+        this.hintText.text("");
+        this.group.getLayer()?.batchDraw();
+>>>>>>> 24334da39e234433f2047e60680bcb2a0eaaea0e
     }
     
 
@@ -465,6 +471,10 @@ export class GameScreenView implements View {
         }
         this.group.getLayer()?.draw();
     }
+
+    showTestResults(percentageScore: number, passed: boolean): void{
+		//show test results
+	}
 
     showComplete():void{
         this.completeScreen.show();

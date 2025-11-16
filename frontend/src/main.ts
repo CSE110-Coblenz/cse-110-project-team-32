@@ -143,7 +143,7 @@ class App implements ScreenSwitcher {
                 console.log(screen.level);
                 //this.gameController.setLevel(screen.level);
                 this.gameController.show();
-                this.gameController.startGame();
+                this.gameController.startGame(screen.level);
                 break;
             case "login":
                 this.loginController.show();

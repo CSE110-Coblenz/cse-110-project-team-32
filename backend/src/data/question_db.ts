@@ -42,11 +42,11 @@ const questions = [
   [2, "What is 9 - 3?", "6", "Take 3 away from 9.", 0],
   [2, "What is 8 - 5?", "3", "Subtract 5 from 8.", 0],
   [2, "What is 10 - 7?", "3", "How far is 7 from 10?", 0],
-  [2, "What is 15 - 6?", "9", "Think of how much 6 less than 15 is.", 0],
+  [2, "What is 15 - 6?", "9", "Think of how much 6 less than 15 is.", 1],
   [2, "What is 9 - 7?", "2", "Simple subtraction.", 0],
   [3, "What is 12 ÷ 4?", "3", "Division by 4.", 0],
   [3, "What is 5 * 3?", "15", "It's 5 added 3 times.", 0],
-  [3, "What is the square root of 16?", "4", "A number multiplied by itself gives 16.", 0],
+  [3, "What is the square root of 16?", "4", "A number multiplied by itself gives 16.", 1],
 ];
   
 

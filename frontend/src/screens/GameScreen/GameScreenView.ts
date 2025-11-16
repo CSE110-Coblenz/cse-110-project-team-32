@@ -329,6 +329,7 @@ export class GameScreenView implements View {
                     // clear answer
                     this.currentAnswer = "";
                 }else if (e.key === "ArrowLeft"){
+                    
                     if(this.cursorIndex > 0){
                         this.cursorIndex--;
                     }

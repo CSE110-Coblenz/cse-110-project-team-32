@@ -67,12 +67,14 @@ export class GameScreenController extends ScreenController {
 
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
+		
 
 		if(this.mode == "practice"){
-			this.view.hideTestTitle();
+			
 			switch (result) {
 				case "next":
-					this.view.updateFeedBack(1);
+					let feedback = Math.random() < 0.5 ? 1 : 2;
+					this.view.updateFeedBack(feedback);
 					this.view.updateQuestion(this.model.getCurrentQuestion());
 					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 					this.view.resetHint();
@@ -107,7 +109,7 @@ export class GameScreenController extends ScreenController {
 		} else if (this.mode == "test") {
 			this.model.updateScore(result === "next"); 
 			this.model.getNextQuestion();
-			this.view.showTestTitle();
+			
 
 			if (this.model.isTestComplete()) {
 				const passed = this.model.checkIfPassed();
@@ -117,6 +119,7 @@ export class GameScreenController extends ScreenController {
 				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 			}
 		}
+		
 		this.view.showFeedBack();
 		setTimeout(()=>this.view.hideFeedBack(), 2000); //hide feedback after 2s
 	}	  

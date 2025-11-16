@@ -348,6 +348,11 @@ export class GameScreenView implements View {
     
         this.group.getLayer()?.batchDraw();
     }
+
+    resetHint(): void {
+        this.hintText.text("");
+        this.group.getLayer()?.batchDraw();
+    }
     
 
     showFeedBack():void{

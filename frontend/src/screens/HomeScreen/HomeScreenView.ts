@@ -36,10 +36,11 @@ export class HomeScreenView implements View {
   private group: Konva.Group;
   private levels: LevelInfo[] = [];
   private miniGames: MiniGameInfo[] = [];
+  private levelsGroup: Konva.Group;
 
   private onLevelSelect?: (levelId: number) => void;
   private onMiniGameSelect?: (gameName: string) => void;
-  private onStartGame?: () => void;
+  onStartGame?: () => void;
   private onLogout?: () => void;
 
   // user info and logout button
@@ -50,13 +51,15 @@ export class HomeScreenView implements View {
   constructor(onLevelSelect?: (levelId: number) => void,
               onStartGame?: () => void,
               onMiniGameSelect?: (gameName: string) => void,
-			        onLogout?: () => void
+              onLogout?: () => void
 ) {
     this.group = new Konva.Group({ visible: true });
     this.onLevelSelect = onLevelSelect;
     this.onMiniGameSelect = onMiniGameSelect;
     this.onStartGame = onStartGame;
-	  this.onLogout = onLogout;
+    this.onLogout = onLogout;
+    this.levelsGroup = new Konva.Group(); // initialize the levels group
+    this.group.add(this.levelsGroup);
 
     // background
    Konva.Image.fromURL("Desert Outpost Concept Art.jpeg", (bgImage: Konva.Image) => {
@@ -68,9 +71,9 @@ export class HomeScreenView implements View {
       bgImage.moveToBottom();
     });
 
-	
+  
 /******fake data for testing of level and mini game buttons****/
-	  /*this.createUserArea();
+    /*this.createUserArea();
 
     const testLevels: LevelInfo[] = [
       { id: 1, unlocked: true },
@@ -135,9 +138,9 @@ export class HomeScreenView implements View {
       width: 220,
       height: 70,
       fill: "#e0e0e0",          
-	  stroke: "#555",           
-	  strokeWidth: 2,
-	  cornerRadius: 6,
+    stroke: "#555",           
+    strokeWidth: 2,
+    cornerRadius: 6,
     });
 
     const text = new Konva.Text({
@@ -172,44 +175,51 @@ export class HomeScreenView implements View {
 
   /********* Level Buttons **************/
   private createLevelButtons(): void {
-    const startX = STAGE_WIDTH * 0.25;  
-	const startY = 100;
-	const rectWidth = 180;
-	const rectHeight = 60;
-	const spacingY = 65;
+  // Clear old buttons
+  this.levelsGroup.destroyChildren();
 
-    this.levels.forEach((level, i) => {
-      const y = startY + i * spacingY;
-      const rect = new Konva.Rect({
-        x: startX,
-		y,
-		width: rectWidth,
-		height: rectHeight,
-		fill: "#e0e0e0",          
-		stroke: "#555",           
-		strokeWidth: 2,
-		cornerRadius: 6,
-      });
+  const startX = STAGE_WIDTH * 0.25;  
+  const startY = 100;
+  const rectWidth = 180;
+  const rectHeight = 60;
+  const spacingY = 65;
 
-      const label = new Konva.Text({
-        x: startX + rectWidth / 2,
-		y: y + rectHeight / 4,
-		text: level.unlocked ? `Level ${level.id}` : `🔒 Level ${level.id}`,
-		fontSize: 20,
-		fontFamily: "Arial",
-		fill: level.unlocked ? "black" : "#777",
-		align: "center",
-      });
-      label.offsetX(label.width() / 2);
-
-      if (level.unlocked && this.onLevelSelect) {
-        rect.on("click", () => this.onLevelSelect!(level.id));
-      }
-
-      this.group.add(rect);
-      this.group.add(label);
+  this.levels.forEach((level, i) => {
+    const y = startY + i * spacingY;
+    const rect = new Konva.Rect({
+      x: startX,
+      y,
+      width: rectWidth,
+      height: rectHeight,
+      fill: "#e0e0e0",
+      stroke: "#555",
+      strokeWidth: 2,
+      cornerRadius: 6,
     });
-  }
+
+    const label = new Konva.Text({
+      x: startX + rectWidth / 2,
+      y: y + rectHeight / 4,
+      text: level.unlocked ? `Level ${level.id}` : `🔒 Level ${level.id}`,
+      fontSize: 20,
+      fontFamily: "Arial",
+      fill: level.unlocked ? "black" : "#777",
+      align: "center",
+    });
+    label.offsetX(label.width() / 2);
+
+    // Only unlocked levels are clickable
+    if (level.unlocked && this.onLevelSelect) {
+      rect.on("click", () => this.onLevelSelect!(level.id));
+    }
+
+    this.levelsGroup.add(rect);
+    this.levelsGroup.add(label);
+  });
+
+  this.levelsGroup.getLayer()?.draw();
+}
+
 
   public setLevels(Currlevel: number): void {
     const levelInfo: LevelInfo[] = [];
@@ -293,13 +303,13 @@ public updateUserName(name: string): void {
 
   show(): void {
     this.group.visible(true);
-		this.group.getLayer()?.draw();
+    this.group.getLayer()?.draw();
     console.log("Showing Home Screen");
   }
 
   hide(): void {
     this.group.visible(false);
-		this.group.getLayer()?.draw();
+    this.group.getLayer()?.draw();
     console.log("Hiding Home Screen");
   }
 
@@ -315,3 +325,4 @@ public updateUserName(name: string): void {
     this.setMiniGames(minigames);
   }
 }
+

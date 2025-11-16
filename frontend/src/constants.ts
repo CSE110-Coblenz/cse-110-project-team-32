@@ -10,6 +10,8 @@ export const CONTENT_HEIGHT = 600;
 
 // Levels
 export const TOTAL_LEVELS = 5;
+export const PASSING_TEST_SCORE = 4;
+export const MAX_TESTSCORE = 5;
 
 // Game timer for tests and mini games
 export const GAME_DURATION = 10;

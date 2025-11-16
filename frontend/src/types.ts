@@ -12,6 +12,7 @@ export interface Question {
     question: string;
     answer: string;
     hint: string;
+	isTest: boolean;
 }
 
 /**

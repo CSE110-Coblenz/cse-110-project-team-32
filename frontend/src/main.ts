@@ -61,6 +61,8 @@ class App implements ScreenSwitcher {
 		// this.gameController.getView().show();
 		// this.gameController.startGame();
 
+        
+
 		// Scale the stage to fit window
 		this.scaleStageToFit();
 
@@ -114,6 +116,7 @@ class App implements ScreenSwitcher {
       this.homeController.getView().show();
       this.loginController.getView().show();
       this.gameController.getView().show();
+
     }
 
     /**
@@ -137,6 +140,8 @@ class App implements ScreenSwitcher {
                 this.homeController.show();
                 break;
             case "level":
+                console.log(screen.level);
+                //this.gameController.setLevel(screen.level);
                 this.gameController.show();
                 this.gameController.startGame();
                 break;

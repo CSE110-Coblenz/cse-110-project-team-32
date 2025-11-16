@@ -23,6 +23,7 @@ export class GameScreenController extends ScreenController {
 		this.view.onExit = () => {
             // console.log("Exit button clicked");
             this.screenSwitcher.switchToScreen({ type: "home" });
+			this.view.resetHint();
 			this.view.hideComplete();
         };
 
@@ -39,8 +40,8 @@ export class GameScreenController extends ScreenController {
     /**
 	 * Start the game
 	 */
-	async startGame() {
-		this.model.reset(this.model.getLevel());
+	async startGame(level: number) {
+		this.model.setLevel(level);
 		this.view.resetProgress();
 		await this.model.loadQuestions();
 		
@@ -51,6 +52,8 @@ export class GameScreenController extends ScreenController {
 		const currentQuestion = this.model.getCurrentQuestion();
 		this.view.updateQuestion(currentQuestion);
 		this.view.updateLevel(this.model.getLevel());
+		this.view.initializeAnswer(); //clean the answerbox(it contains user and password)
+		
 		// console.log("Loaded questions:", this.model.getTotalQuestions());
 		// console.log("Current question:", this.model.getCurrentQuestion());
 		
@@ -64,14 +67,17 @@ export class GameScreenController extends ScreenController {
 
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
+		
 
 		if(this.mode == "practice"){
+			
 			switch (result) {
 				case "next":
-					this.view.updateFeedBack(1);
+					let feedback = Math.random() < 0.5 ? 1 : 2;
+					this.view.updateFeedBack(feedback);
 					this.view.updateQuestion(this.model.getCurrentQuestion());
 					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
-					this.view.updateHint("");
+					this.view.resetHint();
 					break;
 
 				case "wrong":
@@ -84,6 +90,7 @@ export class GameScreenController extends ScreenController {
 						this.view.updateQuestion(this.model.getCurrentQuestion());
 						this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 					});
+					this.view.resetHint();
 					break;
 
 				case "complete":
@@ -95,12 +102,14 @@ export class GameScreenController extends ScreenController {
 						this.model.getTotalQuestions(),
 						this.model.getTotalQuestions(),
 					);
+					this.view.resetHint();
 					setTimeout(()=>this.view.showComplete(), 1000);
 					break;
 			}
 		} else if (this.mode == "test") {
 			this.model.updateScore(result === "next"); 
 			this.model.getNextQuestion();
+			
 
 			if (this.model.isTestComplete()) {
 				const passed = this.model.checkIfPassed();
@@ -110,12 +119,13 @@ export class GameScreenController extends ScreenController {
 				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 			}
 		}
+		
 		this.view.showFeedBack();
 		setTimeout(()=>this.view.hideFeedBack(), 2000); //hide feedback after 2s
 	}	  
 
 	handleHint() {
-		this.view.updateHint(`Hint: ${this.model.getCurrentQuestion()?.hint}` || "");
+		this.view.updateHint(`Hint: ${this.model.getCurrentQuestion()?.hint}`);
 	}
 
 	startTest() {
@@ -123,7 +133,7 @@ export class GameScreenController extends ScreenController {
 		this.model.resetScore();
 		this.model.reset(this.model.getLevel()); // load test questions
 		this.view.resetProgress();
-		this.startGame();
+		this.startGame(this.model.getLevel());
 	}
 
 	/**

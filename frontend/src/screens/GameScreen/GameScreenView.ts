@@ -13,6 +13,10 @@ export class GameScreenView implements View {
     private answerBox!: Konva.Rect;
     private answerText!: Konva.Text;
     private currentAnswer: string = "";
+    private cursor!: Konva.Rect;
+    private cursorIndex: number = 0;//position of cursor
+    private measureText!: Konva.Text; //measure length of answer
+    private testTitle!: Konva.Text;
 
     private levelText!: Konva.Text;
     private progressBar!: Konva.Rect;
@@ -174,6 +178,18 @@ export class GameScreenView implements View {
                 stroke: "black"
             });
             this.group.add(this.answerBox);
+
+            this.testTitle = new Konva.Text({
+                x: contentBox.x() + contentBox.width() / 5,
+                y: contentBox.y() + contentBox.height() / 6,
+                width: 3 * (contentBox.width()/5),
+                fontSize: 48,
+                fill: '#e9362aff',
+                text:"Test Question:",
+                align: 'center',
+                visible: false
+            });
+            this.group.add(this.testTitle);
             
             // answer text in box
             this.answerText = new Konva.Text({
@@ -184,6 +200,29 @@ export class GameScreenView implements View {
                 fill: "black",
             });
             this.group.add(this.answerText);
+
+            //used to get length of answer, not a shown UI
+            this.measureText = new Konva.Text({ 
+                x:0,
+                y:0,
+                fontSize:32,
+                visible:false
+            });
+            this.group.add(this.measureText);
+
+            this.cursor = new Konva.Rect({
+                x: this.answerText.x(),
+                y: this.answerText.y(),
+                width: 3,
+                height: this.answerText.fontSize(),
+                fill: 'white'
+            });
+            this.group.add(this.cursor);
+            //add flash to cursor
+            setInterval(()=>{
+                this.cursor.visible(!this.cursor.visible());
+                this.cursor.getLayer()?.batchDraw();
+            }, 400);
 
             // Hint button beside the answer box
             const hintButton = new Konva.Rect({
@@ -237,10 +276,10 @@ export class GameScreenView implements View {
                 height: this.feedBackBox.height(),
                 align: 'center',
                 fontSize: 180,
-                stroke: 'black',
+                stroke: 'grey',
                 strokeWidth: 2,
                 text: "feedback",
-                fill: 'grey',
+                fill: 'white',
             });
             this.feedBack.visible(false);
             this.group.add(this.feedBack);
@@ -277,18 +316,37 @@ export class GameScreenView implements View {
 
             // constructing answer text by listening for valid key clicks
             window.addEventListener("keydown", (e) => {
+                let pretext = this.currentAnswer.slice(0, this.cursorIndex);
+                let rest = this.currentAnswer.slice(this.cursorIndex, this.currentAnswer.length);
                 if (e.key === "Backspace") {
-                    this.currentAnswer = this.currentAnswer.slice(0, -1);
+                    pretext = pretext.slice(0,-1);
+                    this.currentAnswer = pretext + rest;
+                    this.cursorIndex--;
+                    // this.currentAnswer = this.currentAnswer.slice(0, -1);
                 } else if  (e.key === "Enter" && this.onSubmit) {
                     // submit function
                     this.onSubmit(this.currentAnswer);
                     // clear answer
                     this.currentAnswer = "";
-                } else if (/^[0-9]/.test(e.key)) {
-                    this.currentAnswer += e.key;
+                }else if (e.key === "ArrowLeft"){
+                    
+                    if(this.cursorIndex > 0){
+                        this.cursorIndex--;
+                    }
+                }else if(e.key === "ArrowRight"){
+                    if(this.cursorIndex < this.currentAnswer.length){
+                        this.cursorIndex++;
+                    }
+                }else if (/^[0-9]/.test(e.key)) {
+                    pretext += e.key;
+                    this.currentAnswer = pretext + rest;
+                    this.cursorIndex++;
                 }
                 this.answerText.text(this.currentAnswer);
+                this.updateCursor();
                 this.answerText.getLayer()?.batchDraw();
+                this.cursor.getLayer()?.batchDraw();
+
             });
 
             // Redraw items
@@ -348,6 +406,24 @@ export class GameScreenView implements View {
     
         this.group.getLayer()?.batchDraw();
     }
+
+    resetHint(): void {
+        this.hintText.text("");
+        this.group.getLayer()?.batchDraw();
+    }
+
+    /*
+        Update the location of cursor
+    */
+    private updateCursor(){
+        if(!this.cursor || !this.answerText || !this.measureText) return;
+        const current = this.currentAnswer.slice(0, this.cursorIndex);
+        this.measureText.text(current);
+        const length = this.measureText.getTextWidth();
+        this.cursor.x(this.answerText.x() + length);
+        this.cursor.getLayer()?.batchDraw();
+    }
+    
     
 
     showFeedBack():void{
@@ -368,26 +444,29 @@ export class GameScreenView implements View {
 
     updateFeedBack(rate:number){
         //rate should be 0,1,2,3 (3 is best, 0 is worst)
+        
         switch (rate) {
             case 0:
                 this.feedBack.text("TRY AGAIN!");
                 this.feedBackBox.fill('red');
+                this.feedBack.fontSize(180);
                 break;
             case 1:
                 this.feedBack.text("GOOD JOB!");
                 this.feedBackBox.fill('green');
+                this.feedBack.fontSize(180);
                 break;
             case 2:
                 this.feedBack.text("AWESOME!");
                 this.feedBackBox.fill('green');
                 break;
             case 3:
-                /*
-                TODO - please add a feedback for restarting level when failing the test question
-
                 this.feedBack.text("Uh-oh! Ran out of retries... restarting level!");
                 this.feedBackBox.fill('red');
+                this.feedBack.fontSize(90);
                 break;
+                /*
+                TODO - please add a feedback for restarting level when failing the test question
                 */
         }
         this.group.getLayer()?.draw();
@@ -406,6 +485,19 @@ export class GameScreenView implements View {
         this.completeScreen.hide();
         this.completeText.hide();
     }
+    
+    /*
+        show "Test Question:" in the top
+    */
+    showTestTitle(){
+        this.testTitle.visible(true);
+        this.group.getLayer()?.draw();
+    }
+    hideTestTitle(){
+        this.testTitle.visible(false);
+        this.group.getLayer()?.draw();
+    }
+    
 
 	/**
 	 * Show the screen
@@ -426,4 +518,11 @@ export class GameScreenView implements View {
 	getGroup(): Konva.Group {
 		return this.group;
 	}
+
+    //make sure the answer box is clean once the game is started
+    initializeAnswer(){
+        this.answerText.text("");
+        this.currentAnswer = "";
+        this.updateCursor();
+    }
 }

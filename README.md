@@ -1,7 +1,7 @@
 # CSE110_Project
 Fresh repository with main branch.
 
-To run:
+To run GameScreen:
 
 npm install  
 
@@ -20,3 +20,11 @@ Go to /frontend
 npm run dev  
 
 Game will open on browser.  
+
+
+To run LoginScreen:  
+If you have MacOS, on the terminal, you go to the frontend folder and run: npm run dev  
+
+In another terminal, you go to the backend folder and run: npm start  
+
+If you have windows, make sure to change the terminal to be WSL  

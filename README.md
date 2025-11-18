@@ -5,6 +5,8 @@ To run:
 
 npm install  
 
+First time running: cd backend and then mkdir data  
+
 Need two different terminals, one running backend & other frontend
 
 Backend:

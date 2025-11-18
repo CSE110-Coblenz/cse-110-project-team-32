@@ -23,6 +23,7 @@ Game will open on browser.
 
 
 To run LoginScreen:  
+First time running: cd backend and then mkdir data    
 If you have MacOS, on the terminal, you go to the frontend folder and run: npm run dev  
 
 In another terminal, you go to the backend folder and run: npm start  

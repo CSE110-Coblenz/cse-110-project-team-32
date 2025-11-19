@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 //Routes that we are mounting to the main router app
-// app.use("/api/user", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/questions", questionRoutes);
 
 export default app;

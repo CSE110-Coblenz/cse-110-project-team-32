@@ -18,7 +18,8 @@ export class Minigame1ScreenView implements View{
     private inputBox: Konva.Rect;
     private inputGroup: Konva.Group;
     private submitBtn: Konva.Group;
-    
+    private feedbackText: Konva.Text;
+
 
 
   constructor(layer: Konva.Layer) {
@@ -165,6 +166,10 @@ export class Minigame1ScreenView implements View{
     
 
     //showing sequence text
+    /**
+     * TODO: need to adjust the size and position and add ? at the end
+     * Then consider the next line  position for the input and submit button
+     */
     this.sequenceText = new Konva.Text({
         x: qCard.x() + 20,
         y: qCard.y() + 40,
@@ -246,6 +251,20 @@ export class Minigame1ScreenView implements View{
         fill: "white"
         });
     this.submitBtn.add(submitText);
+
+    // Feekback: correct/wrong
+    /**
+     * TODO: change color which green for correct and red for wrong
+     */
+    this.feedbackText = new Konva.Text({
+        x: qCard.x() + 20,
+        y: qCard.y() + 180,
+        width: 460,
+        fontSize: 28,
+        align: "center",
+        fill: "white",
+    });
+    this.questionGroup.add(this.feedbackText);
     
     /***
      * NEED to CHANGE!!!!!!!!!!!-----------------
@@ -267,7 +286,9 @@ export class Minigame1ScreenView implements View{
   }
 
     // --------------------------  
-
+    /***
+     * ---------------------------------------------------------------------------------!!!!!!!!!!!-----------------
+     * */
 
     hideIntro() {
         this.introGroup.visible(false);
@@ -278,9 +299,10 @@ export class Minigame1ScreenView implements View{
         this.questionGroup.visible(true);
         this.layer.draw();
     }
-///////?????
+//show the question with  ",  ___ ?";
     displayQuestion(question: string) {
-        this.sequenceText.text(question);
+        const display = question + ",  ___ ?";
+        this.sequenceText.text(display);
         this.layer.draw();
     }
 

@@ -13,8 +13,8 @@ export class Minigame1ScreenModel {
   private readonly FIRE_GROWTH = 0.3;
   private readonly REQUIRED_CORRECT = 5;
 
-  private questions = [{ text: "1 + 1 = ?", answer: "2" }];
-  private index = 0;
+//   private questions = [{ text: "1 + 1 = ?", answer: "2" }];
+//   private index = 0;
 
 
 /***
@@ -43,7 +43,7 @@ export class Minigame1ScreenModel {
     this.isWin = false;
 
     // reset question index
-    this.index = 0;
+    //this.index = 0;
   }
 
   reset(): void {
@@ -54,7 +54,7 @@ export class Minigame1ScreenModel {
     this.isWin = false;
 
     // reset question index
-    this.index = 0;
+    //this.index = 0;
 
     this.generateNewQuestion();
   }
@@ -65,18 +65,18 @@ export class Minigame1ScreenModel {
    */
     generateNewQuestion() {
         const start = Math.floor(Math.random() * 9) + 1;
-        const step = Math.floor(Math.random() * 100) + 1;
+        const step = Math.floor(Math.random() * 10) + 1;
 
         this.sequence = [];
 
         for (let i = 0; i < 5; i++) {
-        this.sequence.push(start + i * step);
-    }
+            this.sequence.push(start + i * step);
+        }
 
         this.expectedAnswer = start + 5 * step;
     }
 
-        getSequence() {
+    getSequence() {
         return this.sequence;
     }
 
@@ -116,11 +116,11 @@ export class Minigame1ScreenModel {
     }
   }
 
-  getCurrentQuestion() {
-    return this.questions[this.index];
-  }
+//   getCurrentQuestion() {
+//     return this.questions[this.index];
+//   }
 
-  nextQuestion() {
-    // Only 1 question for now
-  }
+//   nextQuestion() {
+//     // Only 1 question for now
+//   }
 }

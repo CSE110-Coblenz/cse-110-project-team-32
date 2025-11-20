@@ -16,6 +16,7 @@ export class Minigame1ScreenController extends ScreenController {
 
     this.model = new Minigame1ScreenModel();
     this.view = new Minigame1ScreenView(layer);
+    this.view.hideFeedback();
 
     // Bind Start Game button
     const startBtn = this.view.getGroup().findOne(".startGameButton");
@@ -24,6 +25,9 @@ export class Minigame1ScreenController extends ScreenController {
     } else {
       console.warn("StartGameButton not found!");
     }
+    this.view.onSubmit = (answer: string) => {
+			this.handleAnswer(answer);
+		};
   }
 
   // ------------------------------
@@ -34,6 +38,7 @@ export class Minigame1ScreenController extends ScreenController {
 
     this.view.hideIntro();
     this.view.showQuestionBox();
+    
 
     // Display first sequence
     const seq = this.model.getSequence();
@@ -64,6 +69,7 @@ export class Minigame1ScreenController extends ScreenController {
   // ------------------------------
   handleAnswer(userInput: string) {
     const answerNum = Number(userInput);
+    console.log("handleAnswer execute");
 
     if (isNaN(answerNum)) {
       console.log("Invalid input!");
@@ -73,15 +79,20 @@ export class Minigame1ScreenController extends ScreenController {
     const correct = this.model.checkAnswer(answerNum);
 
     if (correct) {
+      let feedbacknum = Math.random() < 0.5 ? 1 : 2;
+      this.view.updateFeedback(feedbacknum);
       console.log("Correct!");
       this.view.updateCorrect(this.model.getTotalCorrect());
     } else {
+      this.view.updateFeedback(0);
       console.log("Wrong!");
     }
-
+    this.view.showFeedback();
+    setTimeout(()=>this.view.hideFeedback(),1000); //hide feedback after 1s and go to next question
     // Show next question (Model auto-generated it)
     const seq = this.model.getSequence();
     this.view.displayQuestion(seq.join(", "));
+
   }
 
   // ------------------------------

@@ -8,6 +8,7 @@ export class Minigame1ScreenView implements View{
     private layer: Konva.Layer;
     private introGroup: Konva.Group;
     private questionGroup: Konva.Group;
+    private feedbackGroup: Konva.Group;
     private htmlInput: HTMLInputElement;
 
     // --- Question UI elements ---
@@ -18,8 +19,11 @@ export class Minigame1ScreenView implements View{
     private inputBox: Konva.Rect;
     private inputGroup: Konva.Group;
     private submitBtn: Konva.Group;
-    private feedbackText: Konva.Text;
+    private feedback!: Konva.Text;
+    private feedbackBox!: Konva.Rect;
 
+    // handle submit
+    onSubmit?: (answer: string) => void;
 
 
   constructor(layer: Konva.Layer) {
@@ -252,19 +256,56 @@ export class Minigame1ScreenView implements View{
         });
     this.submitBtn.add(submitText);
 
+    this.submitBtn.on("mouseenter", ()=>{
+        submitRect.fill("#a0dba0ff");
+    });
+    this.submitBtn.on("mouseleave", () =>{
+        submitRect.fill("#6bd66b");
+    })
+
+    this.submitBtn.on("click", () => {
+      const val = this.htmlInput.value.trim();
+      if(val && this.onSubmit){
+        console.log("on submit execute");
+        this.htmlInput.value=""; //clear the answer
+        this.onSubmit(val);
+        
+      }
+    });
+
     // Feekback: correct/wrong
     /**
      * TODO: change color which green for correct and red for wrong
      */
-    this.feedbackText = new Konva.Text({
-        x: qCard.x() + 20,
-        y: qCard.y() + 180,
-        width: 460,
-        fontSize: 28,
-        align: "center",
-        fill: "white",
+    this.feedbackGroup = new Konva.Group({});
+    this.group.add(this.feedbackGroup);
+
+    this.feedbackBox = new Konva.Rect({
+      x: qCard.x() + qCard.width()/20,
+      y: qCard.y() + qCard.height()/2,
+      width: (qCard.width()/10)*9,
+      // width: contentBox.width(),
+      height: (qCard.height()/10)*2,
+      fill: '',
+      stroke:'',
+      opacity: 0.9
+  });
+    this.feedbackGroup.add(this.feedbackBox);
+    
+    this.feedback = new Konva.Text({
+        x: this.feedbackBox.x(), //should be middle of box
+        y: this.feedbackBox.y(), 
+        width: this.feedbackBox.width(),
+        height: this.feedbackBox.height(),
+        align: 'center',
+        fontSize: this.feedbackBox.height(),
+        stroke: 'black',
+        strokeWidth: 2,
+        text: "feedback",
+        fill: 'grey',
     });
-    this.questionGroup.add(this.feedbackText);
+    this.feedbackGroup.add(this.feedback);
+    // this.feedbackGroup.visible(false);
     
     /***
      * NEED to CHANGE!!!!!!!!!!!-----------------
@@ -298,6 +339,35 @@ export class Minigame1ScreenView implements View{
     showQuestionBox() {
         this.questionGroup.visible(true);
         this.layer.draw();
+    }
+    /*
+    ---------------feed back-----------------
+    */
+    showFeedback(){
+        this.feedbackGroup.visible(true);
+        this.layer.draw();
+    }
+    hideFeedback(){
+      this.feedbackGroup.visible(false);
+      this.layer.draw();
+    }
+    updateFeedback(rate:number){
+        //rate should be 0,1,2 (0 for incorrect, 1,2 for correct)
+        switch (rate) {
+            case 0:
+                this.feedback.text("TRY AGAIN!");
+                this.feedbackBox.fill('red');
+                break;
+            case 1:
+                this.feedback.text("GOOD JOB!");
+                this.feedbackBox.fill('green');
+                break;
+            case 2:
+                this.feedback.text("AWESOME!");
+                this.feedbackBox.fill('green');
+                break;
+        }
+        this.group.getLayer()?.draw();
     }
 //show the question with  ",  ___ ?";
     displayQuestion(question: string) {

@@ -123,10 +123,11 @@ class App implements ScreenSwitcher {
       this.layer.draw();
 
       // Show starting screen
-    //   this.homeController.getView().show();
+    //  this.homeController.getView().show();
     //   this.loginController.getView().show();
     //   this.gameController.getView().show();
       this.minigame1Controller.getView().show();
+      
 
     }
 
@@ -168,7 +169,7 @@ class App implements ScreenSwitcher {
             case "minigame":
                 if (screen.game === "MiniGame1") {
                     this.minigame1Controller.getView().show();
-                    //this.minigame1Controller.startGame?.();
+                    // this.minigame1Controller.startGame?.();
                 }
 
                 // if (screen.game === "MiniGame2") {

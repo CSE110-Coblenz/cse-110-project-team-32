@@ -17,6 +17,8 @@ export class GameScreenView implements View {
     private cursorIndex: number = 0;//position of cursor
     private measureText!: Konva.Text; //measure length of answer
     private testTitle!: Konva.Text;
+    private modeBox!: Konva.Rect;
+    private modeText!: Konva.Text;
 
     private levelText!: Konva.Text;
     private progressBar!: Konva.Rect;
@@ -129,6 +131,40 @@ export class GameScreenView implements View {
                 cornerRadius: 8,
             });
             this.group.add(levelBox);
+
+            // MODE BOX (Practice / Test)
+            const modeBoxWidth = 250;
+            const modeBoxHeight = 50;
+
+            // Position: centered between exit button and level box
+            const modeBoxX =
+                exitButton.x() +
+                exitButtonSize +
+                (levelBox.x() - (exitButton.x() + exitButtonSize) - modeBoxWidth) / 2;
+
+            this.modeBox = new Konva.Rect({
+                x: modeBoxX,
+                y: contentBox.y() + 20,
+                width: modeBoxWidth,
+                height: modeBoxHeight,
+                fill: "#d9d9d9",
+                stroke: "black",
+                strokeWidth: 2,
+                cornerRadius: 8,
+            });
+            this.group.add(this.modeBox);
+
+            this.modeText = new Konva.Text({
+                x: this.modeBox.x(),
+                y: this.modeBox.y() + (modeBoxHeight - 32) / 2,
+                width: this.modeBox.width(),
+                text: "Practice",       // default
+                fontSize: 32,
+                align: "center",
+                fill: "black",
+            });
+            this.group.add(this.modeText);
+
           
             this.levelText = new Konva.Text({
                 x: levelBox.x(),
@@ -395,6 +431,21 @@ export class GameScreenView implements View {
         this.levelText.text(`Level ${level}`);
     }
 
+    /**
+     * updates the mode to show practice or test
+     * @param mode 
+     */
+    updateMode(mode: "Practice" | "Test", testTries = 0) {
+        console.log("mode changed to:", mode);
+        let modeText = mode
+        if (mode == "Test") {
+            modeText = "Test: " + testTries + " Tries Left";
+        }
+
+        this.modeText.text(modeText);
+        this.group.getLayer()?.draw();
+    }
+
 
     updateHint(hint: string): void {
         this.hintText.text(`${hint}`);
@@ -472,10 +523,6 @@ export class GameScreenView implements View {
         this.group.getLayer()?.draw();
     }
 
-    showTestResults(percentageScore: number, passed: boolean): void{
-		//show test results
-	}
-
     showComplete():void{
         this.completeScreen.show();
         this.completeText.show();
@@ -484,18 +531,6 @@ export class GameScreenView implements View {
     hideComplete():void{
         this.completeScreen.hide();
         this.completeText.hide();
-    }
-    
-    /*
-        show "Test Question:" in the top
-    */
-    showTestTitle(){
-        this.testTitle.visible(true);
-        this.group.getLayer()?.draw();
-    }
-    hideTestTitle(){
-        this.testTitle.visible(false);
-        this.group.getLayer()?.draw();
     }
     
 

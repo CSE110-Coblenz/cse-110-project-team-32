@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { Question } from "../models/question";
 import path from "path";
 
-const questiondb = new Database(path.join(__dirname, "../../data/question.db"));
+const questiondb = new Database(path.join(__dirname, "/question.db"));
 
 // create the questions table if it doesn’t exist
 questiondb.prepare(`

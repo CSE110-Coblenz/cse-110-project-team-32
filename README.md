@@ -1,31 +1,24 @@
 # CSE110_Project
 Fresh repository with main branch.
 
-To run GameScreen:
+## To run the game for the first time:
 
-npm install  
+If you have Windows, change your terminal to WSL. If you have MacOS, skip this step and run the commands below.
 
-First time running: cd backend and then mkdir data  
+Go to /backend and run ```npm install```
 
-Need two different terminals, one running backend & other frontend
+Go to /frontend and run ```npm install```
 
-Backend:
-Go to /backend/src/data
-Run npx tsx question_db.ts
-Go to /backend/src
-Run npx ts-node server.ts
+Go to /backend and run ```mkdir data```  
 
-Frontend:
-Go to /frontend
-npm run dev  
+Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this command if you don't have the question database already loaded)
+
+## To run the game for any subsequent time:
+
+Go to /frontend and run ```npm run dev```
+
+Got to /backend and run ```npm start```
+
 
 Game will open on browser.  
 
-
-To run LoginScreen:  
-First time running: cd backend and then mkdir data    
-If you have MacOS, on the terminal, you go to the frontend folder and run: npm run dev  
-
-In another terminal, you go to the backend folder and run: npm start  
-
-If you have windows, make sure to change the terminal to be WSL  

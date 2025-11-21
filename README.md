@@ -15,6 +15,7 @@ Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this comm
 
 Go to /backend and create a ```.env``` file. Here, you will type the following contents:
 
+![env_image.jpg](frontend/public/env_image.jpg)
 
 
 ## To run the game for any subsequent time:

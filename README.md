@@ -17,7 +17,7 @@ Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this comm
 
 Go to /frontend and run ```npm run dev```
 
-Got to /backend and run ```npm start```
+Go to /backend and run ```npm start```
 
 
 Game will open on browser.  

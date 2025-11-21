@@ -51,9 +51,12 @@ export class HomeScreenController extends ScreenController {
   private handleStartGame(): void { 
     console.log("Start Game clicked!"); // You could call: this.screenSwitcher.switchToScreen({ type: "level", level: this.model.getCurrLevel() }); 
   } 
+  
   private handleMiniGameClicked(gameName: string): void { 
     console.log("Mini game selected:", gameName); 
+    this.screenSwitcher.switchToScreen({ type: "minigame", game: gameName });
   } 
+
   private handleLogout(): void { 
     console.log("User logged out"); 
     this.screenSwitcher.switchToScreen({ type: "login" }); 

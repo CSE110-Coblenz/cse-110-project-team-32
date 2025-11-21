@@ -1,7 +1,6 @@
 import Konva from "konva";
 import type { View } from "../../types";
 import { STAGE_HEIGHT, STAGE_WIDTH, TOTAL_LEVELS } from "../../constants";
-import { HomeScreenController } from "./HomeScreenController";
 import type { MiniGameInfo } from "../../types";
 
 /*********************************************/
@@ -11,22 +10,7 @@ import type { MiniGameInfo } from "../../types";
 //          3) vertical list of mini games on right
 //          4) user info and log out button on top right
 /*********************************************/
-// interface LevelInfo      // defines the shape, lock or unlock level
-// interface MiniGameInfo   // defines the shape, lock or unlock mini game
-// export class HomeScreenView implements View
-//      constructor:
-//      -- Background
-//      -- fake data for testing of level and mini game (Need to remove later)
-//      -- private createStartGameButton()
-//      -- private createMiniGameButton(game: MiniGameInfo, y: number)     
-//      -*- public setMiniGames(games: MiniGameInfo[])
-//      -- private createLevelButtons()
-//      -*- public setLevels(levels: LevelInfo[])
-//      -- private createUserArea()
-//      -*- public updateUserName(name: string)
-//                            
 
-// for level select
 interface LevelInfo {
   id: number;
   unlocked: boolean;
@@ -36,11 +20,13 @@ export class HomeScreenView implements View {
   private group: Konva.Group;
   private levels: LevelInfo[] = [];
   private miniGames: MiniGameInfo[] = [];
-  private levelsGroup: Konva.Group;
+  private logoutGroup: Konva.Group | null = null;
+  private lastLevelBottomY = 0;
+  private lastMiniGameBottomY = 0;
 
   private onLevelSelect?: (levelId: number) => void;
   private onMiniGameSelect?: (gameName: string) => void;
-  onStartGame?: () => void;
+  private onStartGame?: () => void;
   private onLogout?: () => void;
 
   // user info and logout button
@@ -51,18 +37,17 @@ export class HomeScreenView implements View {
   constructor(onLevelSelect?: (levelId: number) => void,
               onStartGame?: () => void,
               onMiniGameSelect?: (gameName: string) => void,
-              onLogout?: () => void
+                    onLogout?: () => void
 ) {
     this.group = new Konva.Group({ visible: true });
     this.onLevelSelect = onLevelSelect;
     this.onMiniGameSelect = onMiniGameSelect;
     this.onStartGame = onStartGame;
     this.onLogout = onLogout;
-    this.levelsGroup = new Konva.Group(); // initialize the levels group
-    this.group.add(this.levelsGroup);
 
     // background
-   Konva.Image.fromURL("Desert Outpost Concept Art.jpeg", (bgImage: Konva.Image) => {
+   Konva.Image.fromURL("desertBg2.jpg", (bgImage: Konva.Image) => {
+    //locks its size to the logical stage — it won’t stretch to the full browser (Ni)
       bgImage.x(0);
       bgImage.y(0);
       bgImage.width(STAGE_WIDTH);
@@ -98,13 +83,25 @@ export class HomeScreenView implements View {
   }
 
   /****************** Start Game Button ********************/
+  // fixed bug: onlu rect was clickable, not the text (Ni)
+  // made the rect and text into a group, and set click event on rect
+  // adjust positioning to center text in rect (Ni)
+  private startGameTopY = 0;
+
   private createStartGameButton(): void {
-    const startGroup = new Konva.Group();
-    const rect = new Konva.Rect({
+    const BTN_WIDTH = 220;
+    const BTN_HEIGHT = 70;
+
+    const startGroup = new Konva.Group({
       x: STAGE_WIDTH * 0.55,
-      y: 150,
-      width: 220,
-      height: 70,
+      y: STAGE_HEIGHT * 0.35,
+    });
+
+    const rect = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: BTN_WIDTH,
+      height: BTN_HEIGHT,
       fill: "#99ac46ff",
       cornerRadius: 10,
       stroke: "black",
@@ -112,51 +109,81 @@ export class HomeScreenView implements View {
     });
 
     const text = new Konva.Text({
-      x: STAGE_WIDTH * 0.55 + 110,
-      y: 170,
+      x: 110, // center of rect
+      y: 35, // adjust to center vertically
       text: "START GAME",
       fontSize: 24,
       fontFamily: "Arial",
       fill: "yellow",
       align: "center",
     });
+
     text.offsetX(text.width() / 2);
+    text.offsetY(text.height() / 2);
 
     startGroup.add(rect);
     startGroup.add(text);
 
-    if (this.onStartGame) rect.on("click", this.onStartGame);
+    if (this.onStartGame) startGroup.on("click", this.onStartGame);
+
+
+    // 30 here is because i set spacing in setMiniGames to 100, so 100 - 70 (btn height) = 30
+    this.startGameTopY = startGroup.y(); 
+
     this.group.add(startGroup);
   }
 
+
   /****** Mini Game Buttons *****/
   private createMiniGameButton(game: MiniGameInfo, y: number): Konva.Group {
-    const group = new Konva.Group();
-    const rect = new Konva.Rect({
+    // btn size
+    const BTN_WIDTH = 220;
+    const BTN_HEIGHT = 70;
+
+    // group to hold rect and text
+    const group = new Konva.Group({
       x: STAGE_WIDTH * 0.55,
       y,
-      width: 220,
-      height: 70,
+    });
+
+    const rect = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: BTN_WIDTH,
+      height: BTN_HEIGHT,
       fill: "#e0e0e0",          
-    stroke: "#555",           
-    strokeWidth: 2,
-    cornerRadius: 6,
+      stroke: "#555",           
+      strokeWidth: 2,
+      cornerRadius: 6,
     });
 
     const text = new Konva.Text({
-      x: STAGE_WIDTH * 0.55 + 110,
-      y: y + 20,
+      x: BTN_WIDTH / 2,
+      y: BTN_HEIGHT / 2,
       text: game.unlocked ? game.name : `🔒 ${game.name}`,
       fontSize: 22,
       fontFamily: "Arial",
       fill: "black",
       align: "center",
     });
+
     text.offsetX(text.width() / 2);
+    text.offsetY(text.height() / 2);
 
     if (game.unlocked && this.onMiniGameSelect) {
-      rect.on("click", () => this.onMiniGameSelect!(game.name));
+      group.on("click", () => this.onMiniGameSelect!(game.name));
     }
+    
+    // hover
+    group.on("mouseenter", () => {
+      rect.fill("#deb831ff");
+      rect.getLayer()?.batchDraw();
+    });
+    group.on("mouseleave", () => {
+      rect.fill("#e0e0e0");
+      rect.getLayer()?.batchDraw();
+    });
+    // hover end
 
     group.add(rect);
     group.add(text);
@@ -165,41 +192,42 @@ export class HomeScreenView implements View {
 
   public setMiniGames(games: MiniGameInfo[]): void {
     this.miniGames = games;
-    const baseY = 270;
+
+    const baseY = this.startGameTopY;
     const spacing = 100;
+
     games.forEach((g, i) => {
-      const btn = this.createMiniGameButton(g, baseY + i * spacing);
+      const btn = this.createMiniGameButton(g, baseY + (i+1) * spacing);
       this.group.add(btn);
     });
+
+    this.lastMiniGameBottomY = baseY + (this.miniGames.length - 1) * spacing + 70;
   }
 
   /********* Level Buttons **************/
-  private createLevelButtons(): void {
-  // Clear old buttons
-  this.levelsGroup.destroyChildren();
+  private createLevelButton(level: LevelInfo, y: number): Konva.Group {
+    const BTN_WIDTH = 180;
+    const BTN_HEIGHT = 60;
 
-  const startX = STAGE_WIDTH * 0.25;  
-  const startY = 100;
-  const rectWidth = 180;
-  const rectHeight = 60;
-  const spacingY = 65;
-
-  this.levels.forEach((level, i) => {
-    const y = startY + i * spacingY;
-    const rect = new Konva.Rect({
-      x: startX,
+    const group = new Konva.Group({
+      x: STAGE_WIDTH * 0.35,
       y,
-      width: rectWidth,
-      height: rectHeight,
-      fill: "#e0e0e0",
-      stroke: "#555",
-      strokeWidth: 2,
-      cornerRadius: 6,
     });
 
+    const rect = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: BTN_WIDTH,
+      height: BTN_HEIGHT,
+      fill: "#e0e0e0",          
+      stroke: "#555",           
+      strokeWidth: 2,
+      cornerRadius: 6,
+      });
+
     const label = new Konva.Text({
-      x: startX + rectWidth / 2,
-      y: y + rectHeight / 4,
+      x: BTN_WIDTH / 2,
+      y: BTN_HEIGHT / 2,
       text: level.unlocked ? `Level ${level.id}` : `🔒 Level ${level.id}`,
       fontSize: 20,
       fontFamily: "Arial",
@@ -207,18 +235,41 @@ export class HomeScreenView implements View {
       align: "center",
     });
     label.offsetX(label.width() / 2);
+    label.offsetY(label.height() / 2);
 
-    // Only unlocked levels are clickable
     if (level.unlocked && this.onLevelSelect) {
-      rect.on("click", () => this.onLevelSelect!(level.id));
+      group.on("click", () => this.onLevelSelect!(level.id));
     }
 
-    this.levelsGroup.add(rect);
-    this.levelsGroup.add(label);
-  });
+    // hover
+    group.on("mouseenter", () => {
+      rect.fill("#deb831ff");
+      rect.getLayer()?.batchDraw();
+    });
+    group.on("mouseleave", () => {
+      rect.fill("#e0e0e0");
+      rect.getLayer()?.batchDraw();
+    });
+    // hover end
 
-  this.levelsGroup.getLayer()?.draw();
-}
+    group.add(rect);
+    group.add(label);
+    return group;
+  }
+
+  private createLevelButtons(): void {
+    const BTN_HEIGHT = 60;
+    const GAP = 20;
+
+    let currentY = this.startGameTopY - 40;
+
+    this.levels.forEach(level => {
+      const btn = this.createLevelButton(level, currentY);
+      this.group.add(btn);
+
+      currentY += BTN_HEIGHT + GAP;
+    });
+  }
 
 
   public setLevels(Currlevel: number): void {
@@ -230,31 +281,53 @@ export class HomeScreenView implements View {
         unlocked: i <= Currlevel,
       });
     }
+    
     console.log("currlevel:", Currlevel);
     this.levels = levelInfo;
     this.createLevelButtons();
+
+    this.lastLevelBottomY = this.startGameTopY - 40 + (this.levels.length) * (60 + 20);
   }
+
 
   /**************Log out Button *****************/
   private createUserArea(userId: string): void {
-    const padding = 20;
+    const BTN_WIDTH = 140;
+    const BTN_HEIGHT = 40;    
 
+    this.logoutGroup = new Konva.Group({
+      x: 0,   // reposition later
+      y: 0,
+    });
+    
     // Use user name placeholder
     this.userText = new Konva.Text({
-      x: STAGE_WIDTH - 250,
-      y: padding,
+      x: 0,
+      y: 0,
       text: `Hello ${userId}`,
-      fontSize: 20,
+      fontSize: 25,
       fontFamily: "Arial",
-      fill: "#1c1717ff",
+      fill: "white",
+      stroke: "black",
+      strokeWidth: 1, 
+    });
+
+    // Background for "Hello user"
+    const helloBg = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: this.userText.width() + 20,
+      height: this.userText.height() + 10,
+      fill: "rgba(0,0,0,0.45)", // 半透明黑
+      cornerRadius: 8,
     });
 
     // Red logout button
     this.logoutButton = new Konva.Rect({
-      x: STAGE_WIDTH - 110,
-      y: padding - 5,
-      width: 90,
-      height: 30,
+      x: 0,
+      y: 50,
+      width: BTN_WIDTH,
+      height: BTN_HEIGHT,
       fill: "#ff4d4f",
       cornerRadius: 6,
       stroke: "darkred",
@@ -262,15 +335,17 @@ export class HomeScreenView implements View {
     });
 
     this.logoutText = new Konva.Text({
-      x: STAGE_WIDTH - 65,
-      y: padding + 2,
+      x: BTN_WIDTH / 2,
+      y: 50 + BTN_HEIGHT / 2,
       text: "Log Out",
       fontSize: 16,
       fontFamily: "Arial",
       fill: "white",
       align: "center",
     });
+
     this.logoutText.offsetX(this.logoutText.width() / 2);
+    this.logoutText.offsetY(this.logoutText.height() / 2);
 
     // Hover effect
     this.logoutButton.on("mouseenter", () => {
@@ -285,11 +360,49 @@ export class HomeScreenView implements View {
    
     if (this.onLogout) {
       this.logoutButton.on("click", this.onLogout);
+      this.logoutText.on("click", this.onLogout);
     }
+    
+    this.logoutGroup.add(helloBg);
+    this.logoutGroup.add(this.userText);
+    this.logoutGroup.add(this.logoutButton);
+    this.logoutGroup.add(this.logoutText);
 
-    this.group.add(this.userText);
-    this.group.add(this.logoutButton);
-    this.group.add(this.logoutText);
+    this.group.add(this.logoutGroup);
+  }
+
+  private positionLogoutButton(): void {
+    if (!this.logoutGroup) return;
+
+    const centerX = (STAGE_WIDTH * 0.25 + STAGE_WIDTH * 0.55) / 2;
+
+    const lowerBottom = Math.max(this.lastLevelBottomY, this.lastMiniGameBottomY);
+
+    //test
+    console.log("===== positionLogoutButton() Debug =====");
+    console.log("STAGE_WIDTH:", STAGE_WIDTH);
+    console.log("logoutButton width:", this.logoutButton?.width());
+    console.log("centerX:", centerX);
+    console.log("lastLevelBottomY:", this.lastLevelBottomY);
+    console.log("lastMiniGameBottomY:", this.lastMiniGameBottomY);
+    console.log("lowerBottom:", lowerBottom);
+    //
+
+    // this.logoutGroup.x(centerX - this.logoutButton!.width() / 2);
+    // this.logoutGroup.y(lowerBottom + 100);
+    const finalX = centerX + this.logoutButton!.width() / 1.5;
+    const finalY = lowerBottom + 60;
+
+    console.log("Final logoutGroup X:", finalX);
+    console.log("Final logoutGroup Y:", finalY);
+    console.log("========================================");
+
+    // 设置位置
+    this.logoutGroup.x(finalX);
+    this.logoutGroup.y(finalY);
+
+
+    this.logoutGroup.getLayer()?.batchDraw();
   }
 
   /******************* Update user name ********************/
@@ -323,6 +436,6 @@ public updateUserName(name: string): void {
     this.createUserArea(userId);
     this.setLevels(currLevel);
     this.setMiniGames(minigames);
+    this.positionLogoutButton(); 
   }
 }
-

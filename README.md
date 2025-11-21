@@ -13,6 +13,10 @@ Go to /backend and run ```mkdir data```
 
 Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this command if you don't have the question database already loaded)
 
+Go to /backend and create a ```.env``` file. Here, you will type the following contents:
+
+
+
 ## To run the game for any subsequent time:
 
 Go to /frontend and run ```npm run dev```

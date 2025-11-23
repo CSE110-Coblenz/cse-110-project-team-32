@@ -11,7 +11,7 @@ export class Minigame1ScreenModel {
 
   private readonly INITIAL_TIME = 30;
   private readonly FIRE_GROWTH = 0.3;
-  private readonly REQUIRED_CORRECT = 1;
+  private readonly REQUIRED_CORRECT = 5;
 
 //   private questions = [{ text: "1 + 1 = ?", answer: "2" }];
 //   private index = 0;
@@ -98,7 +98,7 @@ export class Minigame1ScreenModel {
   getIsWin() { return this.isWin; }
 
   incrementCorrect(): void {
-    console.log("incremented!");
+    // console.log("incremented!");
     this.totalCorrect++;
     if (this.totalCorrect >= this.REQUIRED_CORRECT) {
       this.isGameOver = true;

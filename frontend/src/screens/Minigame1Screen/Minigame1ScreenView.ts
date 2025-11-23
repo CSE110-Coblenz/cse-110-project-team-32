@@ -26,12 +26,15 @@ export class Minigame1ScreenView implements View{
     private feedbackBox!: Konva.Rect;
     private gameOverBox!: Konva.Rect;
     private gameOverText!: Konva.Text;
+    private tryAgainBox!: Konva.Rect;
+    private tryAgainText!: Konva.Text;
     private gameWinBox!: Konva.Rect;
     private gameWinText!: Konva.Text;
 
-    // handle submit
+    // handle submit, exit page, try again after time up
     onSubmit?: (answer: string) => void;
     onExit?: () => void;
+    onTryAgain?: () => void;
 
   constructor(layer: Konva.Layer) {
     this.layer = layer;
@@ -44,7 +47,7 @@ export class Minigame1ScreenView implements View{
     this.htmlInput.style.fontSize = "20px";
     document.body.appendChild(this.htmlInput); 
 ////Html
-
+    
     // --- Add background image ---
     Konva.Image.fromURL("desertBg.jpg", (bgImage: Konva.Image) => {
           bgImage.x(0);
@@ -330,13 +333,53 @@ export class Minigame1ScreenView implements View{
       y: this.gameOverBox.y() + this.gameOverBox.height()/3,
       width: this.gameOverBox.width(),
       height: this.gameOverBox.height(),
-      aligh: 'center',
+      align: 'center',
       fontSize: 130,
       fill: 'red',
       stroke: 'black',
       text: "TIME IS UP!",
     });
     this.gameOverGroup.add(this.gameOverText);
+    this.tryAgainBox = new Konva.Rect({
+      x: this.gameOverBox.x() + this.gameOverBox.width()/3 * 1,
+      y: this.gameOverBox.y() + this.gameOverBox.height()/16 * 11,
+      width: this.gameOverBox.width()/3,
+      height: this.gameOverBox.height()/4,
+      fill:'#1eac31ff',
+      cornerRadius: 8,
+      strokeWidth: 2,
+      stroke: 'black',
+    });
+    this.gameOverGroup.add(this.tryAgainBox);
+    this.tryAgainText = new Konva.Text({
+      x: this.tryAgainBox.x(),
+      y: this.tryAgainBox.y() + 18,
+      width: this.tryAgainBox.width(),
+      height: this.tryAgainBox.height(),
+      align: 'center',
+      fill: 'white',
+      text:"Try Again",
+      fontSize: 60,
+    });
+    this.gameOverGroup.add(this.tryAgainText);
+    this.tryAgainBox.on("click", ()=>{
+      if(this.onTryAgain) this.onTryAgain();
+    });
+    this.tryAgainBox.on("mouseenter", ()=>{
+      this.tryAgainBox.opacity(0.5);
+    });
+    this.tryAgainBox.on("mouseleave", ()=>{
+      this.tryAgainBox.opacity(1);
+    });
+    this.tryAgainText.on("click", ()=>{
+      if(this.onTryAgain) this.onTryAgain();
+    });
+    this.tryAgainText.on("mouseenter", ()=>{
+      this.tryAgainBox.opacity(0.5);
+    });
+    this.tryAgainText.on("mouseleave", ()=>{
+      this.tryAgainBox.opacity(1);
+    });
 
     this.gameWinGroup = new Konva.Group();
     this.group.add(this.gameWinGroup);
@@ -408,6 +451,16 @@ export class Minigame1ScreenView implements View{
         console.log("exit clicked");
     });
     this.exitGroup.visible(false);
+
+    this.htmlInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        const answer = this.htmlInput.value.trim();
+        if(this.onSubmit && answer){
+           this.onSubmit(answer);
+          this.htmlInput.value="";
+        }
+      }
+    })
                 
 
     // this.feedbackGroup.visible(false);
@@ -453,6 +506,15 @@ export class Minigame1ScreenView implements View{
     hideQuestionBox(){
       this.questionGroup.hide();
       this.exitGroup.hide();
+      this.layer.draw();
+    }
+    updateInput(){
+      this.inputText.text(this.htmlInput.value);
+      this.layer.draw();
+    }
+    hideHTML(){
+      this.htmlInput.style.display = "none";
+      this.htmlInput.value = "";
       this.layer.draw();
     }
     /*

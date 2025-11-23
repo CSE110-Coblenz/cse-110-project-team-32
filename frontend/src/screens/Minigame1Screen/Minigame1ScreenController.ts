@@ -29,7 +29,7 @@ export class Minigame1ScreenController extends ScreenController {
     }
     this.view.onSubmit = (answer: string) => {
 			this.handleAnswer(answer);
-
+      this.view.updateInput();
 		};
     this.view.onExit = () => {
       this.model.setGameOver();
@@ -37,10 +37,15 @@ export class Minigame1ScreenController extends ScreenController {
       this.view.hideGameOver();
       this.view.hideGameWin();
       this.view.showIntro();
+      this.view.hideHTML();
+      this.view.updateInput();
       
       clearInterval(this.timerId);
       this.screenSwitcher.switchToScreen({type: "home"});
-      
+    }
+    this.view.onTryAgain = () =>{
+      this.view.hideGameOver();
+      this.startGame();
     }
   }
 
@@ -52,6 +57,7 @@ export class Minigame1ScreenController extends ScreenController {
     this.model.reset();
     console.log("reseted!");
     this.view.updateTime(this.model.getTimeLeft())
+    this.view.updateCorrect(this.model.getTotalCorrect());
     this.startTimer();
     this.view.hideIntro();
     this.view.showQuestionBox();
@@ -138,6 +144,8 @@ export class Minigame1ScreenController extends ScreenController {
       this.model.setGameOver();
       console.log("⏰ GAME OVER!");
     }
+    this.view.hideHTML();
+    this.view.updateInput();
   }
 
   getView() {

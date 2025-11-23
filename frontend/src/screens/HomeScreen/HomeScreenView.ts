@@ -439,4 +439,3 @@ public updateUserName(name: string): void {
     this.positionLogoutButton(); 
   }
 }
-

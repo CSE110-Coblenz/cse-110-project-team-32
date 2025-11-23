@@ -26,26 +26,70 @@ export class LoginScreenController extends ScreenController {
     /**
      * Handle login attempt
      */
-    private handleLogin(username: string, password: string): void {
+    private async handleLogin(username: string, password: string): Promise<void> {
         // TODO: Implement actual authentication logic when database is added
-        if (username && password) {
-            this.model.setUsername(username);
-            this.model.setPassword(password);
-            // For now, any non-empty username/password combination will work
+        this.model.setUsername(username);
+        this.model.setPassword(password);
+        const res = await fetch(`http://localhost:3000/api/user/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: username, password: password })
+        });
+        //If the backend threw an error, let the user know, otherwise, just switch to the homescreen
+        if (!res.ok) {
+            const error = await res.json();
+            alert("Login error: " +  error.error);
+            return;
+        } else {
             this.screenSwitcher.switchToScreen({
                 type: "home",
             });
-        } else {
-            alert("Please enter both username and password");
         }
+
     }
 
     /**
      * Handle signup request
      */
     private handleSignup(): void {
-        // TODO: Implement signup logic when database is added
-        alert("Sign up functionality will be added soon!");
+        // Show the signup modal and handle created account via callback
+        this.view.showSignupModal(async (username: string, password: string) => {
+            await this.handleCreateAccount(username, password);
+        });
+    }
+
+    /**
+     * Handle account creation (no DB yet) — prefill login and close modal
+     */
+
+    private async handleCreateAccount(username: string, password: string): Promise<void> {
+        // Store in model (temporarily)
+        this.model.setUsername(username);
+        this.model.setPassword(password);
+        // Prefill the login inputs so the user can log in
+        this.view.prefillLoginFields(username, password);
+        const res = await fetch(`http://localhost:3000/api/user/newUser`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: username, password: password})
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            alert("Signup error: " + error.error);
+            return;
+        } else {
+            alert('Account created. You can now log in.');
+            this.screenSwitcher.switchToScreen({
+                type: "home",
+            });
+        }
+
+        /*
+        // Hide the signup modal
+        this.view.hideSignupModal();
+        // Optionally notify the user
+        alert('Account created. You can now log in.');
+        */
     }
 
     /**

@@ -1,8 +1,9 @@
 import Database from "better-sqlite3";
+import { User } from "../models/user";
 import path from "path";
 
 // Create or open the SQLite database file
-const userdb = new Database(path.join(__dirname, "../../data/user.db"));
+const userdb = new Database(path.join(__dirname, "/user.db"));
 
 // Create the "users" table if it doesn’t already exist
 userdb.prepare(`
@@ -33,16 +34,19 @@ export function addUser(username: string, password: string): number {
   return Number(info.lastInsertRowid);
 }
 
-export function getUserByUsername(username: string) {
-  return userdb.prepare("SELECT * FROM users WHERE username = ?").get(username);
+export function getUserByUsername(username: string): User | undefined {
+  return userdb
+    .prepare("SELECT * FROM users WHERE username = ?")
+    .get(username) as User | undefined;
 }
 
 export function getAllUsers() {
   return userdb.prepare("SELECT * FROM users").all();
 }
 
-export function getUserById(id: number) {
-  return userdb.prepare("SELECT * FROM users WHERE id = ?").get(id);
+export function getUserById(id: number): User | undefined {
+  return userdb
+  .prepare("SELECT * FROM users WHERE id = ?").get(id) as User | undefined;
 }
 
 export function deleteUser(id: number) {

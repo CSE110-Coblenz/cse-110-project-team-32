@@ -1,20 +1,29 @@
 # CSE110_Project
 Fresh repository with main branch.
 
-To run:
+## To run the game for the first time:
 
-npm install  
+If you have Windows, change your terminal to WSL. If you have MacOS, skip this step and run the commands below.
 
-Need two different terminals, one running backend & other frontend
+Go to /backend and run ```npm install```
 
-Backend:
-Go to /backend/src/data
-Run npx tsx question_db.ts
-Go to /backend/src
-Run npx ts-node server.ts
+Go to /frontend and run ```npm install```
 
-Frontend:
-Go to /frontend
-npm run dev  
+Go to /backend and run ```mkdir data```  
+
+Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this command if you don't have the question database already loaded)
+
+Go to /backend and create a ```.env``` file. Here, you will type the following contents:
+
+![env_image.jpg](frontend/public/env_image.jpg)
+
+
+## To run the game for any subsequent time:
+
+Go to /frontend and run ```npm run dev```
+
+Go to /backend and run ```npm start```
+
 
 Game will open on browser.  
+

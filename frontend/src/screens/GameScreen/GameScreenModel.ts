@@ -116,7 +116,7 @@ export class GameScreenModel {
 		return false;
 	}
 
-	getScorePercentage(): number{
-		return (this.testScore/MAX_TESTSCORE)*100;
+	getTestTries(){
+		return this.triesLeft;
 	}
 }

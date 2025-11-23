@@ -9,9 +9,9 @@ export class Minigame1ScreenModel {
   private sequence: number[] = [];  // 5 numbers to show
   private expectedAnswer: number = 0; // correct 6th number
 
-  private readonly INITIAL_TIME = 10;
+  private readonly INITIAL_TIME = 30;
   private readonly FIRE_GROWTH = 0.3;
-  private readonly REQUIRED_CORRECT = 5;
+  private readonly REQUIRED_CORRECT = 1;
 
 //   private questions = [{ text: "1 + 1 = ?", answer: "2" }];
 //   private index = 0;
@@ -63,7 +63,7 @@ export class Minigame1ScreenModel {
    * 
    * Logic
    */
-    generateNewQuestion() {
+  generateNewQuestion() {
         const start = Math.floor(Math.random() * 9) + 1;
         const step = Math.floor(Math.random() * 10) + 1;
 
@@ -76,7 +76,7 @@ export class Minigame1ScreenModel {
         this.expectedAnswer = start + 5 * step;
     }
 
-    getSequence() {
+  getSequence(): number[] {
         return this.sequence;
     }
 
@@ -84,7 +84,6 @@ export class Minigame1ScreenModel {
         const correct = userAnswer === this.expectedAnswer;
 
         if (correct) {
-            this.totalCorrect++;
             this.generateNewQuestion(); // generate next question
         }
 
@@ -95,9 +94,11 @@ export class Minigame1ScreenModel {
   getTimeLeft() { return this.timeLeft; }
   getFireSize() { return this.fireSize; }
   getIsGameOver() { return this.isGameOver; }
+  setGameOver(){ this.isGameOver = true;}
   getIsWin() { return this.isWin; }
 
   incrementCorrect(): void {
+    console.log("incremented!");
     this.totalCorrect++;
     if (this.totalCorrect >= this.REQUIRED_CORRECT) {
       this.isGameOver = true;

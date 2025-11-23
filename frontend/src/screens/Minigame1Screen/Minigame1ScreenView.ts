@@ -9,6 +9,9 @@ export class Minigame1ScreenView implements View{
     private introGroup: Konva.Group;
     private questionGroup: Konva.Group;
     private feedbackGroup: Konva.Group;
+    private gameOverGroup: Konva.Group;
+    private gameWinGroup: Konva.Group;
+    private exitGroup: Konva.Group;
     private htmlInput: HTMLInputElement;
 
     // --- Question UI elements ---
@@ -21,10 +24,14 @@ export class Minigame1ScreenView implements View{
     private submitBtn: Konva.Group;
     private feedback!: Konva.Text;
     private feedbackBox!: Konva.Rect;
+    private gameOverBox!: Konva.Rect;
+    private gameOverText!: Konva.Text;
+    private gameWinBox!: Konva.Rect;
+    private gameWinText!: Konva.Text;
 
     // handle submit
     onSubmit?: (answer: string) => void;
-
+    onExit?: () => void;
 
   constructor(layer: Konva.Layer) {
     this.layer = layer;
@@ -305,6 +312,104 @@ export class Minigame1ScreenView implements View{
         fill: 'grey',
     });
     this.feedbackGroup.add(this.feedback);
+
+    this.gameOverGroup = new Konva.Group({})
+    this.group.add(this.gameOverGroup);
+    this.gameOverBox = new Konva.Rect({
+      x: qCard.x(),
+      y: qCard.y() + qCard.height()/10,
+      width: qCard.width(),
+      height: qCard.height()/5 * 4,
+      fill: "#e2e2e2ff",
+      cornerRadius: 8,
+      opacity: 0.8,
+    });
+    this.gameOverGroup.add(this.gameOverBox);
+    this.gameOverText = new Konva.Text({
+      x: this.gameOverBox.x() + this.gameOverBox.width()/20,
+      y: this.gameOverBox.y() + this.gameOverBox.height()/3,
+      width: this.gameOverBox.width(),
+      height: this.gameOverBox.height(),
+      aligh: 'center',
+      fontSize: 130,
+      fill: 'red',
+      stroke: 'black',
+      text: "TIME IS UP!",
+    });
+    this.gameOverGroup.add(this.gameOverText);
+
+    this.gameWinGroup = new Konva.Group();
+    this.group.add(this.gameWinGroup);
+    this.gameWinBox = new Konva.Rect({
+      x: qCard.x(),
+      y: qCard.y() + qCard.height()/10,
+      width: qCard.width(),
+      height: qCard.height()/5 * 4,
+      fill: "#e2e2e2ff",
+      cornerRadius: 8,
+      opacity: 0.8,
+    });
+    this.gameWinText = new Konva.Text({
+       x: this.gameOverBox.x(),
+      y: this.gameOverBox.y() + this.gameOverBox.height()/3,
+      width: this.gameOverBox.width(),
+      height: this.gameOverBox.height(),
+      align: 'center',
+      fontSize: 90,
+      fill: 'red',
+      stroke: 'black',
+      text: "Congradulations! You win!",
+    });
+    this.gameWinGroup.add(this.gameWinBox);
+    this.gameWinGroup.add(this.gameWinText);
+
+
+     // exit button top right
+     
+    const exitButtonSize = 50;
+    this.exitGroup = new Konva.Group();
+    this.group.add(this.exitGroup);
+    const exitButton = new Konva.Rect({
+        x: qCard.x() + qCard.width() - exitButtonSize - 5,
+        y: qCard.y() + 5,
+        width: exitButtonSize,
+        height: exitButtonSize,
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 2,
+        cornerRadius: 8,
+    });
+    this.exitGroup.add(exitButton);
+
+    exitButton.on("click", () => {
+        if (this.onExit) this.onExit();
+        console.log("exit clicked");
+    });
+    this.exitGroup.on("mouseenter", ()=>{
+      exitButton.opacity(0.5);
+    });
+    this.exitGroup.on("mouseleave", ()=>{
+      exitButton.opacity(1);
+    })
+
+    const exitSymbol = new Konva.Text({
+        x: exitButton.x(),
+        y: exitButton.y() + (exitButton.height() - 32) / 2,
+        width: exitButton.width(),
+        text: "X",
+        fontSize: 32,
+        align: "center",
+        verticalAlign: "middle",
+    });
+    this.exitGroup.add(exitSymbol);
+
+    exitSymbol.on("click", () => {
+        if (this.onExit) this.onExit();
+        console.log("exit clicked");
+    });
+    this.exitGroup.visible(false);
+                
+
     // this.feedbackGroup.visible(false);
     
     /***
@@ -324,13 +429,17 @@ export class Minigame1ScreenView implements View{
 
     // this group has 2 sub-groups: introGroup and questionGroup
     this.layer.add(this.group);
+    this.introGroup.moveToTop();
   }
 
     // --------------------------  
     /***
      * ---------------------------------------------------------------------------------!!!!!!!!!!!-----------------
      * */
-
+    showIntro(){
+      this.introGroup.visible(true);
+      this.layer.draw();
+    }
     hideIntro() {
         this.introGroup.visible(false);
         this.layer.draw();
@@ -338,7 +447,13 @@ export class Minigame1ScreenView implements View{
 
     showQuestionBox() {
         this.questionGroup.visible(true);
+        this.exitGroup.visible(true);
         this.layer.draw();
+    }
+    hideQuestionBox(){
+      this.questionGroup.hide();
+      this.exitGroup.hide();
+      this.layer.draw();
     }
     /*
     ---------------feed back-----------------
@@ -384,6 +499,22 @@ export class Minigame1ScreenView implements View{
     updateTime(timeLeft: number) {
         this.timerText.text(`Time: ${timeLeft}`);
         this.layer.draw();
+    }
+    showGameOver(){
+      this.gameOverGroup.show();
+      // this.layer.draw();
+    }
+    hideGameOver(){
+      this.gameOverGroup.hide();
+      this.layer.draw();
+    }
+    showGameWin(){
+      this.gameWinGroup.show();
+      this.layer.draw();
+    }
+    hideGameWin(){
+      this.gameWinGroup.hide();
+      this.layer.draw();
     }
 
     getGroup(): Konva.Group {

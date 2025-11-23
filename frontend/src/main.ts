@@ -66,7 +66,7 @@ class App implements ScreenSwitcher {
 		// this.gameController.startGame();
 
         // UNCOMMENT THESE LINE FOR TESTING MINIGAME 1 SCREEN
-		// this.minigame1Controller.getView().show();
+		this.minigame1Controller.getView().show();
 		// this.minigame1Controller.startGame();
         
 

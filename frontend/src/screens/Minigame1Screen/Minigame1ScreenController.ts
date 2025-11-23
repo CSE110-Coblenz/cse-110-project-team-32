@@ -17,6 +17,8 @@ export class Minigame1ScreenController extends ScreenController {
     this.model = new Minigame1ScreenModel();
     this.view = new Minigame1ScreenView(layer);
     this.view.hideFeedback();
+    this.view.hideGameOver();
+    this.view.hideGameWin();
 
     // Bind Start Game button
     const startBtn = this.view.getGroup().findOne(".startGameButton");
@@ -27,15 +29,30 @@ export class Minigame1ScreenController extends ScreenController {
     }
     this.view.onSubmit = (answer: string) => {
 			this.handleAnswer(answer);
+
 		};
+    this.view.onExit = () => {
+      this.model.setGameOver();
+      this.view.hideQuestionBox();
+      this.view.hideGameOver();
+      this.view.hideGameWin();
+      this.view.showIntro();
+      
+      clearInterval(this.timerId);
+      this.screenSwitcher.switchToScreen({type: "home"});
+      
+    }
   }
 
   // ------------------------------
   // Game Start
   // ------------------------------
   startGame() {
-    this.model.reset();
 
+    this.model.reset();
+    console.log("reseted!");
+    this.view.updateTime(this.model.getTimeLeft())
+    this.startTimer();
     this.view.hideIntro();
     this.view.showQuestionBox();
     
@@ -44,18 +61,23 @@ export class Minigame1ScreenController extends ScreenController {
     const seq = this.model.getSequence();
     this.view.displayQuestion(seq.join(", "));
 
-    this.startTimer();
+    
   }
+
 
   // ------------------------------
   // Timer
   // ------------------------------
   private startTimer() {
     this.timerId = setInterval(() => {
+      if(this.model.getIsGameOver()){
+      return;
+    }
       this.model.reduceTime();
       const timeLeft = this.model.getTimeLeft();
 
       this.view.updateTime(timeLeft);
+      console.log("time" + timeLeft);
 
       if (timeLeft <= 0) {
         clearInterval(this.timerId);
@@ -63,6 +85,8 @@ export class Minigame1ScreenController extends ScreenController {
       }
     }, 1000);
   }
+
+  
 
   // ------------------------------
   // Handle player answer
@@ -82,6 +106,7 @@ export class Minigame1ScreenController extends ScreenController {
       let feedbacknum = Math.random() < 0.5 ? 1 : 2;
       this.view.updateFeedback(feedbacknum);
       console.log("Correct!");
+      this.model.incrementCorrect();
       this.view.updateCorrect(this.model.getTotalCorrect());
     } else {
       this.view.updateFeedback(0);
@@ -89,18 +114,30 @@ export class Minigame1ScreenController extends ScreenController {
     }
     this.view.showFeedback();
     setTimeout(()=>this.view.hideFeedback(),1000); //hide feedback after 1s and go to next question
+    if(this.model.getIsWin()){
+      this.handleGameOver();
+      console.log("game win!");
+      return;
+    }
     // Show next question (Model auto-generated it)
     const seq = this.model.getSequence();
     this.view.displayQuestion(seq.join(", "));
 
   }
-
+  
   // ------------------------------
   // Game Over
   // ------------------------------
   private handleGameOver() {
-    console.log("⏰ GAME OVER!");
-    // TODO: Show GameOver UI
+    if(this.model.getIsWin()){
+      this.view.showGameWin();
+      this.model.setGameOver();
+    }
+    else{
+      this.view.showGameOver(); //actually means game lose
+      this.model.setGameOver();
+      console.log("⏰ GAME OVER!");
+    }
   }
 
   getView() {

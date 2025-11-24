@@ -22,6 +22,7 @@ class App implements ScreenSwitcher {
     private homeController: HomeScreenController;
     private gameController: GameScreenController;
     private loginController: LoginScreenController;
+	private minigame1Controller: Minigame1ScreenController;
 
     constructor(container: string) {
         // Initialize Konva stage (the main canvas)
@@ -43,12 +44,14 @@ class App implements ScreenSwitcher {
         this.homeController = new HomeScreenController(this, testUserId, this.layer);
         this.gameController = new GameScreenController(this);
         this.loginController = new LoginScreenController(this);
+		this.minigame1Controller = new Minigame1ScreenController(this, this.layer);
 
         // Add all screen groups to the layer
         // All screens exist simultaneously but only one is visible at a time
         this.layer.add(this.homeController.getView().getGroup());
         this.layer.add(this.gameController.getView().getGroup());
         this.layer.add(this.loginController.getView().getGroup());
+		this.layer.add(this.minigame1Controller.getView().getGroup());
         
         // Draw the layer (render everything to the canvas)
         this.layer.draw();
@@ -116,6 +119,7 @@ class App implements ScreenSwitcher {
       this.homeController.getView().show();
       this.loginController.getView().show();
       this.gameController.getView().show();
+	  this.minigame1Controller.getView().show();
 
     }
 
@@ -133,6 +137,7 @@ class App implements ScreenSwitcher {
         this.homeController.hide();
         this.loginController.hide();
         this.gameController.hide();
+		this.minigame1Controller.getView().hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {
@@ -147,6 +152,11 @@ class App implements ScreenSwitcher {
                 break;
             case "login":
                 this.loginController.show();
+			case "minigame":
+                if (screen.game === "MiniGame1") {
+                    this.minigame1Controller.getView().show();
+                    // this.minigame1Controller.startGame?.();
+                }
                 break;
         }
     }

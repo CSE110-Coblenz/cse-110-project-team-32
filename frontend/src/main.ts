@@ -3,6 +3,7 @@ import type { ScreenSwitcher, Screen } from "./types";
 import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController";
 import { GameScreenController } from "./screens//GameScreen/GameScreenController";
 import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
+import { Minigame2ScreenController } from "./screens/Minigame2Screen/Minigame2ScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
 /**
@@ -22,6 +23,7 @@ class App implements ScreenSwitcher {
     private homeController: HomeScreenController;
     private gameController: GameScreenController;
     private loginController: LoginScreenController;
+    private minigame2Controller: Minigame2ScreenController;
 
     constructor(container: string) {
         // Initialize Konva stage (the main canvas)
@@ -43,11 +45,17 @@ class App implements ScreenSwitcher {
         this.homeController = new HomeScreenController(this, testUserId, this.layer);
         this.gameController = new GameScreenController(this);
         this.loginController = new LoginScreenController(this);
+        this.minigame2Controller = new Minigame2ScreenController(this);
 
         // Add all screen groups to the layer
         // All screens exist simultaneously but only one is visible at a time
         this.layer.add(this.homeController.getView().getGroup());
         this.layer.add(this.gameController.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView2().getGroup());
+        this.layer.add(this.minigame2Controller.getView3().getGroup());
+
+        //Add login view at the end to be the first one to show
         this.layer.add(this.loginController.getView().getGroup());
         
         // Draw the layer (render everything to the canvas)
@@ -120,7 +128,9 @@ class App implements ScreenSwitcher {
       this.homeController.getView().show();
       this.loginController.getView().show();
       this.gameController.getView().show();
-
+      this.minigame2Controller.getView().show();
+      this.minigame2Controller.getView2().show();
+      this.minigame2Controller.getView3().show();
     }
 
     /**
@@ -151,6 +161,18 @@ class App implements ScreenSwitcher {
                 break;
             case "login":
                 this.loginController.show();
+                break;
+            case "intro":
+                this.minigame2Controller.show();
+                this.minigame2Controller.startMinigame2Entrance();
+                break;
+            case "pick":
+                this.minigame2Controller.show2();
+                this.minigame2Controller.startMinigame2Entrance2();
+                break;
+            case "question":
+                this.minigame2Controller.show3();
+                this.minigame2Controller.startNewQuestion();
                 break;
         }
     }

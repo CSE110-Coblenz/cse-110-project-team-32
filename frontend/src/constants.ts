@@ -20,4 +20,9 @@ export const GAME_DURATION = 10;
 export const MINI_GAME_UNLOCK_LEVELS = [2,4];
 export const MINI_GAME_NAMES = ["Memory Match", "Desert Runner"];
 
+//minigame 2
+export const EASYQ_NUM = 20;
+export const MEDQ_NUM = 20;
+export const HARDQ_NUM = 20;
+
 

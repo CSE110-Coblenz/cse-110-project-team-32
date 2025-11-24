@@ -3,6 +3,7 @@ import type { ScreenSwitcher } from "../../types.ts";
 import { LoginScreenView } from "./LoginScreenView.ts";
 import { LoginScreenModel } from "./LoginScreenModel.ts";
 
+
 /**
  * LoginScreenController - Handles Login interactions
  */
@@ -19,6 +20,7 @@ export class LoginScreenController extends ScreenController {
             (username, password) => this.handleLogin(username, password),
             () => this.handleSignup()
         );
+        
     }
 
     /**

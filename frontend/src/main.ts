@@ -95,6 +95,10 @@ class App implements ScreenSwitcher {
 		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale) / 2);
 	  
 		this.stage.draw();
+
+        // updates login screen with resized window to resize username/password fields
+        this.loginController.getView().updateStageScale(scale);
+
 	  }
 
 

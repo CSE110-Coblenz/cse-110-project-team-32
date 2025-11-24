@@ -9,7 +9,7 @@ export class Minigame1ScreenModel {
   private sequence: number[] = [];  // 5 numbers to show
   private expectedAnswer: number = 0; // correct 6th number
 
-  private readonly INITIAL_TIME = 30;
+  private readonly INITIAL_TIME = 60;
   private readonly FIRE_GROWTH = 0.3;
   private readonly REQUIRED_CORRECT = 5;
 

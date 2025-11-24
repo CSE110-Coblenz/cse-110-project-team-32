@@ -3,6 +3,7 @@ import type { ScreenSwitcher, Screen } from "./types";
 import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController";
 import { GameScreenController } from "./screens//GameScreen/GameScreenController";
 import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
+import { Minigame1ScreenController } from "./screens/Minigame1Screen/Minigame1ScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
 /**
@@ -152,8 +153,9 @@ class App implements ScreenSwitcher {
                 break;
             case "login":
                 this.loginController.show();
+                break;
 			case "minigame":
-                if (screen.game === "MiniGame1") {
+                if (screen.game === "Sequence Rush") {
                     this.minigame1Controller.getView().show();
                     // this.minigame1Controller.startGame?.();
                 }

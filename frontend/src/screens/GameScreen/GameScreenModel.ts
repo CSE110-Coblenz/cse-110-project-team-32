@@ -3,10 +3,8 @@
  */
 
 import type { Question } from "../../types";
-import { PASSING_TEST_SCORE, MAX_TESTSCORE } from "../../constants";
 
 export class GameScreenModel {
-	private testScore = 0;
 	private level;
 	private questions: Question[] = [];
 	private currentQuestionIndex = 0;
@@ -53,6 +51,10 @@ export class GameScreenModel {
 		return this.questions.length;
 	}
 
+	getTotalPracticeQuestions(): number {
+		return this.questions.length - 1;
+	}
+
 	isTestQuestion(): boolean {
 		const q = this.getCurrentQuestion();
 		return q ? q.isTest : false;
@@ -97,23 +99,6 @@ export class GameScreenModel {
 		this.level = level;
 		this.currentQuestionIndex = 0;
 		this.questions = [];
-	}
-
-	resetScore(): void {
-		this.testScore = 0;
-	}
-
-	updateScore(correct: boolean): void {
-    	if (correct) this.testScore += 1;
-	}
-
-	checkIfPassed(): boolean {
-    	return this.testScore >= PASSING_TEST_SCORE;
-	}
-
-	isTestComplete(): boolean {
-		// is test complete ?
-		return false;
 	}
 
 	getTestTries(){

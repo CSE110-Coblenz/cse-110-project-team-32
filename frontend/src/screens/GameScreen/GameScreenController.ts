@@ -33,19 +33,24 @@ export class GameScreenController extends ScreenController {
 			this.handleHint();
 		}
 
+		this.view.onReset = () => {
+			this.handleReset();
+		}
 	}
 
     /**
 	 * Start the game
 	 */
 	async startGame(level: number) {
-		this.view.updateMode("Practice");
 		this.model.setLevel(level);
 		this.view.resetProgress();
 		await this.model.loadQuestions();
 
 		const currentQuestion = this.model.getCurrentQuestion();
-		this.view.updateQuestion(currentQuestion);
+		const currentQuestionIndex = this.model.getCurrentQuestionIndex();
+		const totalQuestions = this.model.getTotalPracticeQuestions();
+		const retriesLeft = this.model.getTestTries()
+		this.view.updateQuestion(currentQuestion, currentQuestionIndex, totalQuestions, retriesLeft);
 		this.view.updateLevel(this.model.getLevel());
 		this.view.initializeAnswer(); //clean the answerbox(it contains user and password)
 		
@@ -62,30 +67,25 @@ export class GameScreenController extends ScreenController {
 
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
-
-		const isTestQuestion = this.model.getCurrentQuestionIndex() === this.model.getTotalQuestions() - 1;
-
-		if (isTestQuestion) {
-			this.view.updateMode("Test", this.model.getTestTries());
-		 }
-			
+	
 		switch (result) {
 			case "next":
 				let feedback = Math.random() < 0.5 ? 1 : 2;
 				this.view.updateFeedBack(feedback);
-				this.view.updateQuestion(this.model.getCurrentQuestion());
+				this.view.updateQuestion(this.model.getCurrentQuestion(), this.model.getCurrentQuestionIndex(), this.model.getTotalPracticeQuestions(), this.model.getTestTries());
 				this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				this.view.resetHint();
 				break;
 
 			case "wrong":
 				this.view.updateFeedBack(0);
+				this.view.updateQuestion(this.model.getCurrentQuestion(), this.model.getCurrentQuestionIndex(), this.model.getTotalPracticeQuestions(), this.model.getTestTries());
 				break;
 
 			case "restart":
 				this.view.updateFeedBack(3);
 				this.model.loadQuestions().then(() => {
-					this.view.updateQuestion(this.model.getCurrentQuestion());
+					this.view.updateQuestion(this.model.getCurrentQuestion(), this.model.getCurrentQuestionIndex(), this.model.getTotalPracticeQuestions(), this.model.getTestTries());
 					this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
 				});
 				this.view.resetHint();
@@ -111,6 +111,15 @@ export class GameScreenController extends ScreenController {
 
 	handleHint() {
 		this.view.updateHint(`Hint: ${this.model.getCurrentQuestion()?.hint}`);
+	}
+
+	handleReset() {
+		this.model.reset(this.model.getLevel());
+		this.model.loadQuestions().then(() => {
+			this.view.updateQuestion(this.model.getCurrentQuestion(), this.model.getCurrentQuestionIndex(), this.model.getTotalPracticeQuestions(), this.model.getTestTries());
+			this.view.updateProgress(this.model.getCurrentQuestionIndex(), this.model.getTotalQuestions());
+		});
+		this.view.resetHint();
 	}
 
 	/**

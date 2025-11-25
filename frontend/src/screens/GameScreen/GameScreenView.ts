@@ -21,6 +21,7 @@ export class GameScreenView implements View {
     private modeText!: Konva.Text;
 
     private levelText!: Konva.Text;
+    private questionBoxText!: Konva.Text;
     private progressBar!: Konva.Rect;
     private progressFill!: Konva.Rect;
     private feedBack!: Konva.Text;
@@ -31,6 +32,7 @@ export class GameScreenView implements View {
     onSubmit?: (answer: string) => void;
     onExit?: () => void;
     onHint?: () => void;
+    onReset?: () => void;
 
 	constructor() {
 		this.group = new Konva.Group({ visible: false });
@@ -115,6 +117,38 @@ export class GameScreenView implements View {
             exitSymbol.on("click", () => {
                 if (this.onExit) this.onExit();
             });
+
+            // reset button top left
+            const resetButton = new Konva.Rect({
+                x: contentBox.x() + 20,
+                y: contentBox.y() + 80,
+                width: exitButtonSize,
+                height: exitButtonSize,
+                fill: "green",
+                stroke: "black",
+                strokeWidth: 2,
+                cornerRadius: 8,
+            });
+            this.group.add(resetButton);
+
+            exitButton.on("click", () => {
+                if (this.onReset) this.onReset();
+            });
+
+            const resetSymbol = new Konva.Text({
+                x: resetButton.x(),
+                y: resetButton.y() + (resetButton.height() - 45) / 2,
+                width: resetButton.width(),
+                text: "↻",
+                fontSize: 40,
+                align: "center",
+                verticalAlign: "middle",
+            });
+            this.group.add(resetSymbol);
+
+            resetSymbol.on("click", () => {
+                if (this.onReset) this.onReset();
+            });
             
             // level box top right
             const levelBoxWidth = 250;
@@ -125,46 +159,12 @@ export class GameScreenView implements View {
                 y: contentBox.y() + 20,
                 width: levelBoxWidth,
                 height: levelBoxHeight,
-                fill: "grey",
+                fill: "#14b1d9",
                 stroke: "black",
                 strokeWidth: 2,
                 cornerRadius: 8,
             });
             this.group.add(levelBox);
-
-            // MODE BOX (Practice / Test)
-            const modeBoxWidth = 250;
-            const modeBoxHeight = 50;
-
-            // Position: centered between exit button and level box
-            const modeBoxX =
-                exitButton.x() +
-                exitButtonSize +
-                (levelBox.x() - (exitButton.x() + exitButtonSize) - modeBoxWidth) / 2;
-
-            this.modeBox = new Konva.Rect({
-                x: modeBoxX,
-                y: contentBox.y() + 20,
-                width: modeBoxWidth,
-                height: modeBoxHeight,
-                fill: "#d9d9d9",
-                stroke: "black",
-                strokeWidth: 2,
-                cornerRadius: 8,
-            });
-            this.group.add(this.modeBox);
-
-            this.modeText = new Konva.Text({
-                x: this.modeBox.x(),
-                y: this.modeBox.y() + (modeBoxHeight - 32) / 2,
-                width: this.modeBox.width(),
-                text: "Practice",       // default
-                fontSize: 32,
-                align: "center",
-                fill: "black",
-            });
-            this.group.add(this.modeText);
-
           
             this.levelText = new Konva.Text({
                 x: levelBox.x(),
@@ -176,6 +176,30 @@ export class GameScreenView implements View {
                 fill: "black",
                 });
             this.group.add(this.levelText);
+
+            // question box top right
+            const questionBox = new Konva.Rect({
+                x: contentBox.x() + contentBox.width() - levelBoxWidth - 20,
+                y: contentBox.y() + 80,
+                width: levelBoxWidth,
+                height: levelBoxHeight,
+                fill: "green",
+                stroke: "black",
+                strokeWidth: 2,
+                cornerRadius: 8,
+            });
+            this.group.add(questionBox);
+          
+            this.questionBoxText = new Konva.Text({
+                x: questionBox.x(),
+                y: questionBox.y() + (questionBox.height() - 32) / 2,
+                width: questionBox.width(),
+                text: "",
+                fontSize: 32,
+                align: "center",
+                fill: "black",
+                });
+            this.group.add(this.questionBoxText);
             
             // question text at the top
             this.questionText = new Konva.Text({
@@ -322,7 +346,7 @@ export class GameScreenView implements View {
 
             this.completeScreen = new Konva.Rect({
                 x: contentBox.x(),
-                y:contentBox.y(),
+                y: contentBox.y(),
                 width: contentBox.width(),
                 height: contentBox.height(),
                 fill: "grey",
@@ -395,8 +419,13 @@ export class GameScreenView implements View {
     /**
 	 * Update the question
 	 */
-    updateQuestion(question: Question | null): void {
+    updateQuestion(question: Question | null, index: number, total: number, retries: number): void {
         this.questionText.text(question?.question);
+        if (question?.isTest) {
+            this.questionBoxText.text(`Test Retries: ${retries}`);
+        } else {
+            this.questionBoxText.text(`Question ${index + 1} of ${total}`);
+        }
         this.group.getLayer()?.draw();
     }
 
@@ -431,22 +460,6 @@ export class GameScreenView implements View {
         this.levelText.text(`Level ${level}`);
     }
 
-    /**
-     * updates the mode to show practice or test
-     * @param mode 
-     */
-    updateMode(mode: "Practice" | "Test", testTries = 0) {
-        console.log("mode changed to:", mode);
-        let modeText = mode
-        if (mode == "Test") {
-            modeText = "Test: " + testTries + " Tries Left";
-        }
-
-        this.modeText.text(modeText);
-        this.group.getLayer()?.draw();
-    }
-
-
     updateHint(hint: string): void {
         this.hintText.text(`${hint}`);
     
@@ -474,7 +487,6 @@ export class GameScreenView implements View {
         this.cursor.x(this.answerText.x() + length);
         this.cursor.getLayer()?.batchDraw();
     }
-    
     
 
     showFeedBack():void{

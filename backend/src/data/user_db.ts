@@ -47,5 +47,13 @@ export function deleteUser(id: number) {
   userdb.prepare("DELETE FROM users WHERE id = ?").run(id);
 }
 
+export function updateCurrLevelByUsername(username: string, newLevel: number): boolean {
+  const info = userdb
+    .prepare("UPDATE users SET currLevel = ? WHERE username = ?")
+    .run(newLevel, username);
+
+  return info.changes > 0; // true if a row was actually updated
+}
+
 // Export the database (optional if you need raw access)
 export default userdb as any;

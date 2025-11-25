@@ -20,6 +20,7 @@ export class GameScreenController extends ScreenController {
 
 		this.view.onExit = () => {
             // console.log("Exit button clicked");
+			
             this.screenSwitcher.switchToScreen({ type: "home" });
 			this.view.resetHint();
 			this.view.hideComplete();

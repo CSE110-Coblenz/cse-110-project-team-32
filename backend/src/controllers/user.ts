@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { getUserByUsername, getUserById, addUser } from "../data/user_db";
+import { getUserByUsername, getUserById, addUser, updateCurrLevelByUsername } from "../data/user_db";
 
 
 //Route handler used to handle signup
@@ -122,4 +122,19 @@ export const getUserByUsernameHandler = async (req: Request, res: Response) => {
         res.status(500).json({ error: (err as Error).message });
     }
 };
+
+// put route
+export const updateCurrLevelByUsernameHandler = (req: Request, res: Response) => {
+  const { username } = req.params;
+  const { currLevel } = req.body;
+
+  if (!username) return res.status(400).json({ error: "Username required" });
+  if (currLevel === undefined) return res.status(400).json({ error: "currLevel required" });
+
+  const success = updateCurrLevelByUsername(username, currLevel);
+  if (!success) return res.status(404).json({ error: "User not found" });
+
+  res.status(200).json({ message: "Level updated", currLevel });
+};
+
 

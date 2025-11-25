@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, getUser, login, getUserByUsernameHandler } from "../controllers/user";
+import { signup, getUser, login, getUserByUsernameHandler, updateCurrLevelByUsernameHandler } from "../controllers/user";
 
 //Create the router that will hold all the routes that will handle the user schema
 const router = express.Router();
@@ -9,6 +9,9 @@ router.post("/newUser", signup);
 router.post("/auth/login", login);
 router.get("/username/:username", getUserByUsernameHandler);
 router.get("/:id", getUser);
+
+router.put("/username/:username", updateCurrLevelByUsernameHandler);
+
 
 
 export default router;

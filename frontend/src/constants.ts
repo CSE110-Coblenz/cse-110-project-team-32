@@ -18,6 +18,6 @@ export const GAME_DURATION = 10;
 
 // minigames
 export const MINI_GAME_UNLOCK_LEVELS = [2,4];
-export const MINI_GAME_NAMES = ["Memory Match", "Desert Runner"];
+export const MINI_GAME_NAMES = ["Sequence Rush", "Desert Runner"];
 
 

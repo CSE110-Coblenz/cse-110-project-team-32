@@ -2,6 +2,7 @@ import { ScreenController } from "../../types.ts";
 import type { ScreenSwitcher } from "../../types.ts";
 import { LoginScreenView } from "./LoginScreenView.ts";
 import { LoginScreenModel } from "./LoginScreenModel.ts";
+import { userStore } from "../../context/UserState.ts";
 
 /**
  * LoginScreenController - Handles Login interactions
@@ -40,7 +41,12 @@ export class LoginScreenController extends ScreenController {
             alert("Login error: " +  error.error);
             return;
         } else {
-            console.log("res is:", res);
+            const res2 = await fetch(`http://localhost:3000/api/user/username/${username}`);
+            console.log("res is:", res2);
+            const data = await res2.json();
+            console.log("data is:", data);
+            userStore.setUsername(data.username);
+            userStore.setCurrLevel(data.currLevel);
             this.screenSwitcher.switchToScreen({
                 type: "home",
                 username: username,

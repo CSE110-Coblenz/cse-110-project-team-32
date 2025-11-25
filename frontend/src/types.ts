@@ -21,7 +21,7 @@ export interface Question {
  * - "home": Home menu screen
  */
 export type Screen =
-	| { type: "home", username: string }
+	| { type: "home" }
 	| { type: "login" }
 	| { type: "start" }
 	| { type: "level"; level: number }

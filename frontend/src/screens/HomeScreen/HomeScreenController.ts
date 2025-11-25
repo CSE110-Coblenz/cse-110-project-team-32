@@ -5,6 +5,7 @@ import { User } from "../../core/models/User";
 import { UserService } from "../../core/Services/UserService";
 import { HomeScreenModel } from "./HomeScreenModel";
 import Konva from "konva";
+import { userStore } from "../../context/UserState.ts";
 
 export class HomeScreenController extends ScreenController {
   private view: HomeScreenView;
@@ -12,7 +13,7 @@ export class HomeScreenController extends ScreenController {
   private screenSwitcher: ScreenSwitcher;
   private layer: Konva.Layer;
 
-  constructor(screenSwitcher: ScreenSwitcher, userId: string, layer: Konva.Layer) { 
+  constructor(screenSwitcher: ScreenSwitcher, layer: Konva.Layer) { 
     super(); 
     this.screenSwitcher = screenSwitcher; this.view = new HomeScreenView( 
       (levelId) => this.handleLevelClicked(levelId), // onLevelSelect 
@@ -24,14 +25,16 @@ export class HomeScreenController extends ScreenController {
       this.layer = layer; 
     }
 
-  async init(username: string){
+  public init(){
+    const state = userStore.getState();
+    if (!state.username) throw new Error("Username not set in userStore");
+    console.log("context username:", state.username, state.currLevel);
     console.log("initialising homescreen");
-    console.log("username:", username);
-    this.model.setUsername(username);
     this.model.setMiniGames();
-    await this.model.init(username);
+    this.model.setUsername(state.username);
+    this.model.init();
 
-    this.view.CreateView(username, this.model.getCurrLevel(), this.model.getMiniGames());
+    this.view.CreateView(this.model.getUsername(), this.model.getCurrLevel(), this.model.getMiniGames());
     this.layer.add(this.view.getGroup());
     this.layer.draw();
     this.view.show();

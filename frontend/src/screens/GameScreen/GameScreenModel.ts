@@ -11,9 +11,11 @@ export class GameScreenModel {
 	private questions: Question[] = [];
 	private currentQuestionIndex = 0;
 	private triesLeft = 3;
+	private username: string = "";
 
 	constructor(level: number = 1) {
 		this.level = level;
+		this.username = this.username;
 	}
 
 	/**
@@ -119,4 +121,12 @@ export class GameScreenModel {
 	getTestTries(){
 		return this.triesLeft;
 	}
+
+	public setUsername(username: string): void {
+        this.username = username;
+    }
+
+    public getUsername(): string {
+        return this.username;
+    }
 }

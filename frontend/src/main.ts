@@ -42,7 +42,7 @@ class App implements ScreenSwitcher {
 
         // Initialize all screen controllers
         // Each controller manages a Model, View, and handles user interactions
-        this.homeController = new HomeScreenController(this, testUserId, this.layer);
+        this.homeController = new HomeScreenController(this, this.layer);
         this.gameController = new GameScreenController(this);
         this.loginController = new LoginScreenController(this);
 		this.minigame1Controller = new Minigame1ScreenController(this, this.layer);
@@ -144,7 +144,7 @@ class App implements ScreenSwitcher {
         // Show the requested screen based on the screen type
         switch (screen.type) {
             case "home":
-                this.homeController.init(screen.username);
+                this.homeController.init();
                 this.homeController.show();
                 break;
             case "level":

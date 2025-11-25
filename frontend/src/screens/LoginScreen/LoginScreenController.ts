@@ -33,14 +33,17 @@ export class LoginScreenController extends ScreenController {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: username, password: password })
         });
+        console.log("res is:", res);
         //If the backend threw an error, let the user know, otherwise, just switch to the homescreen
         if (!res.ok) {
             const error = await res.json();
             alert("Login error: " +  error.error);
             return;
         } else {
+            console.log("res is:", res);
             this.screenSwitcher.switchToScreen({
                 type: "home",
+                username: username,
             });
         }
 
@@ -79,6 +82,7 @@ export class LoginScreenController extends ScreenController {
             alert('Account created. You can now log in.');
             this.screenSwitcher.switchToScreen({
                 type: "home",
+                username: username
             });
         }
 

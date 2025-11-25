@@ -73,26 +73,53 @@ export const login = async(req: Request, res: Response) => {
     }
 };
 
-
 export const getUser = async(req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
         if (!Number.isFinite(id)) {
-        return res.status(400).json({ error: "Invalid id" });
+            return res.status(400).json({ error: "Invalid id" });
         }
 
-        //Find a user object with the id requested
         const user = getUserById(id);
 
-        //Check if a user exists with the id requested
         if (!user) {
-            return res.status(404).json({error : "User not found"});
+            return res.status(404).json({ error: "User not found" });
         }
 
-        //Send the user back into the frontend
-        res.status(200).json({id: user.id, username: user.username});
+        res.status(200).json({
+            id: user.id,
+            username: user.username,
+            currLevel: user.currLevel
+        });
 
     } catch (err) {
         res.status(500).json({ error: (err as Error).message });
     }
 };
+
+// Route handler to get user by username
+export const getUserByUsernameHandler = async (req: Request, res: Response) => {
+    try {
+        const { username } = req.params;
+
+        if (!username) {
+            return res.status(400).json({ error: "Username is required" });
+        }
+
+        const user = getUserByUsername(username);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({
+            id: user.id,
+            username: user.username,
+            currLevel: user.currLevel
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+};
+

@@ -1,4 +1,5 @@
 import app from "./app";
+import path from "path";
 import dotenv from "dotenv";
 
 // Load environment variables from .env

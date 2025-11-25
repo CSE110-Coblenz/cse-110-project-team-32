@@ -6,16 +6,30 @@ import type { MiniGameInfo } from "../../types";
 export class HomeScreenModel {
     private currLevel = 0; //current level of user
     private miniGames: MiniGameInfo[] = []; //minigames status
+    private username: string = "";
 
 
-    setCurrentLevel(): void {
-        // get the latest level the user stopped at
-        // set currLevel to it
-        // also update when level changes
-        this.currLevel = 3;
+    public async init(username: string): Promise<void> {
+        if (!username) {
+            console.error("No username passed to HomeScreenModel.init()");
+            return;
+        }
+
+        const res = await fetch(`http://localhost:3000/api/user/username/${username}`);
+        if (!res.ok) {
+            console.error("Backend error:", await res.text());
+            return;
+        }
+
+        const data = await res.json();
+        console.log("Fetched user data:", data);
+
+        this.currLevel = data.currLevel ?? 1;
+        this.setMiniGames();
     }
 
     getCurrLevel(): number {
+        console.log(this.currLevel);
         return this.currLevel;
     }
 
@@ -30,6 +44,14 @@ export class HomeScreenModel {
 
     public getMiniGames(): MiniGameInfo[] {
         return this.miniGames;
+    }
+
+    public setUsername(username: string): void {
+        this.username = username;
+    }
+
+    public getUsername(): string {
+        return this.username;
     }
 
 }

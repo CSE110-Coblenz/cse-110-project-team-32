@@ -104,20 +104,22 @@ class App implements ScreenSwitcher {
     */
     private initializeScreens(): void{
       // Initialize home screen (loads user data, levels, etc.)
-      this.homeController.init();
+      //this.homeController.init();
 
-      // Add all screen groups to the shared layer
-      this.layer.add(this.homeController.getView().getGroup());
+      // Add each screen's Konva group to the layer once
+        this.layer.add(this.homeController.getView().getGroup());
+        this.layer.add(this.loginController.getView().getGroup());
+        this.layer.add(this.gameController.getView().getGroup());
 
       // Render the layer
       this.layer.draw();
 
       // Show starting screen
-      this.homeController.getView().show();
+      //this.homeController.getView().show();
       this.loginController.getView().show();
-      this.gameController.getView().show();
+      //this.gameController.getView().show();
 
-    }
+    } 
 
     /**
      * Switch to a different screen
@@ -137,6 +139,7 @@ class App implements ScreenSwitcher {
         // Show the requested screen based on the screen type
         switch (screen.type) {
             case "home":
+                this.homeController.init(screen.username);
                 this.homeController.show();
                 break;
             case "level":

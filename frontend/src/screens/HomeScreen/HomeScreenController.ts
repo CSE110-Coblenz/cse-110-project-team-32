@@ -10,8 +10,6 @@ export class HomeScreenController extends ScreenController {
   private view: HomeScreenView;
   private model: HomeScreenModel;
   private screenSwitcher: ScreenSwitcher;
-  private user!: User;
-  private userId: string;
   private layer: Konva.Layer;
 
   constructor(screenSwitcher: ScreenSwitcher, userId: string, layer: Konva.Layer) { 
@@ -23,17 +21,17 @@ export class HomeScreenController extends ScreenController {
       () => this.handleLogout() // onLogout 
       ); 
       this.model = new HomeScreenModel(); 
-      this.userId = userId; 
       this.layer = layer; 
     }
 
-  init(){
+  async init(username: string){
     console.log("initialising homescreen");
-
-    this.model.setCurrentLevel();
+    console.log("username:", username);
+    this.model.setUsername(username);
     this.model.setMiniGames();
+    await this.model.init(username);
 
-    this.view.CreateView(this.userId, this.model.getCurrLevel(), this.model.getMiniGames());
+    this.view.CreateView(username, this.model.getCurrLevel(), this.model.getMiniGames());
     this.layer.add(this.view.getGroup());
     this.layer.draw();
     this.view.show();
@@ -50,6 +48,7 @@ export class HomeScreenController extends ScreenController {
   
   private handleStartGame(): void { 
     console.log("Start Game clicked!"); // You could call: this.screenSwitcher.switchToScreen({ type: "level", level: this.model.getCurrLevel() }); 
+    console.log("username:", this.model.getUsername());
   } 
   
   private handleMiniGameClicked(gameName: string): void { 

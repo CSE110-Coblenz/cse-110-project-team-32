@@ -10,7 +10,8 @@ userdb.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    currLevel INT NOT NULL
   )
 `).run();
 
@@ -19,18 +20,11 @@ const { count } = userdb
   .prepare("SELECT COUNT(*) as count FROM users")
   .get() as { count: number };
 
-if (count === 0) {
-  const insert = userdb.prepare(`
-    INSERT INTO users (username, password)
-    VALUES (?, ?)
-  `);
-}
-
 // Example functions for CRUD operations
 export function addUser(username: string, password: string): number {
   const info = userdb
-    .prepare("INSERT INTO users (username, password) VALUES (?, ?)")
-    .run(username, password);
+    .prepare("INSERT INTO users (username, password, currLevel) VALUES (?, ?, ?)")
+    .run(username, password, 1);
   return Number(info.lastInsertRowid);
 }
 
@@ -54,4 +48,4 @@ export function deleteUser(id: number) {
 }
 
 // Export the database (optional if you need raw access)
-export default userdb;
+export default userdb as any;

@@ -92,8 +92,7 @@ export class GameScreenController extends ScreenController {
 				break;
 
 			case "complete":
-				console.log("Practice complete");
-				
+				this.view.updateFeedBack(1);
 				// console.log(this.model.getCurrentQuestionIndex());
 				// console.log(this.model.getTotalQuestions());
 				this.view.updateProgress(

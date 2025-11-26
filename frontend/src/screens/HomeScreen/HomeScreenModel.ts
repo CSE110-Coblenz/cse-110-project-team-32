@@ -1,21 +1,25 @@
 import { MINI_GAME_UNLOCK_LEVELS, MINI_GAME_NAMES } from "../../constants";
 import type { MiniGameInfo } from "../../types";
+import { userStore } from "../../context/UserState.ts";
 
 
 
 export class HomeScreenModel {
     private currLevel = 0; //current level of user
     private miniGames: MiniGameInfo[] = []; //minigames status
+    private username!: string;
 
 
-    setCurrentLevel(): void {
-        // get the latest level the user stopped at
-        // set currLevel to it
-        // also update when level changes
-        this.currLevel = 3;
+    public init(): void {
+        const state = userStore.getState();
+        console.log("context username:", state.username, state.currLevel);
+
+        this.currLevel = state.currLevel ?? 1;
+        this.setMiniGames();
     }
 
     getCurrLevel(): number {
+        console.log(this.currLevel);
         return this.currLevel;
     }
 
@@ -30,6 +34,14 @@ export class HomeScreenModel {
 
     public getMiniGames(): MiniGameInfo[] {
         return this.miniGames;
+    }
+
+    public setUsername(username: string): void {
+        this.username = username;
+    }
+
+    public getUsername(): string {
+        return this.username;
     }
 
 }

@@ -2,6 +2,7 @@ import { ScreenController } from "../../types.ts";
 import type { ScreenSwitcher } from "../../types.ts";
 import { LoginScreenView } from "./LoginScreenView.ts";
 import { LoginScreenModel } from "./LoginScreenModel.ts";
+import { userStore } from "../../context/UserState.ts";
 
 /**
  * LoginScreenController - Handles Login interactions
@@ -33,14 +34,21 @@ export class LoginScreenController extends ScreenController {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: username, password: password })
         });
+        console.log("res is:", res);
         //If the backend threw an error, let the user know, otherwise, just switch to the homescreen
         if (!res.ok) {
             const error = await res.json();
             alert("Login error: " +  error.error);
             return;
         } else {
+            const res2 = await fetch(`http://localhost:3000/api/user/username/${username}`);
+            console.log("res is:", res2);
+            const data = await res2.json();
+            console.log("data is:", data);
+            userStore.setUsername(data.username);
+            userStore.setCurrLevel(data.currLevel);
             this.screenSwitcher.switchToScreen({
-                type: "home",
+                type: "home"
             });
         }
 
@@ -54,6 +62,7 @@ export class LoginScreenController extends ScreenController {
         this.view.showSignupModal(async (username: string, password: string) => {
             await this.handleCreateAccount(username, password);
         });
+
     }
 
     /**
@@ -77,8 +86,14 @@ export class LoginScreenController extends ScreenController {
             return;
         } else {
             alert('Account created. You can now log in.');
+            const res2 = await fetch(`http://localhost:3000/api/user/username/${username}`);
+            console.log("res is:", res2);
+            const data = await res2.json();
+            console.log("data is:", data);
+            userStore.setUsername(data.username);
+            userStore.setCurrLevel(data.currLevel);
             this.screenSwitcher.switchToScreen({
-                type: "home",
+                type: "home"
             });
         }
 

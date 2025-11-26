@@ -55,35 +55,10 @@ export class HomeScreenView implements View {
       this.group.add(bgImage);
       bgImage.moveToBottom();
     });
-
-  
-/******fake data for testing of level and mini game buttons****/
-    /*this.createUserArea();
-
-    const testLevels: LevelInfo[] = [
-      { id: 1, unlocked: true },
-      { id: 2, unlocked: true },
-      { id: 3, unlocked: false },
-      { id: 4, unlocked: false },
-      { id: 5, unlocked: false },
-      { id: 6, unlocked: false },
-    ];
-
-    const testMiniGames: MiniGameInfo[] = [
-      { name: "Mini Game 1", unlocked: true, unlockLevel: 2 },
-      { name: "Mini Game 2", unlocked: false, unlockLevel: 4 },
-    ];
-
-    // buttons on the right side
-    this.createStartGameButton();
-    this.setMiniGames(testMiniGames);
-
-    // draw left side levels
-    this.setLevels(testLevels);*/
   }
 
   /****************** Start Game Button ********************/
-  // fixed bug: onlu rect was clickable, not the text (Ni)
+  // fixed bug: only rect was clickable, not the text (Ni)
   // made the rect and text into a group, and set click event on rect
   // adjust positioning to center text in rect (Ni)
   private startGameTopY = 0;
@@ -206,56 +181,55 @@ export class HomeScreenView implements View {
 
   /********* Level Buttons **************/
   private createLevelButton(level: LevelInfo, y: number): Konva.Group {
-    const BTN_WIDTH = 180;
-    const BTN_HEIGHT = 60;
+  const BTN_WIDTH = 180;
+  const BTN_HEIGHT = 60;
 
-    const group = new Konva.Group({
-      x: STAGE_WIDTH * 0.35,
-      y,
-    });
+  const levelId = level.id;  // ← capture the id here
 
-    const rect = new Konva.Rect({
-      x: 0,
-      y: 0,
-      width: BTN_WIDTH,
-      height: BTN_HEIGHT,
-      fill: "#e0e0e0",          
-      stroke: "#555",           
-      strokeWidth: 2,
-      cornerRadius: 6,
-      });
+  const group = new Konva.Group({ x: STAGE_WIDTH * 0.35, y });
 
-    const label = new Konva.Text({
-      x: BTN_WIDTH / 2,
-      y: BTN_HEIGHT / 2,
-      text: level.unlocked ? `Level ${level.id}` : `🔒 Level ${level.id}`,
-      fontSize: 20,
-      fontFamily: "Arial",
-      fill: level.unlocked ? "black" : "#777",
-      align: "center",
-    });
-    label.offsetX(label.width() / 2);
-    label.offsetY(label.height() / 2);
+  const rect = new Konva.Rect({
+    x: 0,
+    y: 0,
+    width: BTN_WIDTH,
+    height: BTN_HEIGHT,
+    fill: "#e0e0e0",          
+    stroke: "#555",           
+    strokeWidth: 2,
+    cornerRadius: 6,
+  });
 
-    if (level.unlocked && this.onLevelSelect) {
-      group.on("click", () => this.onLevelSelect!(level.id));
-    }
+  const label = new Konva.Text({
+    x: BTN_WIDTH / 2,
+    y: BTN_HEIGHT / 2,
+    text: level.unlocked ? `Level ${levelId}` : `🔒 Level ${levelId}`,
+    fontSize: 20,
+    fontFamily: "Arial",
+    fill: level.unlocked ? "black" : "#777",
+    align: "center",
+  });
+  label.offsetX(label.width() / 2);
+  label.offsetY(label.height() / 2);
 
-    // hover
-    group.on("mouseenter", () => {
-      rect.fill("#deb831ff");
-      rect.getLayer()?.batchDraw();
-    });
-    group.on("mouseleave", () => {
-      rect.fill("#e0e0e0");
-      rect.getLayer()?.batchDraw();
-    });
-    // hover end
-
-    group.add(rect);
-    group.add(label);
-    return group;
+  if (level.unlocked && this.onLevelSelect) {
+    group.on("click", () => this.onLevelSelect!(levelId)); // ← use captured id
   }
+
+  // hover effect
+  group.on("mouseenter", () => {
+    rect.fill("#deb831ff");
+    rect.getLayer()?.batchDraw();
+  });
+  group.on("mouseleave", () => {
+    rect.fill("#e0e0e0");
+    rect.getLayer()?.batchDraw();
+  });
+
+  group.add(rect);
+  group.add(label);
+  return group;
+}
+
 
   private createLevelButtons(): void {
     const BTN_HEIGHT = 60;

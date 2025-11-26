@@ -5,16 +5,15 @@ import { User } from "../../core/models/User";
 import { UserService } from "../../core/Services/UserService";
 import { HomeScreenModel } from "./HomeScreenModel";
 import Konva from "konva";
+import { userStore } from "../../context/UserState.ts";
 
 export class HomeScreenController extends ScreenController {
   private view: HomeScreenView;
   private model: HomeScreenModel;
   private screenSwitcher: ScreenSwitcher;
-  private user!: User;
-  private userId: string;
   private layer: Konva.Layer;
 
-  constructor(screenSwitcher: ScreenSwitcher, userId: string, layer: Konva.Layer) { 
+  constructor(screenSwitcher: ScreenSwitcher, layer: Konva.Layer) { 
     super(); 
     this.screenSwitcher = screenSwitcher; this.view = new HomeScreenView( 
       (levelId) => this.handleLevelClicked(levelId), // onLevelSelect 
@@ -23,17 +22,19 @@ export class HomeScreenController extends ScreenController {
       () => this.handleLogout() // onLogout 
       ); 
       this.model = new HomeScreenModel(); 
-      this.userId = userId; 
       this.layer = layer; 
     }
 
-  init(){
+  public init(){
+    const state = userStore.getState();
+    if (!state.username) throw new Error("Username not set in userStore");
+    console.log("context username:", state.username, state.currLevel);
     console.log("initialising homescreen");
-
-    this.model.setCurrentLevel();
     this.model.setMiniGames();
+    this.model.setUsername(state.username);
+    this.model.init();
 
-    this.view.CreateView(this.userId, this.model.getCurrLevel(), this.model.getMiniGames());
+    this.view.CreateView(this.model.getUsername(), this.model.getCurrLevel(), this.model.getMiniGames());
     this.layer.add(this.view.getGroup());
     this.layer.draw();
     this.view.show();
@@ -50,6 +51,7 @@ export class HomeScreenController extends ScreenController {
   
   private handleStartGame(): void { 
     console.log("Start Game clicked!"); // You could call: this.screenSwitcher.switchToScreen({ type: "level", level: this.model.getCurrLevel() }); 
+    console.log("username:", this.model.getUsername());
   } 
   
   private handleMiniGameClicked(gameName: string): void { 

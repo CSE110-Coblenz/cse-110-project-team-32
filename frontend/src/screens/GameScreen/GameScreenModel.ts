@@ -9,9 +9,11 @@ export class GameScreenModel {
 	private questions: Question[] = [];
 	private currentQuestionIndex = 0;
 	private triesLeft = 3;
+	private username: string = "";
 
 	constructor(level: number = 1) {
 		this.level = level;
+		this.username = this.username;
 	}
 
 	/**
@@ -70,6 +72,7 @@ export class GameScreenModel {
 				this.currentQuestionIndex++;
 				return "next";
 			} else {
+				this.incrementUserLevel(); 
 				return "complete"; // level complete
 			}
 		} else {
@@ -104,4 +107,29 @@ export class GameScreenModel {
 	getTestTries(){
 		return this.triesLeft;
 	}
+
+	public setUsername(username: string): void {
+        this.username = username;
+    }
+
+    public getUsername(): string {
+        return this.username;
+    }
+
+	public async incrementUserLevel() {
+		userStore.incrementLevel();
+		const state = userStore.getState();
+
+		try {
+			await fetch(`http://localhost:3000/api/user/username/${state.username}`, {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ currLevel: state.currLevel }),
+			});
+		} catch (err) {
+			console.error("Error updating level:", err);
+		}
+		console.log("level updated to: ", state.currLevel);
+	}
+
 }

@@ -1,4 +1,4 @@
-import { ScreenController, ScreenSwitcher } from "../../types"
+import { ScreenController, type ScreenSwitcher } from "../../types"
 import { Minigame2ScreenModel } from "./Minigame2ScreenModel"
 import { Minigame2EntranceScreenView } from "./Minigame2ScreenViewEntrance"
 import { Minigame2Entrance2ScreenView } from "./Minigame2ScreenViewEntrance2"
@@ -36,7 +36,7 @@ export class Minigame2ScreenController extends ScreenController {
         this.viewEntrance2.onRandomButtonClick = () => {
             this.model.updateScreenToContinue();
             this.model.updateDifficulty();
-            this.viewRoom.showRoom(this.model.getDifficulty());
+            this.viewRoom.showRoom!(this.model.getDifficulty());
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
         }
 
@@ -50,7 +50,7 @@ export class Minigame2ScreenController extends ScreenController {
                 setTimeout(() => {
                     this.viewRoom.hideCorrectBox();
                     this.model.updateScreenToContinue();
-                    this.viewRoom.switchToScreen({ type: this.model.getScreen() });
+                    this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
                 }, 1000);
 
             } else if (res === "wrong") {
@@ -122,6 +122,7 @@ export class Minigame2ScreenController extends ScreenController {
     }
 
     startMinigame2Entrance2() {
+        this.viewEntrance.hide();
         this.viewEntrance2.showBackground();
         this.viewEntrance2.showBackSquare();
         this.viewEntrance2.showButton1();

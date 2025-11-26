@@ -125,12 +125,12 @@ class App implements ScreenSwitcher {
       this.layer.draw();
 
       // Show starting screen
-      this.homeController.getView().show();
+      //this.homeController.getView().show();
       this.loginController.getView().show();
-      this.gameController.getView().show();
-      this.minigame2Controller.getView().show();
-      this.minigame2Controller.getView2().show();
-      this.minigame2Controller.getView3().show();
+      //this.gameController.getView().show();
+      //this.minigame2Controller.getView().show();
+      //this.minigame2Controller.getView2().show();
+      //this.minigame2Controller.getView3().show();
     }
 
     /**

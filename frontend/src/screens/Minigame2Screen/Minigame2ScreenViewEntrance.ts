@@ -8,7 +8,7 @@ export class Minigame2EntranceScreenView implements View {
     private group: Konva.Group;
 
     //Background
-    private background: Konva.Rect;
+    private background!: Konva.Image;
 
     //Start button
     private startButton: Konva.Group;
@@ -28,8 +28,6 @@ export class Minigame2EntranceScreenView implements View {
     private exitRectangle: Konva.Rect;
     private exitText: Konva.Text;
 
-    //Cursor
-    private cursor: Konva.Rect;
 
     onStart?: () => void;
     onCompleteExit?: () => void;
@@ -37,14 +35,17 @@ export class Minigame2EntranceScreenView implements View {
     constructor() {
         this.group = new Konva.Group({ visible: false });
 
-        //Create the background image
+        //Create the background image ----------------------------------------
         Konva.Image.fromURL("/Minigame_2_entrance.jpg", (bg: Konva.Image) => {
+            this.background = bg;
+
             bg.width(STAGE_WIDTH);
             bg.height(STAGE_HEIGHT);
+
 			this.group.add(bg);
         });
 
-        //Define the button
+        //Define the button group -------------------------------------------
         this.startButton = new Konva.Group({
             x: 545,
             y: 725,
@@ -79,6 +80,14 @@ export class Minigame2EntranceScreenView implements View {
 
         this.startButton.add(this.buttonRect);
         this.startButton.add(this.buttonText);
+
+        this.startButton.on("click", () => {
+            if (this.onStart) {
+                this.onStart();
+            }
+        });
+
+        this.group.add(this.startButton);
 
         //Define the gray rectangle group (you still need to decide where to place the button)
         this.grayRectangleGroup = new Konva.Group({
@@ -117,7 +126,99 @@ export class Minigame2EntranceScreenView implements View {
         this.grayRectangleGroup.add(this.grayRectangle);
         this.grayRectangleGroup.add(this.grayRectangleText);
 
+        this.group.add(this.grayRectangleGroup);
 
+        //Define the title ---------------------------------------------------------
+        this.title = new Konva.Text({
+            text: "MathTrivia!",
+            fontFamily: "Arial Black",
+            fontSize: 150,
+            x: 352.5,
+            y: 10,
+            width: 735,
+            height: 226,
+            fill: "3B8ABB",
+            stroke: "black",
+            strokeWidth: 10,
+            align: "center",
+            verticalAlign: "middle",
+        });
+
+        this.group.add(this.title);
+
+        //Define the exit button group --------------------------------------------
+        this.exitButton = new Konva.Group({
+            x: 1252,
+            y: 48,
+        });
+
+        this.exitRectangle = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: 128,
+            height: 93,
+            cornerRadius: 15,
+            fill: "FF0000",
+            stroke: "black",
+            strokeWidth: 3,
+        });
+        
+        this.exitText = new Konva.Text({
+            text: "Exit",
+            x: 10,
+            y: 10,
+            align: "center",
+            verticalAlign: "middle",
+            width: 108,
+            height: 73,
+            fontFamily: "Rag 123",
+            fontSize: 60,
+            letterSpacing: 2,
+            fill: "black",
+        });
+
+        this.exitButton.add(this.exitRectangle);
+        this.exitButton.add(this.exitText);
+
+        this.exitButton.on("click", () => {
+            if (this.onCompleteExit) {
+                this.onCompleteExit();
+            }
+        });
+
+        this.group.add(this.exitButton);
     }
 
+    //Functions that manipulate the view
+    showBackground(): void {
+        this.background.show();
+    }
+
+    showStartButton(): void {
+        this.startButton.show();
+    }
+
+    showInstructionBox(): void {
+        this.grayRectangleGroup.show();
+    }
+
+    showTitle(): void {
+        this.title.show();
+    }
+
+    showExitButton(): void {
+        this.exitButton.show();
+    }
+
+    getGroup(): Konva.Group {
+        return this.group;
+    }
+
+    show(): void {
+        this.group.show();
+    }
+
+    hide(): void {
+        this.group.hide();
+    }
 }

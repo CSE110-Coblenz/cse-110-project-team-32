@@ -2,6 +2,7 @@
  * GameScreenModel - Manages game state
  */
 
+import { userStore } from "../../context/UserState";
 import type { Question } from "../../types";
 
 export class GameScreenModel {

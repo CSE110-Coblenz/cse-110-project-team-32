@@ -3,6 +3,8 @@
  */
 
 import type { Question } from "../../types";
+import { userStore } from "../../context/UserState";
+
 
 export class GameScreenModel {
 	private level;
@@ -47,6 +49,10 @@ export class GameScreenModel {
 
 	getCurrentQuestionIndex(): number {
 		return this.currentQuestionIndex;
+	}
+
+	setCurrentQuestionIndex(currQIndex: number): void {
+		this.currentQuestionIndex = currQIndex;
 	}
 
 	getTotalQuestions(): number {

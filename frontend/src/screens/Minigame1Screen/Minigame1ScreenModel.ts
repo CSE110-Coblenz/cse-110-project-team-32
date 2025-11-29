@@ -10,7 +10,7 @@ export class Minigame1ScreenModel {
   private expectedAnswer: number = 0; // correct 6th number
 
   private readonly INITIAL_TIME = 60;
-  private readonly FIRE_GROWTH = 0.3;
+  //private readonly FIRE_GROWTH = 0.3;
   private readonly REQUIRED_CORRECT = 5;
 
 //   private questions = [{ text: "1 + 1 = ?", answer: "2" }];

@@ -110,7 +110,7 @@ export class Minigame2ScreenModel {
     }
 
     updateScreenToLeave() : void {
-        this.screen = "home";
+        this.screen = "intro";
     }
 
     getScreen(): "intro" | "pick" | "question" | "home" {

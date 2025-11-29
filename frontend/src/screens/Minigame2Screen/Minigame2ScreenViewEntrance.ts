@@ -43,6 +43,7 @@ export class Minigame2EntranceScreenView implements View {
             bg.height(STAGE_HEIGHT);
 
 			this.group.add(bg);
+            bg.moveToBottom();
         });
 
         //Define the button group -------------------------------------------
@@ -58,7 +59,7 @@ export class Minigame2EntranceScreenView implements View {
             width: 350,
             height: 184,
             cornerRadius: 50,
-            fill: "3B8ABB",
+            fill: "#3B8ABB",
             stroke: "black",
             strokeWidth: 5,
         });
@@ -101,19 +102,19 @@ export class Minigame2EntranceScreenView implements View {
             width: 1320,
             height: 400,
             cornerRadius: 50,
-            fill: "504E4E",
+            fill: "#504E4E",
             opacity: 0.48
         });
 
         this.grayRectangleText = new Konva.Text({
-            text: "Welcome to MathTrivia! \
-             Pick a button and see what question you get, \
-            the more questions you answer correctly, the more points you get!",
-            fontFamily: "Rag 123",
+            text: "Welcome to MathTrivia!" +
+             " Pick a button and see what question you get," +
+            " the more questions you answer correctly, the more points you get!",
             fontSize: 60,
+            fontStyle: "bold",
             width: 1320,
             height: 400,
-            fill: "8E8E8E",
+            fill: "#8E8E8E",
             stroke: "black",
             strokeWidth: 3,
             align: "center",
@@ -130,14 +131,15 @@ export class Minigame2EntranceScreenView implements View {
 
         //Define the title ---------------------------------------------------------
         this.title = new Konva.Text({
-            text: "MathTrivia!",
-            fontFamily: "Arial Black",
+            text: "Math Trivia!",
+            fontFamily: "'Impact', 'Arial Black'",
+            fontStyle: "bold",
             fontSize: 150,
             x: 352.5,
             y: 10,
             width: 735,
             height: 226,
-            fill: "3B8ABB",
+            fill: "#3B8ABB",
             stroke: "black",
             strokeWidth: 10,
             align: "center",
@@ -158,7 +160,7 @@ export class Minigame2EntranceScreenView implements View {
             width: 128,
             height: 93,
             cornerRadius: 15,
-            fill: "FF0000",
+            fill: "#FF0000",
             stroke: "black",
             strokeWidth: 3,
         });
@@ -171,8 +173,7 @@ export class Minigame2EntranceScreenView implements View {
             verticalAlign: "middle",
             width: 108,
             height: 73,
-            fontFamily: "Rag 123",
-            fontSize: 60,
+            fontSize: 50,
             letterSpacing: 2,
             fill: "black",
         });

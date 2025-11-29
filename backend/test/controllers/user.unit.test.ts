@@ -42,5 +42,6 @@ describe("Signup Tests", () => {
         expect(res.json).toHaveBeenCalledWith({
         error: "Username already exists"
         });
+        
     });
 });

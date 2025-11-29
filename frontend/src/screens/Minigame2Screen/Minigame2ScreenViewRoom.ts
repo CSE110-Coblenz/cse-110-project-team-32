@@ -7,10 +7,16 @@ export class Minigame2RoomScreenView implements View {
     
     private group = new Konva.Group;
 
-    showRoom?: (level: "easy" | "medium" | "hard" | null) => void;
 
     onSubmit?: (answer: String) => void;
 
+    restart?: () => void;
+
+    onPartialExit?: () => void;
+
+    showRoom(level: "easy" | "medium" | "hard" | null): void {
+        
+    }
 
     showCorrectBox(): void {
 
@@ -25,7 +31,43 @@ export class Minigame2RoomScreenView implements View {
     }
 
     hideWrongBox(): void {
-        
+
+    }
+
+    showInvalidBox(): void {
+
+    }
+
+    hideInvalidBox(): void {
+
+    }
+
+    showBackground(): void {
+
+    }
+
+    showQuestionContainer(question: Question | null): void {
+
+    }
+
+    showBar(): void {
+
+    }
+
+    showPointNum(pointNum: number): void {
+
+    }
+
+    showQuestionNum(questionNum: number): void {
+
+    }
+
+    updateProgress(time: number | null, time2: number): void {
+
+    }
+
+    showResultsBox(): void {
+
     }
 
     getGroup(): Konva.Group {

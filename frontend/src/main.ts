@@ -3,6 +3,7 @@ import type { ScreenSwitcher, Screen } from "./types";
 import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController";
 import { GameScreenController } from "./screens//GameScreen/GameScreenController";
 import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
+import { Minigame1ScreenController } from "./screens/Minigame1Screen/Minigame1ScreenController";
 import { Minigame2ScreenController } from "./screens/Minigame2Screen/Minigame2ScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
@@ -23,6 +24,7 @@ class App implements ScreenSwitcher {
     private homeController: HomeScreenController;
     private gameController: GameScreenController;
     private loginController: LoginScreenController;
+    private minigame1Controller: Minigame1ScreenController;
     private minigame2Controller: Minigame2ScreenController;
 
     constructor(container: string) {
@@ -44,32 +46,10 @@ class App implements ScreenSwitcher {
         // Each controller manages a Model, View, and handles user interactions
         this.homeController = new HomeScreenController(this, testUserId, this.layer);
         this.gameController = new GameScreenController(this);
-        this.loginController = new LoginScreenController(this);
+        this.loginController = new LoginScreenController(this); 
+        this.minigame1Controller = new Minigame1ScreenController(this, this.layer);
         this.minigame2Controller = new Minigame2ScreenController(this);
 
-        // Add all screen groups to the layer
-        // All screens exist simultaneously but only one is visible at a time
-        this.layer.add(this.homeController.getView().getGroup());
-        this.layer.add(this.gameController.getView().getGroup());
-        this.layer.add(this.minigame2Controller.getView().getGroup());
-        this.layer.add(this.minigame2Controller.getView2().getGroup());
-        this.layer.add(this.minigame2Controller.getView3().getGroup());
-
-        //Add login view at the end to be the first one to show
-        this.layer.add(this.loginController.getView().getGroup());
-        
-        // Draw the layer (render everything to the canvas)
-        this.layer.draw();
-
-        // Start with menu screen visible
-		// COMMENT THIS LINE FOR TESTING GAME LEVEL SCREEN
-		this.homeController.getView().show();
-
-		// UNCOMMENT THESE LINE FOR TESTING GAME LEVEL SCREEN
-		// this.gameController.getView().show();
-		// this.gameController.startGame();
-
-        
 
 		// Scale the stage to fit window
 		this.scaleStageToFit();
@@ -86,26 +66,30 @@ class App implements ScreenSwitcher {
 	 */
 	private scaleStageToFit(): void {
 		// Use Math.max instead of Math.min for “cover” behavior
+        /*
 		const scale = Math.max(
 		  window.innerWidth / STAGE_WIDTH,
 		  window.innerHeight / STAGE_HEIGHT
 		);
+        */
+        const scale1 = window.innerWidth / STAGE_WIDTH;
+        const scale2 = window.innerHeight / STAGE_HEIGHT;
 	  
 		// Scale the entire stage
-		this.stage.scale({ x: scale, y: scale });
+		this.stage.scale({ x: scale1, y: scale2 });
 	  
 		// Resize visible area
-		this.stage.width(STAGE_WIDTH * scale);
-		this.stage.height(STAGE_HEIGHT * scale);
+		this.stage.width(STAGE_WIDTH * scale1);
+		this.stage.height(STAGE_HEIGHT * scale2);
 	  
 		// Center it
-		this.stage.x((window.innerWidth - STAGE_WIDTH * scale) / 2);
-		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale) / 2);
+		this.stage.x((window.innerWidth - STAGE_WIDTH * scale1) / 2);
+		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale2) / 2);
 	  
 		this.stage.draw();
 
         // updates login screen with resized window to resize username/password fields
-        this.loginController.getView().updateStageScale(scale);
+        this.loginController.getView().updateStageScale(scale1);
 
 	  }
 
@@ -114,23 +98,23 @@ class App implements ScreenSwitcher {
     /**
     * Initializes all screens, adds them to the layer, and sets the starting screen.
     */
-    private initializeScreens(): void{
-      // Initialize home screen (loads user data, levels, etc.)
-      this.homeController.init();
+    private initializeScreens(): void {
+        // Initialize home screen (loads user data, levels, etc.)
+        this.homeController.init();
 
-      // Add all screen groups to the shared layer
-      this.layer.add(this.homeController.getView().getGroup());
+        this.layer.add(this.loginController.getView().getGroup());
+        this.layer.add(this.homeController.getView().getGroup());
+        this.layer.add(this.gameController.getView().getGroup());
+        this.layer.add(this.minigame1Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView2().getGroup());
+        this.layer.add(this.minigame2Controller.getView3().getGroup());
 
-      // Render the layer
-      this.layer.draw();
 
-      // Show starting screen
-      //this.homeController.getView().show();
-      this.loginController.getView().show();
-      //this.gameController.getView().show();
-      //this.minigame2Controller.getView().show();
-      //this.minigame2Controller.getView2().show();
-      //this.minigame2Controller.getView3().show();
+        this.stage.draw();
+
+        //Show starting screen
+        this.loginController.getView().show();
     }
 
     /**
@@ -147,21 +131,30 @@ class App implements ScreenSwitcher {
         this.homeController.hide();
         this.loginController.hide();
         this.gameController.hide();
+        this.minigame1Controller.hide();
+        this.minigame2Controller.hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {
             case "home":
+                this.homeController.init();
                 this.homeController.show();
                 break;
             case "level":
                 console.log(screen.level);
-                //this.gameController.setLevel(screen.level);
                 this.gameController.show();
                 this.gameController.startGame(screen.level);
                 break;
             case "login":
                 this.loginController.show();
                 break;
+            case "minigame":
+                if (screen.game === "Sequence Rush") {
+                    this.minigame1Controller.getView().show();
+                } else if (screen.game == "Math Trivia!") {
+                    this.minigame2Controller.getView().show();
+                }
+                break; 
             case "intro":
                 this.minigame2Controller.show();
                 this.minigame2Controller.startMinigame2Entrance();

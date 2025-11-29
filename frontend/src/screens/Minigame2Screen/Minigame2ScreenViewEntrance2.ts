@@ -10,6 +10,30 @@ export class Minigame2Entrance2ScreenView implements View {
 
     onRandomButtonClick?: () => void;
 
+    showBackground(): void {
+
+    }
+
+    showBackSquare(): void {
+
+    }
+
+    showButton1(): void {
+
+    }
+
+    showButton2(): void {
+
+    }
+
+    showButton3(): void {
+
+    }
+
+    showText(): void {
+        
+    }
+
     getGroup(): Konva.Group {
         return this.group;
     }

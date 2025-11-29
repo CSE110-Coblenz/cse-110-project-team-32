@@ -17,8 +17,8 @@ export const MAX_TESTSCORE = 5;
 export const GAME_DURATION = 10;
 
 // minigames
-export const MINI_GAME_UNLOCK_LEVELS = [2,4];
-export const MINI_GAME_NAMES = ["Memory Match", "Desert Runner"];
+export const MINI_GAME_UNLOCK_LEVELS = [2,3];
+export const MINI_GAME_NAMES = ["Sequence Rush", "Math Trivia!"];
 
 //minigame 2
 export const EASYQ_NUM = 20;

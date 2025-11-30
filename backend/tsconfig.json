@@ -40,9 +40,10 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }，
-  "include": [
+  },
+  "include":[
     "src/**/*"
   ]
 
 }
+

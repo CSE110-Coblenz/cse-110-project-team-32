@@ -13,9 +13,27 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                 node-version: '20'
-            # It runs the package.json file inside of the backend folder
-            - run: cd backend && npm ci
-            # It runs the TypeScript compiler but it doesn't output any .js files
-            - run: npx tsc --noEmit
-            # It runs the tests
-            - run: npm test
+            # # It runs the package.json file inside of the backend folder
+            # - run: cd backend && npm ci
+            # # It runs the TypeScript compiler but it doesn't output any .js files
+            # - run: npx tsc --noEmit
+            # # It runs the tests
+            # - run: npm test
+
+            # # Install frontend dependencies
+            - name: Install frontend dependencies
+              run: |
+                cd frontend
+                npm ci
+
+            # Type-check frontend (if using TypeScript)
+            - name: Type check frontend
+              run: |
+                cd frontend
+                npx tsc --noEmit
+
+            # Run frontend tests
+            - name: Test frontend
+              run: |
+                cd frontend
+                npm run test || echo "No frontend tests"

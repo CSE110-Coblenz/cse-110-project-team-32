@@ -13,10 +13,14 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                 node-version: '20'
-            # It runs the package.json file inside of the backend folder
+            # ----------backend-------------
             - run: cd backend && npm ci
-            # It runs the TypeScript compiler but it doesn't output any .js files
             - run: cd backend && npx tsc --noEmit
-            # It runs the tests
             - run: cd backend && npm test
+
+            #----------frontend-------------
+            - run: cd frontend && npm ci
+            - run: cd frontend && npx tsc --noEmit
+            - run: cd frontend && npm test
+
 

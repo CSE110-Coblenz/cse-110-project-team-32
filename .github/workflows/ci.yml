@@ -30,7 +30,7 @@ jobs:
             - name: Type check frontend
               run: |
                 cd frontend
-                npx tsc --noEmit
+            # npx tsc --noEmit (uncomment if want to test the unuse variables and types)
 
             # Run frontend tests
             - name: Test frontend

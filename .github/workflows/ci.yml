@@ -20,7 +20,7 @@ jobs:
             # # It runs the tests
             # - run: npm test
 
-            # # Install frontend dependencies
+            # Install frontend dependencies
             - name: Install frontend dependencies
               run: |
                 cd frontend

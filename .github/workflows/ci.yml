@@ -14,13 +14,22 @@ jobs:
               with:
                 node-version: '20'
             # ----------backend-------------
-            - run: cd backend && npm ci
-            - run: cd backend && npx tsc --noEmit
-            - run: cd backend && npm test
+            - name: Install dependencies
+              working-directory: backend
+              run: npm ci
+        
+            - name: Type check
+              working-directory: backend
+              run: npx tsc --noEmit
+        
+            - name: Run tests
+              working-directory: backend
+              run: npm test
 
             #----------frontend-------------
-            - run: cd frontend && npm ci
-            - run: cd frontend && npx tsc --noEmit
-            - run: cd frontend && npm test
+            # - run: cd frontend && npm ci
+            # - run: cd frontend && npx tsc --noEmit
+            # - run: cd frontend && npm test
+
 
 

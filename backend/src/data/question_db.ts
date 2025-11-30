@@ -57,16 +57,7 @@ const insertMany = questiondb.transaction((questions: any[]) => {
 insertMany(questions);
 }
 
-/*
-export function getQuestionsByLevel(level: number, limit: number): Question[] {
-  return questiondb.prepare(`
-      SELECT * FROM questions
-      WHERE level = ?
-      ORDER BY RANDOM()
-      LIMIT ?
-  `).all(level, limit) as Question[];
-}
-*/
+
 
 export function getRegularQuestion(level: number, limit: number = 5): Question[] {
   return questiondb

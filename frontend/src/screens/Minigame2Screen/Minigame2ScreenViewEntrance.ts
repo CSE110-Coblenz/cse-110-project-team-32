@@ -48,8 +48,22 @@ export class Minigame2EntranceScreenView implements View {
 
         //Define the button group -------------------------------------------
         this.startButton = new Konva.Group({
-            x: 545,
-            y: 725,
+            x: 595,
+            y: 635,
+        });
+
+        this.startButton.on("mouseenter", () => {
+            document.body.style.cursor = "pointer";
+
+            this.buttonRect.fill("#0B486E");  
+            this.group.draw();            
+        });
+
+        this.startButton.on("mouseleave", () => {
+            document.body.style.cursor = "default";
+
+            this.buttonRect.fill("#3B8ABB");
+            this.group.draw();            
         });
 
 
@@ -152,6 +166,20 @@ export class Minigame2EntranceScreenView implements View {
         this.exitButton = new Konva.Group({
             x: 1252,
             y: 48,
+        });
+
+        this.exitButton.on("mouseenter", () => {
+            document.body.style.cursor = "pointer";
+
+            this.exitRectangle.fill("#7C0000");  
+            this.group.draw();            
+        });
+
+        this.exitButton.on("mouseleave", () => {
+            document.body.style.cursor = "default";
+
+            this.exitRectangle.fill("#FF0000");
+            this.group.draw();            
         });
 
         this.exitRectangle = new Konva.Rect({

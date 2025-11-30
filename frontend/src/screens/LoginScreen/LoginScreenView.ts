@@ -4,9 +4,37 @@ import type { View } from "../../types";
 import { STAGE_HEIGHT, STAGE_WIDTH } from "../../constants";
 
 export class LoginScreenView implements View {
+
+    //Main group
     private group: Konva.Group;
+
+    //Central group
+    private centralGroup: Konva.Group;
+
+    //All the pieces of UI inside of the central group
+    private title: Konva.Text;
+    private panelGroup: Konva.Group;
+
+    //All the pieces of UI inside of the panel centralGroup
+    private panelRect: Konva.Rect;
+    private passwordRequestText: Konva.Text;
     private usernameInput!: HTMLInputElement;
     private passwordInput!: HTMLInputElement;
+    private loginGroup: Konva.Group;
+    private footerGroup: Konva.Group;
+
+    //All the pieces of UI inside loginGroup
+    private loginRect: Konva.Rect;
+    private loginText: Konva.Text;
+
+    //All the pieces of UI inside of the footer
+    private newPlayerText: Konva.Text;
+    private signUpGroup: Konva.Group;
+
+    //All the pieces of UI inside of the signUpGroup
+    private signUpRect: Konva.Rect;
+    private signUpText: Konva.Text;
+
     private inputContainer!: HTMLDivElement;
     private stageScale: number = 1;
 
@@ -20,7 +48,17 @@ export class LoginScreenView implements View {
         onLogInClick: (username: string, password: string) => void,
         onSignUpClick: () => void
     ) {
-        this.group = new Konva.Group({ visible: true });
+
+        this.group = new Konva.Group();
+
+        this.centralGroup = new Konva.Group({ 
+            visible: true,
+            x: 420,
+            y: 112,
+        });
+
+        this.group.add(this.centralGroup);
+        
         this.onLogin = onLogInClick;
         this.onSignup = onSignUpClick;
 
@@ -41,12 +79,14 @@ export class LoginScreenView implements View {
         //---------------------------------------------
         // TITLE
         //---------------------------------------------
-        const title = new Konva.Text({
-            x: STAGE_WIDTH / 2,
-            y: 150,
+        this.title = new Konva.Text({
+            //x: STAGE_WIDTH / 2,
+            //y: 150,
+            x: 93,
+            y: 41,
             text: "Escape",
             fontStyle: "bold",
-            fontSize: 110,
+            fontSize: 140,
             fontFamily: "'Impact', 'Arial Black'",
             fill: "#cbe537ff",
             stroke: "black",
@@ -56,33 +96,70 @@ export class LoginScreenView implements View {
             shadowOffset: { x: 10, y: 10 },
             shadowColor: "rgba(72, 82, 48, 0.5)",
         });
-        title.offsetX(title.width() / 2);
-        this.group.add(title);
+        this.centralGroup.add(this.title);
+
+
+        //----------------------------------------------------
+        // CREATING ALL THE ELEMENTS INSIDE OF THE PANEL GROUP
+        //----------------------------------------------------
+
+        this.panelGroup = new Konva.Group({ 
+            visible: true,
+            x: 50,
+            y: 212,
+         });
+
+        this.centralGroup.add(this.panelGroup);
 
         //---------------------------------------------
         // PANEL BEHIND INPUT AREA
         //---------------------------------------------
-        const panelWidth = 420;
-        const panelHeight = 310;
-        const panelRect = new Konva.Rect({
-            x: STAGE_WIDTH / 2 - panelWidth / 2,
-            y: STAGE_HEIGHT / 2 - 150,
+        const panelWidth = 500;
+        const panelHeight = 400;
+        this.panelRect = new Konva.Rect({
+            //x: STAGE_WIDTH / 2 - panelWidth / 2,
+            //y: STAGE_HEIGHT / 2 - 150,
+            x: 0,
+            y: 0,
             width: panelWidth,
             height: panelHeight,
             fill: "#2f2f2f",
             opacity: 0.6,
             cornerRadius: 12,
         });
-        this.group.add(panelRect);
+        this.panelGroup.add(this.panelRect);
+
+        //-----------------------------------------------------------
+        //  TEXT REQUESTING THE USER TO INPUT A LONG ENOUGH PASSWORD
+        //-----------------------------------------------------------
+
+        this.passwordRequestText = new Konva.Text({
+            text: "Please enter a password that is 12 characters or longer",
+            x: 62,
+            y: 39,
+            fontFamily: "Arial",
+            fontSize: 16,
+            fill: "white",
+            align: "center",
+            verticalAlign: "middle",
+        });
+
+        this.panelGroup.add(this.passwordRequestText);
+
+
 
         //---------------------------------------------
         // LOGIN BUTTON
         //---------------------------------------------
-        const loginGroup = new Konva.Group();
-        loginGroup.add(
+        this.loginGroup = new Konva.Group({
+            x: 150,
+            y: 238,
+        });
+
+        this.loginRect = 
             new Konva.Rect({
-                x: STAGE_WIDTH / 2 - 100,
-                y: STAGE_HEIGHT / 2,
+                x: 0,
+                y: 0,
                 width: 200,
                 height: 60,
                 fill: "#cee353ff",
@@ -90,78 +167,94 @@ export class LoginScreenView implements View {
                 stroke: "darkgreen",
                 strokeWidth: 3,
             })
-        );
-        const loginText = new Konva.Text({
-            x: STAGE_WIDTH / 2,
-            y: STAGE_HEIGHT / 2 + 15,
+
+        this.loginGroup.add(this.loginRect);
+
+        this.loginText = new Konva.Text({
+            x: 70,
+            y: 16,
             text: "Log in",
             fontSize: 24,
             fontFamily: "Arial",
             fill: "black",
             align: "center",
         });
-        loginText.offsetX(loginText.width() / 2);
-        loginGroup.add(loginText);
 
-        loginGroup.on("click", () => {
+        this.loginGroup.add(this.loginText);
+
+        this.loginGroup.on("click", () => {
             this.onLogin(this.usernameInput.value, this.passwordInput.value);
         });
-        loginGroup.on("mouseover", () => (document.body.style.cursor = "pointer"));
-        loginGroup.on("mouseout", () => (document.body.style.cursor = "default"));
+        this.loginGroup.on("mouseover", () => (document.body.style.cursor = "pointer"));
+        this.loginGroup.on("mouseout", () => (document.body.style.cursor = "default"));
 
-        this.group.add(loginGroup);
+        this.panelGroup.add(this.loginGroup);
 
         //---------------------------------------------
         // SIGN UP FOOTER
         //---------------------------------------------
-        const footerGroup = new Konva.Group({
-            x: STAGE_WIDTH / 2,
-            y: STAGE_HEIGHT / 2 + 90,
+        this.footerGroup = new Konva.Group({
+            x: 59,
+            y: 303,
         });
 
-        const newPlayerText = new Konva.Text({
-            x: -75,
-            y: 10,
+        this.panelGroup.add(this.footerGroup);
+
+        //----------------------------------------------
+        // PLAYER TEXT
+        //----------------------------------------------
+
+        this.newPlayerText = new Konva.Text({
+            x: 59,
+            y: 28,
             text: "New Player?",
             fontSize: 20,
             fontFamily: "Arial",
             fill: "white",
             align: "right",
         });
-        newPlayerText.offsetX(newPlayerText.width() / 2);
-        footerGroup.add(newPlayerText);
 
-        const signUpGroup = new Konva.Group();
-        signUpGroup.add(
-            new Konva.Rect({
-                x: 10,
-                y: 0,
-                width: 140,
-                height: 40,
-                fill: "#cee353ff",
-                cornerRadius: 8,
-                stroke: "darkgreen",
-                strokeWidth: 3,
-            })
-        );
-        const signupText = new Konva.Text({
-            x: 80,
-            y: 12,
+        this.newPlayerText.offsetX(this.newPlayerText.width() / 2);
+        this.footerGroup.add(this.newPlayerText);
+
+        //------------------------------------------------
+        // SIGNUP BUTTON
+        //------------------------------------------------
+
+        this.signUpGroup = new Konva.Group({
+            x: 226,
+            y: 20,
+        });
+
+        this.signUpRect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: 140,
+            height: 40,
+            fill: "#cee353ff",
+            cornerRadius: 8,
+            stroke: "darkgreen",
+            strokeWidth: 3,
+        });
+
+        this.signUpGroup.add(this.signUpRect);
+
+        this.signUpText = new Konva.Text({
+            x: 45,
+            y: 10,
             text: "Sign up",
             fontSize: 16,
             fontFamily: "Arial",
             fill: "black",
             align: "center",
         });
-        signupText.offsetX(signupText.width() / 2);
-        signUpGroup.add(signupText);
+        this.signUpGroup.add(this.signUpText);
 
-        signUpGroup.on("click", () => this.onSignup());
-        signUpGroup.on("mouseover", () => (document.body.style.cursor = "pointer"));
-        signUpGroup.on("mouseout", () => (document.body.style.cursor = "default"));
+        this.signUpGroup.on("click", () => this.onSignup());
+        this.signUpGroup.on("mouseover", () => (document.body.style.cursor = "pointer"));
+        this.signUpGroup.on("mouseout", () => (document.body.style.cursor = "default"));
 
-        footerGroup.add(signUpGroup);
-        this.group.add(footerGroup);
+        this.footerGroup.add(this.signUpGroup);
 
         //---------------------------------------------
         // DOM INPUTS
@@ -225,8 +318,8 @@ export class LoginScreenView implements View {
 
     private updateInputLayout(): void {
         // Base canvas coordinates
-        const inputCanvasX = STAGE_WIDTH / 2;
-        const inputCanvasY = STAGE_HEIGHT / 2 - 180;
+        const inputCanvasX = STAGE_WIDTH / 2 - 50;
+        const inputCanvasY = STAGE_HEIGHT / 2 - 100;
 
         // Convert to actual screen pixels
         const screenX = inputCanvasX * this.stageScale;

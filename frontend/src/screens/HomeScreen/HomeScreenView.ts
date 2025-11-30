@@ -56,30 +56,7 @@ export class HomeScreenView implements View {
       bgImage.moveToBottom();
     });
 
-  
-/******fake data for testing of level and mini game buttons****/
-    /*this.createUserArea();
 
-    const testLevels: LevelInfo[] = [
-      { id: 1, unlocked: true },
-      { id: 2, unlocked: true },
-      { id: 3, unlocked: false },
-      { id: 4, unlocked: false },
-      { id: 5, unlocked: false },
-      { id: 6, unlocked: false },
-    ];
-
-    const testMiniGames: MiniGameInfo[] = [
-      { name: "Mini Game 1", unlocked: true, unlockLevel: 2 },
-      { name: "Mini Game 2", unlocked: false, unlockLevel: 4 },
-    ];
-
-    // buttons on the right side
-    this.createStartGameButton();
-    this.setMiniGames(testMiniGames);
-
-    // draw left side levels
-    this.setLevels(testLevels);*/
   }
 
   /****************** Start Game Button ********************/

@@ -25,7 +25,6 @@ export class LoginScreenController extends ScreenController {
      * Handle login attempt
      */
     private async handleLogin(username: string, password: string): Promise<void> {
-        // TODO: Implement actual authentication logic when database is added
         this.model.setUsername(username);
         this.model.setPassword(password);
         const res = await fetch(`http://localhost:3000/api/user/auth/login`, {
@@ -57,7 +56,7 @@ export class LoginScreenController extends ScreenController {
     }
 
     /**
-     * Handle account creation (no DB yet) — prefill login and close modal
+     * Handle account creation
      */
 
     private async handleCreateAccount(username: string, password: string): Promise<void> {
@@ -82,12 +81,6 @@ export class LoginScreenController extends ScreenController {
             });
         }
 
-        /*
-        // Hide the signup modal
-        this.view.hideSignupModal();
-        // Optionally notify the user
-        alert('Account created. You can now log in.');
-        */
     }
 
     /**

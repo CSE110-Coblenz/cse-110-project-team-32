@@ -19,7 +19,6 @@ export class GameScreenController extends ScreenController {
 		this.view = new GameScreenView();
 
 		this.view.onExit = () => {
-            // console.log("Exit button clicked");
             this.screenSwitcher.switchToScreen({ type: "home" });
 			this.view.resetHint();
 			this.view.hideComplete();
@@ -48,10 +47,6 @@ export class GameScreenController extends ScreenController {
 		this.view.updateQuestion(currentQuestion);
 		this.view.updateLevel(this.model.getLevel());
 		this.view.initializeAnswer(); //clean the answerbox(it contains user and password)
-		
-		// console.log("Loaded questions:", this.model.getTotalQuestions());
-		// console.log("Current question:", this.model.getCurrentQuestion());
-		
 		this.view.show();
 	}
 
@@ -94,8 +89,6 @@ export class GameScreenController extends ScreenController {
 			case "complete":
 				console.log("Practice complete");
 				
-				// console.log(this.model.getCurrentQuestionIndex());
-				// console.log(this.model.getTotalQuestions());
 				this.view.updateProgress(
 					this.model.getTotalQuestions(),
 					this.model.getTotalQuestions(),

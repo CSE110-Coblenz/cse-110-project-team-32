@@ -401,7 +401,7 @@ export class Minigame1ScreenView implements View{
       fontSize: 90,
       fill: 'red',
       stroke: 'black',
-      text: "Congradulations! You win!",
+      text: "Congratulations! You win!",
     });
     this.gameWinGroup.add(this.gameWinBox);
     this.gameWinGroup.add(this.gameWinText);
@@ -595,3 +595,4 @@ export class Minigame1ScreenView implements View{
 }
   
    
+

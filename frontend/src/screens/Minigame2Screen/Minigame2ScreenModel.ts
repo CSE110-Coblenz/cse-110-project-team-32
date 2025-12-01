@@ -30,18 +30,23 @@ export class Minigame2ScreenModel {
     async loadQuestions() : Promise<Question[]> {
         // converting difficulty into level
         let level = 3;
+        // set number of questions based on difficulty
+        let numberOfQuestions = 1;
         switch(this.difficulty) {
             case "easy":
                 level = 1;
+                numberOfQuestions = EASYQ_NUM;
                 break;
             case "medium":
                 level = 2;
+                numberOfQuestions = MEDQ_NUM;
                 break;
             case "hard":
                 level = 3;
+                numberOfQuestions = HARDQ_NUM;
                 break;
         }
-        const res = await fetch(`http://localhost:3000/api/questions/${level}/minigameTwo`);
+        const res = await fetch(`http://localhost:3000/api/questions/${level}/${numberOfQuestions}/minigameTwo`);
         const data = (await res.json()) as Question[];
 
         this.questions = data;

@@ -83,7 +83,7 @@ export function getTestQuestion(level: number): Question | null {
     .get(level) as Question | null;
 }
 
-export function getMiniGameTwoQuestion(level: number, limit: number = 5): Question[] {
+export function getMiniGameTwoQuestion(level: number, limit: number): Question[] {
   return questiondb
     .prepare(`
       SELECT * FROM questions

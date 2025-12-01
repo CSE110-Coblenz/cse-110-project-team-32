@@ -27,7 +27,7 @@ export const getTestQuestions = async (req: Request, res: Response) => {
 export const getMiniGameTwoQuestions = async (req: Request, res: Response) => {
     try {
         const level = Number(req.params.level);
-        const limit = Number(req.params.limit) || 5;
+        const limit = Number(req.params.limit);
         const questions = getMiniGameTwoQuestion(level, limit);
         res.json(questions);
     } catch (error) {

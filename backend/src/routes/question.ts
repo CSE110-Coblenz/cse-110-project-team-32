@@ -11,6 +11,6 @@ router.get("/:level/regular", getRegularQuestions);
 // route for test questions
 router.get("/:level/test", getTestQuestions);
 // route for minigame 2 questions
-router.get("/:level/minigameTwo", getMiniGameTwoQuestions);
+router.get("/:level/:limit/minigameTwo", getMiniGameTwoQuestions);
 
 export default router;

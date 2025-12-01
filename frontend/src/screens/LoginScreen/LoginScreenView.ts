@@ -219,6 +219,7 @@ export class LoginScreenView implements View {
         this.createSignupModal();
     }
 
+    // CODE REVIEW: could make this less verbose by doing Object.assign(overlay.style, { then all properties }
     private createSignupModal(): void {
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';

@@ -78,7 +78,9 @@ export class GameScreenModel {
 				this.currentQuestionIndex++;
 				return "next";
 			} else {
-				this.incrementUserLevel(); 
+				if(this.level == userStore.getCurrLevel()){
+					this.incrementUserLevel(); 
+				}
 				return "complete"; // level complete
 			}
 		} else {

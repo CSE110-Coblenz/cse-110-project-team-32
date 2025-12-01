@@ -45,7 +45,7 @@ export class LoginScreenController extends ScreenController {
             console.log("res is:", res2);
             const data = await res2.json();
             console.log("data is:", data);
-            userStore.setUsername(data.username);
+            userStore.setUsername(username);
             userStore.setCurrLevel(data.currLevel);
             this.screenSwitcher.switchToScreen({
                 type: "home"

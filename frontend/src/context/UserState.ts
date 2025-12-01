@@ -27,6 +27,12 @@ class UserStore {
     this.state.currLevel = level;
   }
 
+  getCurrLevel(): number {
+    if (!this.state) throw new Error("UserState not initialized");
+      return this.state.currLevel;
+  }
+
+
   incrementLevel() {
     if (!this.state) throw new Error("UserState not initialized");
     this.state.currLevel += 1;

@@ -5,7 +5,7 @@ import { userStore } from "../../context/UserState.ts";
 
 
 export class HomeScreenModel {
-    private currLevel = 0; //current level of user
+    private currLevel = 1; //current level of user
     private miniGames: MiniGameInfo[] = []; //minigames status
     private username!: string;
 
@@ -19,6 +19,8 @@ export class HomeScreenModel {
     }
 
     getCurrLevel(): number {
+        const state = userStore.getState();
+        this.currLevel = state.currLevel ?? 1;
         console.log(this.currLevel);
         return this.currLevel;
     }

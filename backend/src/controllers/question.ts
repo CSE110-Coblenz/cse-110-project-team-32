@@ -31,6 +31,7 @@ export const getMiniGameTwoQuestions = async (req: Request, res: Response) => {
         const questions = getMiniGameTwoQuestion(level, limit);
         res.json(questions);
     } catch (error) {
+        console.log("NO Minigame 2 quetions could be loaded");
         console.error("Error fetching minigame 2 questions:", error);
         res.status(500).json({ error: "Failed to fetch minigame 2 questions" });
     }

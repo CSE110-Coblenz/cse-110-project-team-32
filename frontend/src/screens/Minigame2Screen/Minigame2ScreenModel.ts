@@ -8,8 +8,11 @@ export class Minigame2ScreenModel {
     public timeCounter: number | null;
     public timerId: number | null;
     public maxTime: number;
-    private questions: Question[];
+    private easyQuestions: Question[];
+    private mediumQuestions: Question[];
+    private hardQuestions: Question[];
     private question: Question | null;
+    private questionString: String | null;
     private screen: "intro" | "pick" | "question" | "home";
     private difficulty: "easy" | "medium" | "hard" | null;
 
@@ -19,39 +22,40 @@ export class Minigame2ScreenModel {
         this.questionNum = 0;
         this.timeCounter = null;
         this.timerId = null;
-        this.maxTime = 5; // CHANGE BACK TO 50ISH AFTER TESTING
-        this.questions = [];
+        this.maxTime = 30; // CHANGE BACK TO 50ISH AFTER TESTING
+        this.easyQuestions = [];
+        this.mediumQuestions = [];
+        this.hardQuestions = [];
         this.question = null;
+        this.questionString = null;
         this.screen = "intro";
         this.difficulty = null;
     }
 
     //Functions manipulating this.questions
-    async loadQuestions() : Promise<Question[]> {
+    async loadQuestions() : Promise<void> {
         // converting difficulty into level
-        let level = 3;
-        // set number of questions based on difficulty
-        let numberOfQuestions = 1;
-        switch(this.difficulty) {
-            case "easy":
-                level = 1;
-                numberOfQuestions = EASYQ_NUM;
-                break;
-            case "medium":
-                level = 2;
-                numberOfQuestions = MEDQ_NUM;
-                break;
-            case "hard":
-                level = 3;
-                numberOfQuestions = HARDQ_NUM;
-                break;
-        }
-        const res = await fetch(`http://localhost:3000/api/questions/${level}/${numberOfQuestions}/minigameTwo`);
-        const data = (await res.json()) as Question[];
+        let easyLevel = 1;
+        let mediumLevel = 2;
+        let hardLevel = 3;
+        console.log("the questions are trying to be loaded");
+        const res1 = await fetch(`http://localhost:3000/api/questions/${easyLevel}/${EASYQ_NUM}/minigameTwo`);
+        const data1 = (await res1.json()) as Question[];
 
-        this.questions = data;
+        this.easyQuestions = data1;
+
+        const res2 = await fetch(`http://localhost:3000/api/questions/${mediumLevel}/${MEDQ_NUM}/minigameTwo`);
+        const data2 = (await res2.json()) as Question[];
+
+        this.mediumQuestions = data2;
+
+        const res3 = await fetch(`http://localhost:3000/api/questions/${hardLevel}/${HARDQ_NUM}/minigameTwo`);
+        const data3 = (await res3.json()) as Question[];
+
+
+        this.hardQuestions = data3;
         // console.log(this.questions);
-        return this.questions;
+        return;
     }
 
     //Functions manipulating pointNum
@@ -94,21 +98,28 @@ export class Minigame2ScreenModel {
         try {
             if (this.difficulty === "easy") {
                 let i : number = Math.floor(Math.random() * EASYQ_NUM);
-                this.question = this.questions[i];
+                this.question = this.easyQuestions[i];
+                this.questionString = this.question.question;
             } else if (this.difficulty === "medium") {
                 let i : number = Math.floor(Math.random() * MEDQ_NUM);
-                i += EASYQ_NUM;
-                this.question = this.questions[i];
+                this.question = this.mediumQuestions[i];
+                this.questionString = this.question.question;
             } else if (this.difficulty === "hard") {
                 let i : number = Math.floor(Math.random() * HARDQ_NUM);
-                i += MEDQ_NUM + EASYQ_NUM;
-                this.question = this.questions[i];
+                this.question = this.hardQuestions[i];
+                this.questionString = this.question.question;
             } else {
+                console.log("We haven't set the difficulty, that's the error");
                 throw new Error("You haven't set the difficulty");
             }
         } catch (err) {
+            console.log("An error happened in updateQuestion");
             console.error("Error: ", err);
         }
+    }
+
+    getCurrentQuestionString() : String | null {
+        return this.questionString;
     }
 
     //Functions manipulating this.screen
@@ -139,9 +150,9 @@ export class Minigame2ScreenModel {
     //Functions manipulating this.difficulty
     updateDifficulty() : void {
         let i : number = Math.floor(Math.random() * 3);
-        if (i <= 1) {
+        if (i < 1) {
             this.difficulty = "easy";
-        } else if (i <= 2) {
+        } else if (i < 2) {
             this.difficulty = "medium";
         } else {
             this.difficulty = "hard";
@@ -149,9 +160,11 @@ export class Minigame2ScreenModel {
     }
 
     // Explicitly set difficulty (used when player picks a button)
+    /*
     setDifficulty(d: "easy" | "medium" | "hard") : void {
         this.difficulty = d;
     }
+        */
 
     getDifficulty() : "easy" | "medium" | "hard" | null {
         return this.difficulty;

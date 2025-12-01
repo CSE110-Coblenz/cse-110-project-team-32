@@ -23,7 +23,7 @@ export class Minigame2ScreenController extends ScreenController {
         this.viewEntrance.onStart = () => {
             console.log("button was clicked");
             // call this method when user selects a certain difficulty
-            this.model.loadQuestions();
+            //this.model.loadQuestions();
             this.model.updateScreenToContinue();
             this.startTimer();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
@@ -38,6 +38,7 @@ export class Minigame2ScreenController extends ScreenController {
 
         //set up all the functions for this.viewEntrance2
 
+        /*
         this.viewEntrance2.onSelectDifficulty = (difficulty) => {
             this.model.updateScreenToContinue();
             // set difficulty explicitly based on button selected
@@ -45,6 +46,14 @@ export class Minigame2ScreenController extends ScreenController {
             // (we added setDifficulty in the model)
             // @ts-ignore - difficulty is constrained by view signature
             this.model.setDifficulty(difficulty);
+            this.viewRoom.showRoom!(this.model.getDifficulty());
+            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+            */
+
+        this.viewEntrance2.onRandomButtonClick = () => {
+            this.model.updateScreenToContinue();
+            this.model.updateDifficulty();
             this.viewRoom.showRoom!(this.model.getDifficulty());
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
         }
@@ -93,7 +102,7 @@ export class Minigame2ScreenController extends ScreenController {
                     this.viewRoom.hideCorrectBox();
                     this.model.updateScreenToContinue();
                     this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
-                    this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+                    //this.screenSwitcher.switchToScreen({ type: this.model.getScreen() }); //-------Recheck this
                 }, 1000);
 
             } else if (res === "wrong") {
@@ -186,7 +195,7 @@ export class Minigame2ScreenController extends ScreenController {
     startMinigame2Entrance2() {
         this.viewEntrance.hide();
         this.viewEntrance2.showBackground();
-        // this.viewEntrance2.showBackSquare();
+        //this.viewEntrance2.showBackSquare();
         this.viewEntrance2.showButton1();
         this.viewEntrance2.showButton2();
         this.viewEntrance2.showButton3();
@@ -201,6 +210,7 @@ export class Minigame2ScreenController extends ScreenController {
     startNewQuestion() {
         this.viewRoom.showBackground();
         this.model.updateQuestion();
+        this.viewRoom.showQuestion(this.model.getCurrentQuestionString());
         this.viewRoom.showQuestionContainer(this.model.getCurrentQuestion());
         this.viewRoom.showBar();
         this.viewRoom.showPointNum(this.model.getPointNum());
@@ -224,12 +234,12 @@ export class Minigame2ScreenController extends ScreenController {
                 // show results on whichever screen is active
                 const screen = this.model.getScreen();
                 if (screen === "question") {
-                    this.viewRoom.showResultsBox();
+                    this.viewRoom.showResultsBox(this.model.getPointNum());
                 } else if (screen === "pick") {
                     this.viewEntrance2.showResultsBox();
                 } else {
                     // fallback show room results
-                    this.viewRoom.showResultsBox();
+                    this.viewRoom.showResultsBox(this.model.getPointNum());
                 }
             }
         }, 1000);

@@ -102,9 +102,26 @@ class App implements ScreenSwitcher {
         // Initialize home screen (loads user data, levels, etc.)
         this.homeController.init();
 
+        
+        this.layer.add(this.loginController.getView().getGroup());
+
+        this.layer.add(this.homeController.getView().getGroup());
+
+        this.layer.add(this.gameController.getView().getGroup());
+
+        this.layer.add(this.minigame1Controller.getView().getGroup());
+
+        this.layer.add(this.minigame2Controller.getView().getGroup());
+
+        this.layer.add(this.minigame2Controller.getView2().getGroup());
+
+        this.layer.add(this.minigame2Controller.getView3().getGroup());
+
+
         // Render the layer
         this.layer.draw();
 
+        /*
         // Show only the login screen at startup (other screens remain hidden)
         this.homeController.getView().hide();
         this.gameController.getView().hide();
@@ -114,6 +131,7 @@ class App implements ScreenSwitcher {
         this.minigame2Controller.getView3().hide();
         // this.loginController.getView().show(); CHANGE BACK AFTER TESTING
         this.loginController.getView().hide();
+        */
     }
 
     /**
@@ -152,6 +170,7 @@ class App implements ScreenSwitcher {
                 if (screen.game === "Sequence Rush") {
                     this.minigame1Controller.getView().show();
                 } else if (screen.game == "Math Trivia!") {
+                    this.minigame2Controller.startMinigame2Entrance();
                     this.minigame2Controller.getView().show();
                 }
                 break; 

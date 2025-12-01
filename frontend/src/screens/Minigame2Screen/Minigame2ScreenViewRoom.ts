@@ -6,7 +6,7 @@ import type { Question } from "../../types";
 export class Minigame2RoomScreenView implements View {
     private group: Konva.Group = new Konva.Group({ visible: false });
 
-    private background?: Konva.Image;
+    private background: Konva.Image;
     private tintRect?: Konva.Rect;
 
     // top bar
@@ -34,6 +34,7 @@ export class Minigame2RoomScreenView implements View {
 
     // results modal
     private resultsGroup?: Konva.Group;
+    private resultsText2?: Konva.Text;
 
     onSubmit?: (answer: String) => void;
     restart?: () => void;
@@ -43,6 +44,19 @@ export class Minigame2RoomScreenView implements View {
 
     constructor() {
         // background placeholder -- image loaded on showRoom
+
+
+        this.background = new Konva.Image({
+            x: 0,
+            y: 0,
+            width: STAGE_WIDTH,
+            height: STAGE_HEIGHT,
+            listening: false,
+            image: undefined,
+        });
+
+        this.group.add(this.background);
+        this.background.moveToBottom();
 
         // top bar: points and question num
         this.pointText = new Konva.Text({
@@ -91,17 +105,19 @@ export class Minigame2RoomScreenView implements View {
         this.group.add(this.barFront);
 
         // question container (dialog)
-        this.questionContainer = new Konva.Group({ x: STAGE_WIDTH / 2 - 360, y: STAGE_HEIGHT / 2 - 60 });
-        this.questionDialog = new Konva.Rect({ width: 720, height: 220, cornerRadius: 12, fill: "#ffffff", opacity: 0.7, stroke: "black", strokeWidth: 2 });
-        this.questionText = new Konva.Text({ x: 300, y: 30, width: 680, text: "Sample Question", fontSize: 28, fontFamily: "Arial", fill: "black", align: "center" });
+        this.questionContainer = new Konva.Group({ x: 170, y: 226 });
+        this.questionDialog = new Konva.Rect({ width: 1200, height: 600, cornerRadius: 30, fill: "#ffffff", opacity: 0.4, stroke: "black", strokeWidth: 2 });
+
+
+        this.questionText = new Konva.Text({ x: 600, y: 100, width: 680, text: "Sample Question", fontSize: 60, fontFamily: "Arial", fill: "black", align: "center" });
         this.questionText.offsetX(this.questionText.width() / 2);
         this.questionContainer.add(this.questionDialog);
         this.questionContainer.add(this.questionText);
 
         // small submit button displayed inside dialog
-        const submitGroup = new Konva.Group({ x: 260, y: 140 });
-        const submitRect = new Konva.Rect({ width: 200, height: 44, fill: "#d9d9d9", cornerRadius: 10, stroke: "black", strokeWidth: 2 });
-        const submitText = new Konva.Text({ x: 100, y: 10, text: "Submit", fontSize: 20, fontFamily: "Arial", fill: "black" });
+        const submitGroup = new Konva.Group({ x: 150, y: 431 });
+        const submitRect = new Konva.Rect({ width: 300, height: 100, fill: "#d9d9d9", cornerRadius: 10, stroke: "black", strokeWidth: 2 });
+        const submitText = new Konva.Text({ x: 147, y: 20, text: "Submit", fontSize: 60, fontFamily: "Arial", fill: "black" });
         submitText.offsetX(submitText.width() / 2);
         submitGroup.add(submitRect);
         submitGroup.add(submitText);
@@ -160,6 +176,7 @@ export class Minigame2RoomScreenView implements View {
         this.resultsGroup = new Konva.Group({ visible: false });
         const resultsBg = new Konva.Rect({ x: STAGE_WIDTH / 2 - 500, y: STAGE_HEIGHT / 2 - 250, width: 1000, height: 500, fill: "#2b2b2bff", opacity: 0.95, cornerRadius: 12, stroke: "black", strokeWidth: 2 });
         const resultsText = new Konva.Text({ x: STAGE_WIDTH / 2 - 500 + 200, y: STAGE_HEIGHT / 2 - 250 + 100, width: 400, text: "Time's up!", fontSize: 40, fontFamily: "Arial", fill: "#ffffff", align: "center" });
+        this.resultsText2 = new Konva.Text({ x: STAGE_WIDTH / 2 - 500 + 200, y: STAGE_HEIGHT / 2 - 250 + 200, width: 400, text: "You got:", fontSize: 40, fontFamily: "Arial", fill: "#ffffff", align: "center" });
         resultsText.offsetX(resultsText.width() / 2);
         const restartGroup = new Konva.Group({ x: STAGE_WIDTH / 2 - 170, y: STAGE_HEIGHT / 2 + 170 });
         const restartRect = new Konva.Rect({ width: 140, height: 48, fill: "#cee353", cornerRadius: 10, stroke: "darkgreen", strokeWidth: 3 });
@@ -186,6 +203,7 @@ export class Minigame2RoomScreenView implements View {
         exitGroup.on("mouseleave", () => (document.body.style.cursor = "default"));
 
         this.resultsGroup.add(resultsBg);
+        this.resultsGroup.add(this.resultsText2);
         this.resultsGroup.add(resultsText);
         this.resultsGroup.add(restartGroup);
         this.resultsGroup.add(exitGroup);
@@ -208,9 +226,10 @@ export class Minigame2RoomScreenView implements View {
     private createInputElements(): void {
         this.inputContainer = document.createElement("div");
         document.body.appendChild(this.inputContainer);
+        this.inputContainer.style.display = "block";
         this.inputContainer.style.position = "absolute";
-        this.inputContainer.style.left = "50%";
-        this.inputContainer.style.transform = "translateX(-50%)";
+        this.inputContainer.style.left = "670px";  // exact X position
+        this.inputContainer.style.top = "550px";   // exact Y position
         this.inputContainer.style.zIndex = "5";
         this.inputContainer.style.display = "none";
 
@@ -218,8 +237,8 @@ export class Minigame2RoomScreenView implements View {
         this.answerInput.type = "text";
         this.answerInput.placeholder = "Enter answer...";
         this.answerInput.style.padding = "10px";
-        this.answerInput.style.width = "400px";
-        this.answerInput.style.fontSize = "18px";
+        this.answerInput.style.width = "600px";
+        this.answerInput.style.fontSize = "24px";
         this.answerInput.style.borderRadius = "8px";
         this.answerInput.style.border = "2px solid #ccc";
 
@@ -232,12 +251,8 @@ export class Minigame2RoomScreenView implements View {
 
         this.inputContainer.appendChild(this.answerInput);
 
-        // position it relative to stage coordinates
-        const screenX = (STAGE_WIDTH / 2) + "px";
-        const screenY = (STAGE_HEIGHT / 2 - 50) + "px";
-        this.inputContainer.style.top = screenY;
     }
-
+    /*
     showRoom(level: "easy" | "medium" | "hard" | null): void {
         // load the background image (same asset used, tint applied for level)
         Konva.Image.fromURL("/levelBackdrop.png", (img) => {
@@ -266,6 +281,42 @@ export class Minigame2RoomScreenView implements View {
         this.pointText?.text("Points: 0");
         this.questionTextTop?.text("Question 0");
     }
+        */
+    showRoom(level: "easy" | "medium" | "hard" | null): void {
+    const path =
+        level === "easy"   ? "/Easy room.jpg"   :
+        level === "medium" ? "/Normal room.jpg" :
+        level === "hard"   ? "/Hard room.jpg"   :
+        null;
+
+    if (!path) return;
+
+    Konva.Image.fromURL(path, (img) => {
+        this.background.image(img.image());  // reuse same Konva.Image
+        this.background.width(STAGE_WIDTH);
+        this.background.height(STAGE_HEIGHT);
+
+        if (this.tintRect) this.tintRect.destroy();
+            let color = "rgba(0, 0, 0, 0)";
+            if (level === "easy") {
+                color = "rgba(40, 120,40, 0.25)";
+            } else if (level === "medium") {
+                color = "rgba(180,160,60,0.25)";
+            } else {
+                color = "rgba(160,40,40,0.25)";
+            }
+        this.tintRect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: STAGE_WIDTH,
+            height: STAGE_HEIGHT,
+            fill: color,
+            listening: false,
+        });
+        this.group.add(this.tintRect);
+        this.group.getLayer()?.draw();
+    });
+}
 
     showCorrectBox(): void {
         this.correctBox?.show();
@@ -313,6 +364,10 @@ export class Minigame2RoomScreenView implements View {
         this.pointText!.text(`Points: ${pointNum}`);
     }
 
+    showQuestion(questionString: (String | null)): void {
+        this.questionText!.text(`${questionString}`);
+    }
+
     showQuestionNum(questionNum: number): void {
         this.questionTextTop!.text(`Question ${questionNum}`);
     }
@@ -325,8 +380,9 @@ export class Minigame2RoomScreenView implements View {
         this.group.getLayer()?.draw();
     }
 
-    showResultsBox(): void {
+    showResultsBox(points: number): void {
         // bring results modal to the top of the Konva layer and show it
+        this.resultsText2!.text(`You got ${points} points!`);
         this.resultsGroup?.moveToTop();
         this.resultsGroup?.show();
         // also hide DOM input so it cannot appear above the canvas

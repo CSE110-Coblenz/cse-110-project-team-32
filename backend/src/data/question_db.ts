@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { Question } from "../models/question";
 import path from "path";
 
-const questiondb = new Database(path.join(__dirname, "/question.db"));
+const questiondb = new Database(path.join(__dirname, "../../data/question.db"));
 
 // create the questions table if it doesn’t exist
 questiondb.prepare(`
@@ -48,9 +48,79 @@ if (rowCount === 0) {
     [2, "What is 9 - 7?", "2", "Simple subtraction.", 0, 0],
   
     // LEVEL 3: Mixed Operations
-    [3, "What is 12 ÷ 4?", "3", "Division by 4.", 0, 1],
-    [3, "What is 5 * 3?", "15", "It's 5 added 3 times.", 0, 1],
-    [3, "What is the square root of 16?", "4", "A number multiplied by itself gives 16.", 1, 1],
+    [3, "What is 12 ÷ 4?", "3", "Division by 4.", 0, 0],
+    [3, "What is 5 * 3?", "15", "It's 5 added 3 times.", 0, 0],
+    [3, "What is the square root of 16?", "4", "A number multiplied by itself gives 16.", 1, 0],
+
+
+    //MINIGAME 1: Easy Questions
+    [1, "What is 1 + 2?", "3", "no hint.", 0, 1],
+    [1, "What is 3 + 5?", "8", "no hint.", 0, 1],
+    [1, "What is 1 + 1?", "1", "no hint.", 0, 1],
+    [1, "What is 11 + 2?", "13", "no hint.", 0, 1],
+    [1, "What is 10 - 4?", "6", "no hint.", 0, 1],
+    [1, "What number is bigger 8 or 5?", "8", "no hint.", 0, 1],
+    [1, "What number is smaller 13 or 2", "2", "no hint.", 0, 1],
+    [1, "Are these two numbers equal? 2 + 2 and 4? (answer yes or no)", "yes", "no hint.", 0, 1],
+    [1, "Are these two numbers different? 3 + 2 and 5? (answer yes or no)", "no", "no hint.", 0, 1],
+    [1, "What is 4 + 5?", "9", "no hint.", 0, 1],
+    [1, "What is 2 - 1?", "1", "no hint.", 0, 1],
+    [1, "What is 1 - 2?", "-1", "no hint.", 0, 1],
+    [1, "What is 10 + 0?", "10", "no hint.", 0, 1],
+    [1, "What is 99 + 1?", "100", "no hint.", 0, 1],
+    [1, "Fill in the blank, 4, 8, ___, 16?", "12", "no hint.", 0, 1],
+    [1, "Fill in the blank, 1, 2, 3, 4, ___?", "5", "no hint.", 0, 1],
+    [1, "Fill in the blank, 10, 8, 6, ___, 2, 0", "4", "no hint.", 0, 1],
+    [1, "Fill in the blank, 2, 5, 8, 11, ___", "14", "no hint.", 0, 1],
+    [1, "What is 2 + 1?", "3", "no hint.", 0, 1],
+    [1, "What is 3 + 12?", "15", "no hint.", 0, 1],
+
+    // MINIGAME 2: Medium Questions
+    [2, "Which kind of triangles has all equal sides, equilateral, isosceles, or scalene (put answer all in lowercase)?","equilateral", "no hint.", 0, 1],
+    [2, "How many faces does a cube have?", "6", "No hint.", 0, 1],
+    [2, "How many faces does a tetrahedron have?", "4", "No hint.", 0, 1],
+    [2, "How many faces does a sphere have?", "1", "No hint.", 0, 1],
+    [2, "How many sides does a rectangle have?", "4", "No hint.", 0, 1],
+    [2, "How many degrees does a right angle have?", "90", "No hint.", 0, 1],
+    [2, "How many sides does a circle have?", "1", "No hint.", 0, 1],
+    [2, "An angle that is between 90 and 180 degrees is ______? (write all letters in lowercase)", "obtuse", "No hint.", 0, 1],
+    [2, "An angle that is between 0 and 90 degrees is ________? (write all letters in lowercase)", "acute", "No hint.", 0, 1],
+    [2, "What is the area of a square whose sides are 3 units long?", "9", "No hint.", 0, 1],
+    [2, "How many sides does a pentagon have?", "5", "No hint.", 0, 1],
+    [2, "What is 1/2 + 1/2 (enter your answer as a whole number)?", "1", "No hint.", 0, 1],
+    [2, "What is smaller 2/3 or 1/3?", "1/3", "No hint.", 0, 1],
+    [2, "What is smaller 2/4 or 1/7?", "1/7", "No hint.", 0, 1],
+    [2, "What is 14/2 + 4/2 (enter your answer as a whole number)?", "9", "No hint.", 0, 1],
+    [2, "What is 2.3 + 1.1?", "3.4", "No hint.", 0, 1],
+    [2, "What is 1.01 + 0.01?", "1.02", "No hint.", 0, 1],
+    [2, "What is bigger 0.1 or 0.0100?", "0.1", "No hint.", 0, 1],
+    [2, "Which of the following is the prime number: 1, 2, 4, or 9?", "2", "No hint.", 0, 1],
+    [2, "Which of the following is the prime number: 13, 12, 21, 33?", "13", "No hint.", 0, 1],
+
+
+
+    // MINIGAME 2: Hard Questions
+    [3, "What is (4 + 5) * 3?", "27", "No hint", 0, 1],
+    [3, "What is (2 + 3) * 4?", "20", "No hint", 0, 1],
+    [3, "What is (10 / 2) * 4?", "20", "No hint", 0, 1],
+    [3, "What is (15 + 3) * 2?", "36", "No hint", 0, 1],
+    [3, "What is (2 + 3) + (5 * 7)?", "40", "No hint", 0, 1],
+    [3, "What is (2 + 3) + (4 * 11)?", "49", "No hint", 0, 1],
+    [3, "What is 4 * (6 + 7)?", "52", "No hint", 0, 1],
+    [3, "What is 3 * (7 + 2)?", "27", "No hint", 0, 1],
+    [3, "What is 8 * (1 + 1)?", "16", "No hint", 0, 1],
+    [3, "What is (22 - 10) * 4?", "48", "No hint", 0, 1],
+    [3, "What is 1 * 4?", "4", "No hint", 0, 1],
+    [3, "What is [(10 + 4) / (14 * 2 - 26)] * 4?", "28", "No hint", 0, 1],
+    [3, "What is 10² + 3²?", "109", "No hint", 0, 1],
+    [3, "What is 2² * 2²?", "16", "No hint", 0, 1],
+    [3, "What is (2 + 3²) * 1²²⁴?", "11", "No hint", 0, 1],
+    [3, "What is 2⁸?", "256", "No hint", 0, 1],
+    [3, "What is 1?", "1", "No hint", 0, 1],
+    [3, "What is [6² + √(13) + ²10 + 3π]⁽³⁻³⁾ ?", "1", "No hint", 0, 1],
+    [3, "What is {5 * 2[6 + (2 * 2)] + [3² + (5 + 2)]}?", "116", "No hint", 0, 1],
+    [3, "What is (7 * 9) + 3?", "66", "No hint", 0, 1],
+
   ];
   
 const insertMany = questiondb.transaction((questions: any[]) => {

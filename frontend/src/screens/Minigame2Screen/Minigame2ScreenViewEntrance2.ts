@@ -4,9 +4,9 @@ import { CONTENT_HEIGHT, CONTENT_WIDTH, STAGE_HEIGHT, STAGE_WIDTH } from "../../
 import type { Question } from "../../types";
 
 export class Minigame2Entrance2ScreenView implements View {
-    showBackSquare() {
-        throw new Error("Method not implemented.");
-    }
+    //showBackSquare() {
+    //    throw new Error("Method not implemented.");
+    //}
     private group: Konva.Group;
 
     private background!: Konva.Image;
@@ -30,6 +30,7 @@ export class Minigame2Entrance2ScreenView implements View {
     restart?: () => void;
     onPartialExit?: () => void;
     onCompleteExit?: () => void;
+    onRandomButtonClick!: () => void;
 
     onSelectDifficulty?: (d: "easy" | "medium" | "hard") => void;
     onBack?: () => void;
@@ -70,8 +71,9 @@ export class Minigame2Entrance2ScreenView implements View {
             STAGE_WIDTH * 0.25 - 100,
             450,
             "#46799B",
-            "Easy",
-            () => this.onSelectDifficulty?.("easy")
+            "Button 1",
+            //() => this.onSelectDifficulty?.("easy")
+            () => this.onRandomButtonClick()
         );
         this.group.add(this.easyButton);
 
@@ -82,8 +84,9 @@ export class Minigame2Entrance2ScreenView implements View {
             STAGE_WIDTH * 0.5 - 100,
             450,
             "#D0CC54",
-            "Medium",
-            () => this.onSelectDifficulty?.("medium")
+            "Button 2",
+            //() => this.onSelectDifficulty?.("medium")
+            () => this.onRandomButtonClick()
         );
         this.group.add(this.medButton);
 
@@ -94,8 +97,9 @@ export class Minigame2Entrance2ScreenView implements View {
             STAGE_WIDTH * 0.75 - 100,
             450,
             "#B1442F",
-            "Hard",
-            () => this.onSelectDifficulty?.("hard")
+            "Button 3",
+            //() => this.onSelectDifficulty?.("hard")
+            () => this.onRandomButtonClick()
         );
         this.group.add(this.hardButton);
 
@@ -104,7 +108,7 @@ export class Minigame2Entrance2ScreenView implements View {
         // --------------------------
         this.backSquare = this.makeButton(
             50,
-            50,
+            150,
             '#ffffff',
             'Back',
             () => this.onBack?.()

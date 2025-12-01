@@ -38,11 +38,48 @@ export class Minigame2ScreenController extends ScreenController {
 
         //set up all the functions for this.viewEntrance2
 
-        this.viewEntrance2.onRandomButtonClick = () => {
+        this.viewEntrance2.onSelectDifficulty = (difficulty) => {
             this.model.updateScreenToContinue();
-            this.model.updateDifficulty();
+            // set difficulty explicitly based on button selected
+            // model will use this difficulty when choosing a question
+            // (we added setDifficulty in the model)
+            // @ts-ignore - difficulty is constrained by view signature
+            this.model.setDifficulty(difficulty);
             this.viewRoom.showRoom!(this.model.getDifficulty());
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
+        this.viewEntrance2.onBack = () => {
+            // return to intro screen
+            this.viewEntrance2.hide();
+            this.model.updateScreenToRestart();
+            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
+        // wire restart / partial exit on pick screen to same behaviors as room
+        this.viewEntrance2.restart = () => {
+            // hide any results modal that may be visible
+            this.viewEntrance2.hideResultsBox?.();
+            this.viewRoom.hideResultsBox?.();
+            this.model.resetMinigame();
+            this.model.updateScreenToRestart();
+            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
+        this.viewEntrance2.onPartialExit = () => {
+            // stop timer and hide results
+            this.stopTimer();
+            this.viewEntrance2.hideResultsBox?.();
+            this.viewRoom.hideResultsBox?.();
+            this.model.resetMinigame();
+            this.model.updateScreenToRestart();
+            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
+        this.viewEntrance2.onCompleteExit = () => {
+            this.model.updateScreenToLeave();
+            this.screenSwitcher.switchToScreen({ type: "home" });
+            this.viewEntrance.hide();
         }
 
         //set up all the functions for this.viewRoom
@@ -55,6 +92,7 @@ export class Minigame2ScreenController extends ScreenController {
                 setTimeout(() => {
                     this.viewRoom.hideCorrectBox();
                     this.model.updateScreenToContinue();
+                    this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
                     this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
                 }, 1000);
 
@@ -74,7 +112,18 @@ export class Minigame2ScreenController extends ScreenController {
             }
         }
 
+        // go back to pick screen from question screen
+        this.viewRoom.onBack = () => {
+            this.viewRoom.hide();
+            // move screen state from question -> pick (timer continues)
+            this.model.updateScreenToContinue();
+            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
         this.viewRoom.restart = () => {
+            // hide results then reset and go back to intro
+            this.viewRoom.hideResultsBox?.();
+            this.viewEntrance2.hideResultsBox?.();
             this.model.resetMinigame();
             this.model.updateScreenToRestart();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
@@ -82,9 +131,17 @@ export class Minigame2ScreenController extends ScreenController {
 
         this.viewRoom.onPartialExit = () => {
             this.stopTimer();
+            this.viewRoom.hideResultsBox?.();
+            this.viewEntrance2.hideResultsBox?.();
             this.model.resetMinigame();
             this.model.updateScreenToRestart();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
+        }
+
+        this.viewRoom.onCompleteExit = () => {
+            this.model.updateScreenToLeave();
+            this.screenSwitcher.switchToScreen({ type: "home" });
+            this.viewEntrance.hide();
         }
     }
 
@@ -134,6 +191,9 @@ export class Minigame2ScreenController extends ScreenController {
         this.viewEntrance2.showButton2();
         this.viewEntrance2.showButton3();
         this.viewEntrance2.showText();
+        // show the progress bar on the pick screen and sync current progress
+        this.viewEntrance2.showBar();
+        this.viewEntrance2.updateProgress(this.model.timeCounter, this.model.maxTime);
         this.model.updatePointNum();
         this.model.updateQuestionNum();
     }
@@ -155,10 +215,22 @@ export class Minigame2ScreenController extends ScreenController {
         this.model.timeCounter = 0;
         this.model.timerId = setInterval(() => {
             this.model.timeCounter!++;
+            // update progress on both pick and question screens so it persists
             this.viewRoom.updateProgress(this.model.timeCounter, this.model.maxTime);
+            this.viewEntrance2.updateProgress(this.model.timeCounter, this.model.maxTime);
+
             if (this.model.timeCounter! >= this.model.maxTime) {
                 this.stopTimer();
-                this.viewRoom.showResultsBox();
+                // show results on whichever screen is active
+                const screen = this.model.getScreen();
+                if (screen === "question") {
+                    this.viewRoom.showResultsBox();
+                } else if (screen === "pick") {
+                    this.viewEntrance2.showResultsBox();
+                } else {
+                    // fallback show room results
+                    this.viewRoom.showResultsBox();
+                }
             }
         }, 1000);
     }

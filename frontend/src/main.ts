@@ -98,23 +98,22 @@ class App implements ScreenSwitcher {
     /**
     * Initializes all screens, adds them to the layer, and sets the starting screen.
     */
-    private initializeScreens(): void {
+    private initializeScreens(): void{
         // Initialize home screen (loads user data, levels, etc.)
         this.homeController.init();
 
-        this.layer.add(this.loginController.getView().getGroup());
-        this.layer.add(this.homeController.getView().getGroup());
-        this.layer.add(this.gameController.getView().getGroup());
-        this.layer.add(this.minigame1Controller.getView().getGroup());
-        this.layer.add(this.minigame2Controller.getView().getGroup());
-        this.layer.add(this.minigame2Controller.getView2().getGroup());
-        this.layer.add(this.minigame2Controller.getView3().getGroup());
+        // Render the layer
+        this.layer.draw();
 
-
-        this.stage.draw();
-
-        //Show starting screen
-        this.loginController.getView().show();
+        // Show only the login screen at startup (other screens remain hidden)
+        this.homeController.getView().hide();
+        this.gameController.getView().hide();
+        this.minigame2Controller.getView().hide();
+        this.minigame2Controller.getView().show();
+        this.minigame2Controller.getView2().hide();
+        this.minigame2Controller.getView3().hide();
+        // this.loginController.getView().show(); CHANGE BACK AFTER TESTING
+        this.loginController.getView().hide();
     }
 
     /**
@@ -131,8 +130,9 @@ class App implements ScreenSwitcher {
         this.homeController.hide();
         this.loginController.hide();
         this.gameController.hide();
-        this.minigame1Controller.hide();
-        this.minigame2Controller.hide();
+        this.minigame2Controller.getView().hide();
+        this.minigame2Controller.getView2().hide();
+        this.minigame2Controller.getView3().hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {

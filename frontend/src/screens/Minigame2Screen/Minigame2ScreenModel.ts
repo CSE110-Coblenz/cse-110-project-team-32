@@ -19,7 +19,7 @@ export class Minigame2ScreenModel {
         this.questionNum = 0;
         this.timeCounter = null;
         this.timerId = null;
-        this.maxTime = 50;
+        this.maxTime = 5; // CHANGE BACK TO 50ISH AFTER TESTING
         this.questions = [];
         this.question = null;
         this.screen = "intro";
@@ -146,6 +146,11 @@ export class Minigame2ScreenModel {
         } else {
             this.difficulty = "hard";
         }
+    }
+
+    // Explicitly set difficulty (used when player picks a button)
+    setDifficulty(d: "easy" | "medium" | "hard") : void {
+        this.difficulty = d;
     }
 
     getDifficulty() : "easy" | "medium" | "hard" | null {

@@ -22,6 +22,8 @@ export class Minigame2ScreenController extends ScreenController {
         //set up all the functions for this.viewEntrance
         this.viewEntrance.onStart = () => {
             console.log("button was clicked");
+            // call this method when user selects a certain difficulty
+            this.model.loadQuestions();
             this.model.updateScreenToContinue();
             this.startTimer();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
@@ -127,7 +129,7 @@ export class Minigame2ScreenController extends ScreenController {
     startMinigame2Entrance2() {
         this.viewEntrance.hide();
         this.viewEntrance2.showBackground();
-        this.viewEntrance2.showBackSquare();
+        // this.viewEntrance2.showBackSquare();
         this.viewEntrance2.showButton1();
         this.viewEntrance2.showButton2();
         this.viewEntrance2.showButton3();

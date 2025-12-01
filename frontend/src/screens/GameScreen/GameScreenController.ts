@@ -38,7 +38,6 @@ export class GameScreenController extends ScreenController {
 	 * Start the game
 	 */
 	async startGame(level: number) {
-		this.view.updateMode("Practice");
 		this.model.setLevel(level);
 		this.view.resetProgress();
 		await this.model.loadQuestions();
@@ -57,12 +56,6 @@ export class GameScreenController extends ScreenController {
 
 	handleAnswer(answer: string): void {
 		const result = this.model.checkAnswer(answer);
-
-		const isTestQuestion = this.model.getCurrentQuestionIndex() === this.model.getTotalQuestions() - 1;
-
-		if (isTestQuestion) {
-			this.view.updateMode("Test", this.model.getTestTries());
-		 }
 			
 		switch (result) {
 			case "next":

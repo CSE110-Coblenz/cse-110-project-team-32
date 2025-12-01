@@ -420,22 +420,6 @@ export class GameScreenView implements View {
         this.levelText.text(`Level ${level}`);
     }
 
-    /**
-     * updates the mode to show practice or test
-     * @param mode 
-     */
-    updateMode(mode: "Practice" | "Test", testTries = 0) {
-        console.log("mode changed to:", mode);
-        let modeText = mode
-        if (mode == "Test") {
-            modeText = "Test: " + testTries + " Tries Left";
-        }
-
-        this.modeText.text(modeText);
-        this.group.getLayer()?.draw();
-    }
-
-
     updateHint(hint: string): void {
         this.hintText.text(`${hint}`);
     

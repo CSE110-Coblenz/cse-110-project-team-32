@@ -7,4 +7,5 @@ export interface Question {
     answer: string;
     hint: string;
     isTest: boolean;
+    isMinigame: boolean;
 }

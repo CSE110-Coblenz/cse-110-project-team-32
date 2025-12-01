@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRegularQuestion, getTestQuestion } from "../data/question_db";
+import { getMiniGameTwoQuestion, getRegularQuestion, getTestQuestion } from "../data/question_db";
 
 export const getRegularQuestions = async (req: Request, res: Response) => {
     try {
@@ -21,5 +21,17 @@ export const getTestQuestions = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error fetching test questions:", error);
         res.status(500).json({ error: "Failed to fetch test questions" });
+    }
+}
+
+export const getMiniGameTwoQuestions = async (req: Request, res: Response) => {
+    try {
+        const level = Number(req.params.level);
+        const limit = Number(req.params.limit) || 5;
+        const questions = getMiniGameTwoQuestion(level, limit);
+        res.json(questions);
+    } catch (error) {
+        console.error("Error fetching minigame 2 questions:", error);
+        res.status(500).json({ error: "Failed to fetch minigame 2 questions" });
     }
 }

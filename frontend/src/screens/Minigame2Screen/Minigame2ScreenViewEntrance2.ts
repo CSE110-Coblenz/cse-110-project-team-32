@@ -4,6 +4,9 @@ import { CONTENT_HEIGHT, CONTENT_WIDTH, STAGE_HEIGHT, STAGE_WIDTH } from "../../
 import type { Question } from "../../types";
 
 export class Minigame2Entrance2ScreenView implements View {
+    showBackSquare() {
+        throw new Error("Method not implemented.");
+    }
     private group: Konva.Group;
 
     private background?: Konva.Image;
@@ -19,6 +22,7 @@ export class Minigame2Entrance2ScreenView implements View {
     onSelectEasy?: () => void;
     onSelectMedium?: () => void;
     onSelectHard?: () => void;
+    onRandomButtonClick: (() => void) | undefined;
 
     constructor() {
         this.group = new Konva.Group({ visible: false });

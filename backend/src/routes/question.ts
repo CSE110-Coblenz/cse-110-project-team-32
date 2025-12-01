@@ -1,5 +1,5 @@
 import express from "express";
-import { getRegularQuestions, getTestQuestions } from "../controllers/question";
+import { getMiniGameTwoQuestions, getRegularQuestions, getTestQuestions } from "../controllers/question";
 
 //Create the router that will hold all the routes that will handle the user schema
 const router = express.Router();
@@ -10,5 +10,7 @@ const router = express.Router();
 router.get("/:level/regular", getRegularQuestions);
 // route for test questions
 router.get("/:level/test", getTestQuestions);
+// route for minigame 2 questions
+router.get("/:level/minigameTwo", getMiniGameTwoQuestions);
 
 export default router;

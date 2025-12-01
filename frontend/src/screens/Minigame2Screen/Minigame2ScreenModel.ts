@@ -28,10 +28,24 @@ export class Minigame2ScreenModel {
 
     //Functions manipulating this.questions
     async loadQuestions() : Promise<Question[]> {
-        const res = await fetch(``);
+        // converting difficulty into level
+        let level = 3;
+        switch(this.difficulty) {
+            case "easy":
+                level = 1;
+                break;
+            case "medium":
+                level = 2;
+                break;
+            case "hard":
+                level = 3;
+                break;
+        }
+        const res = await fetch(`http://localhost:3000/api/questions/${level}/minigameTwo`);
         const data = (await res.json()) as Question[];
 
         this.questions = data;
+        // console.log(this.questions);
         return this.questions;
     }
 

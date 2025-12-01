@@ -3,14 +3,6 @@ import type { View } from "../../types";
 import { STAGE_HEIGHT, STAGE_WIDTH, TOTAL_LEVELS } from "../../constants";
 import type { MiniGameInfo } from "../../types";
 
-/*********************************************/
-// HomeScreenView.ts
-// Dispaly: 1) vertical list of levels on left
-//          2) center big "Start Game" button
-//          3) vertical list of mini games on right
-//          4) user info and log out button on top right
-/*********************************************/
-
 interface LevelInfo {
   id: number;
   unlocked: boolean;
@@ -47,7 +39,7 @@ export class HomeScreenView implements View {
 
     // background
    Konva.Image.fromURL("desertBg2.jpg", (bgImage: Konva.Image) => {
-    //locks its size to the logical stage — it won’t stretch to the full browser (Ni)
+    //locks its size to the logical stage
       bgImage.x(0);
       bgImage.y(0);
       bgImage.width(STAGE_WIDTH);
@@ -57,10 +49,6 @@ export class HomeScreenView implements View {
     });
   }
 
-  /****************** Start Game Button ********************/
-  // fixed bug: only rect was clickable, not the text (Ni)
-  // made the rect and text into a group, and set click event on rect
-  // adjust positioning to center text in rect (Ni)
   private startGameTopY = 0;
 
   private createStartGameButton(): void {
@@ -100,9 +88,6 @@ export class HomeScreenView implements View {
     startGroup.add(text);
 
     if (this.onStartGame) startGroup.on("click", this.onStartGame);
-
-
-    // 30 here is because i set spacing in setMiniGames to 100, so 100 - 70 (btn height) = 30
     this.startGameTopY = startGroup.y(); 
 
     this.group.add(startGroup);
@@ -158,7 +143,6 @@ export class HomeScreenView implements View {
       rect.fill("#e0e0e0");
       rect.getLayer()?.batchDraw();
     });
-    // hover end
 
     group.add(rect);
     group.add(text);
@@ -184,7 +168,7 @@ export class HomeScreenView implements View {
   const BTN_WIDTH = 180;
   const BTN_HEIGHT = 60;
 
-  const levelId = level.id;  // ← capture the id here
+  const levelId = level.id; 
 
   const group = new Konva.Group({ x: STAGE_WIDTH * 0.35, y });
 
@@ -212,7 +196,7 @@ export class HomeScreenView implements View {
   label.offsetY(label.height() / 2);
 
   if (level.unlocked && this.onLevelSelect) {
-    group.on("click", () => this.onLevelSelect!(levelId)); // ← use captured id
+    group.on("click", () => this.onLevelSelect!(levelId)); 
   }
 
   // hover effect
@@ -274,7 +258,6 @@ export class HomeScreenView implements View {
       y: 0,
     });
     
-    // Use user name placeholder
     this.userText = new Konva.Text({
       x: 0,
       y: 0,
@@ -352,18 +335,6 @@ export class HomeScreenView implements View {
 
     const lowerBottom = Math.max(this.lastLevelBottomY, this.lastMiniGameBottomY);
 
-    //test
-    console.log("===== positionLogoutButton() Debug =====");
-    console.log("STAGE_WIDTH:", STAGE_WIDTH);
-    console.log("logoutButton width:", this.logoutButton?.width());
-    console.log("centerX:", centerX);
-    console.log("lastLevelBottomY:", this.lastLevelBottomY);
-    console.log("lastMiniGameBottomY:", this.lastMiniGameBottomY);
-    console.log("lowerBottom:", lowerBottom);
-    //
-
-    // this.logoutGroup.x(centerX - this.logoutButton!.width() / 2);
-    // this.logoutGroup.y(lowerBottom + 100);
     const finalX = centerX + this.logoutButton!.width() / 1.5;
     const finalY = lowerBottom + 60;
 
@@ -371,7 +342,6 @@ export class HomeScreenView implements View {
     console.log("Final logoutGroup Y:", finalY);
     console.log("========================================");
 
-    // 设置位置
     this.logoutGroup.x(finalX);
     this.logoutGroup.y(finalY);
 

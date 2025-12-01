@@ -1,6 +1,6 @@
 import Konva from "konva";
 import type { View } from "../../types";
-import { CONTENT_HEIGHT, CONTENT_WIDTH, STAGE_HEIGHT, STAGE_WIDTH } from "../../constants";
+import { STAGE_HEIGHT, STAGE_WIDTH } from "../../constants";
 
 
 export class Minigame1ScreenView implements View{
@@ -13,6 +13,7 @@ export class Minigame1ScreenView implements View{
     private gameWinGroup: Konva.Group;
     private exitGroup: Konva.Group;
     private htmlInput: HTMLInputElement;
+    private introExitGroup: Konva.Group;
 
     // --- Question UI elements ---
     private sequenceText: Konva.Text;
@@ -68,15 +69,15 @@ export class Minigame1ScreenView implements View{
         name: "startGameButton",  
     });
 
-    const cardWidth = 400;
-    const cardHeight = 250;
+    const cardWidth = 600;
+    const cardHeight = 375;
 
     const introCard = new Konva.Rect({
       x: (STAGE_WIDTH - cardWidth) / 2,
       y: (STAGE_HEIGHT - cardHeight) / 2,
       width: cardWidth,
       height: cardHeight,
-      fill: "rgba(255,255,255,0.6)", // 半透明白色
+      fill: "rgba(255,255,255,0.6)", 
       cornerRadius: 15,
       stroke: "#333",
       strokeWidth: 2,
@@ -84,17 +85,45 @@ export class Minigame1ScreenView implements View{
     this.introGroup.add(introCard);
 
     // --- Intro text ---
-    const introText = new Konva.Text({
+    // const introText = new Konva.Text({
+    //   x: introCard.x() + 20,
+    //   y: introCard.y() + 20,
+    //   width: cardWidth - 40,
+    //   text: "Welcome to Sequence Rush!\nFind out the rules and answer the missing area.\nAre you ready?",
+    //   fontSize: 20,
+    //   fontFamily: "Calibri",
+    //   fill: "#222",
+    //   align: "center",
+    // });
+    // this.introGroup.add(introText);
+
+    const introTitle = new Konva.Text({
       x: introCard.x() + 20,
-      y: introCard.y() + 20,
+      y: introCard.y() + 40,
       width: cardWidth - 40,
-      text: "Welcome to MiniGame 1!\nFind out the rules and answer the missing area.\nAre you ready?",
-      fontSize: 20,
+      text: "Welcome to Sequence Rush!",
+      fontSize: 32,        // bigger
+      fontFamily: "Calibri",
+      fill: "#111",
+      align: "center",
+      fontStyle: "bold",
+    });
+    this.introGroup.add(introTitle);
+
+    // === Body text ===
+    // Add extra vertical spacing by adjusting y
+    const introBody = new Konva.Text({
+      x: introCard.x() + 20,
+      y: introTitle.y() + 60,   //controls spacing (increase this number for more space)
+      width: cardWidth - 40,
+      text: "Find out the rules and answer the missing area.\n\nAre you ready?",
+      fontSize: 24,
       fontFamily: "Calibri",
       fill: "#222",
       align: "center",
+      lineHeight: 1.4,          //adds spacing between lines
     });
-    this.introGroup.add(introText);
+    this.introGroup.add(introBody);
 
     // START GAME BUTTON
     const buttonWidth = 180;
@@ -102,7 +131,7 @@ export class Minigame1ScreenView implements View{
 
     const startButton = new Konva.Rect({
       x: introCard.x() + (cardWidth - buttonWidth) / 2,
-      y: introCard.y() + cardHeight - buttonHeight - 20,
+      y: introCard.y() + cardHeight - buttonHeight - 60,
       width: buttonWidth,
       height: buttonHeight,
       fill: "#7db9ff",
@@ -140,6 +169,53 @@ export class Minigame1ScreenView implements View{
     // exported event: controller will listen to this
     startButton.name("startGameButton");
     buttonLabel.name("startGameButton");
+
+    //
+    // Intro Exit Button
+// ===============================
+    const introExitSize = 30;
+
+    this.introExitGroup = new Konva.Group({});
+    this.introGroup.add(this.introExitGroup);
+
+    const introExitButton = new Konva.Rect({
+      x: introCard.x() + cardWidth - introExitSize - 10,
+      y: introCard.y() + 10,
+      width: introExitSize,
+      height: introExitSize,
+      fill: "#ea7142ff",
+      cornerRadius: 8,
+      stroke: "black",
+      strokeWidth: 2
+    });
+    this.introExitGroup.add(introExitButton);
+
+    const introExitSymbol = new Konva.Text({
+      x: introExitButton.x(),
+      y: introExitButton.y() + 6,
+      width: introExitButton.width(),
+      text: "X",
+      fontSize: 20,
+      align: "center"
+    });
+    this.introExitGroup.add(introExitSymbol);
+
+    // Hover effect
+    this.introExitGroup.on("mouseenter", () => {
+      introExitButton.opacity(0.5);
+      this.layer.draw();
+    });
+    this.introExitGroup.on("mouseleave", () => {
+      introExitButton.opacity(1);
+      this.layer.draw();
+    });
+
+    // Click (same as game exit)
+    this.introExitGroup.on("click", () => {
+      if (this.onExit) this.onExit();
+      console.log("exit from intro");
+    });
+//
 
     /***
      * QuestionGroup--------------------------
@@ -407,8 +483,8 @@ export class Minigame1ScreenView implements View{
     this.gameWinGroup.add(this.gameWinText);
 
 
-     // exit button top right
-     
+    // exit button top right
+
     const exitButtonSize = 50;
     this.exitGroup = new Konva.Group();
     this.group.add(this.exitGroup);

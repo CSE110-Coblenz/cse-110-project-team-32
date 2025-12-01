@@ -49,9 +49,7 @@ export class Minigame1ScreenController extends ScreenController {
     }
   }
 
-  // ------------------------------
   // Game Start
-  // ------------------------------
   startGame() {
 
     this.model.reset();
@@ -66,14 +64,10 @@ export class Minigame1ScreenController extends ScreenController {
     // Display first sequence
     const seq = this.model.getSequence();
     this.view.displayQuestion(seq.join(", "));
-
-    
   }
 
 
-  // ------------------------------
   // Timer
-  // ------------------------------
   private startTimer() {
     this.timerId = setInterval(() => {
       if(this.model.getIsGameOver()){
@@ -93,10 +87,7 @@ export class Minigame1ScreenController extends ScreenController {
   }
 
   
-
-  // ------------------------------
   // Handle player answer
-  // ------------------------------
   handleAnswer(userInput: string) {
     const answerNum = Number(userInput);
     console.log("handleAnswer execute");
@@ -131,9 +122,8 @@ export class Minigame1ScreenController extends ScreenController {
 
   }
   
-  // ------------------------------
-  // Game Over
-  // ------------------------------
+
+  // Game Over handling
   private handleGameOver() {
     if(this.model.getIsWin()){
       this.view.showGameWin();

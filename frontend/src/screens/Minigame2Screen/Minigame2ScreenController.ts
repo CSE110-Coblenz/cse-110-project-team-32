@@ -38,19 +38,6 @@ export class Minigame2ScreenController extends ScreenController {
 
         //set up all the functions for this.viewEntrance2
 
-        /*
-        this.viewEntrance2.onSelectDifficulty = (difficulty) => {
-            this.model.updateScreenToContinue();
-            // set difficulty explicitly based on button selected
-            // model will use this difficulty when choosing a question
-            // (we added setDifficulty in the model)
-            // @ts-ignore - difficulty is constrained by view signature
-            this.model.setDifficulty(difficulty);
-            this.viewRoom.showRoom!(this.model.getDifficulty());
-            this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
-        }
-            */
-
         this.viewEntrance2.onRandomButtonClick = () => {
             this.model.updateScreenToContinue();
             this.model.updateDifficulty();

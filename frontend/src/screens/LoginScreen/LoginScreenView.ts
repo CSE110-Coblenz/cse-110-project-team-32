@@ -134,9 +134,11 @@ export class LoginScreenView implements View {
         //-----------------------------------------------------------
 
         this.passwordRequestText = new Konva.Text({
-            text: "Please enter a password that is 12 characters or longer",
+            text: "When creating an account, please enter a password that is 12 characters or longer",
             x: 62,
             y: 39,
+            width: 375,
+            height: 60,
             fontFamily: "Arial",
             fontSize: 16,
             fill: "white",

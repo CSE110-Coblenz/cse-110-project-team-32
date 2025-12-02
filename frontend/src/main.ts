@@ -66,12 +66,6 @@ class App implements ScreenSwitcher {
 	 */
 	private scaleStageToFit(): void {
 		// Use Math.max instead of Math.min for “cover” behavior
-        /*
-		const scale = Math.max(
-		  window.innerWidth / STAGE_WIDTH,
-		  window.innerHeight / STAGE_HEIGHT
-		);
-        */
         const scale1 = window.innerWidth / STAGE_WIDTH;
         const scale2 = window.innerHeight / STAGE_HEIGHT;
 	  
@@ -104,34 +98,16 @@ class App implements ScreenSwitcher {
 
         
         this.layer.add(this.loginController.getView().getGroup());
-
         this.layer.add(this.homeController.getView().getGroup());
-
         this.layer.add(this.gameController.getView().getGroup());
-
         this.layer.add(this.minigame1Controller.getView().getGroup());
-
         this.layer.add(this.minigame2Controller.getView().getGroup());
-
         this.layer.add(this.minigame2Controller.getView2().getGroup());
-
         this.layer.add(this.minigame2Controller.getView3().getGroup());
 
 
         // Render the layer
         this.layer.draw();
-
-        /*
-        // Show only the login screen at startup (other screens remain hidden)
-        this.homeController.getView().hide();
-        this.gameController.getView().hide();
-        this.minigame2Controller.getView().hide();
-        this.minigame2Controller.getView().show();
-        this.minigame2Controller.getView2().hide();
-        this.minigame2Controller.getView3().hide();
-        // this.loginController.getView().show(); CHANGE BACK AFTER TESTING
-        this.loginController.getView().hide();
-        */
     }
 
     /**

@@ -56,7 +56,7 @@ if (rowCount === 0) {
     //MINIGAME 1: Easy Questions
     [1, "What is 1 + 2?", "3", "no hint.", 0, 1],
     [1, "What is 3 + 5?", "8", "no hint.", 0, 1],
-    [1, "What is 1 + 1?", "1", "no hint.", 0, 1],
+    [1, "What is 1 + 1?", "2", "no hint.", 0, 1],
     [1, "What is 11 + 2?", "13", "no hint.", 0, 1],
     [1, "What is 10 - 4?", "6", "no hint.", 0, 1],
     [1, "What number is bigger 8 or 5?", "8", "no hint.", 0, 1],
@@ -116,7 +116,7 @@ if (rowCount === 0) {
     [3, "What is 2² * 2²?", "16", "No hint", 0, 1],
     [3, "What is (2 + 3²) * 1²²⁴?", "11", "No hint", 0, 1],
     [3, "What is 2⁸?", "256", "No hint", 0, 1],
-    [3, "What is 1?", "1", "No hint", 0, 1],
+    [3, "What is 3 * 3 * 3?", "27", "No hint", 0, 1],
     [3, "What is [6² + √(13) + ²10 + 3π]⁽³⁻³⁾ ?", "1", "No hint", 0, 1],
     [3, "What is {5 * 2[6 + (2 * 2)] + [3² + (5 + 2)]}?", "116", "No hint", 0, 1],
     [3, "What is (7 * 9) + 3?", "66", "No hint", 0, 1],

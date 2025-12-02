@@ -114,26 +114,6 @@ export class Minigame2Entrance2ScreenView implements View {
             () => this.onBack?.()
         );
 
-        // // shrink and restyle the returned button so it looks like the small back square
-        // const backRect = this.backSquare.findOne('Rect') as Konva.Rect | null;
-        // const backText = this.backSquare.findOne('Text') as Konva.Text | null;
-        // if (backRect) {
-        //     backRect.width(120);
-        //     backRect.height(80);
-        //     // smaller corner radius and semi-transparent background like original
-        //     // @ts-ignore cornerRadius exists
-        //     backRect.cornerRadius(10);
-        //     backRect.fill('#ffffff');
-        //     backRect.opacity(0.6);
-        // }
-        // if (backText && backRect) {
-        //     backText.fontSize(28);
-        //     backText.fill('black');
-        //     backText.width(backRect.width());
-        //     backText.height(backRect.height());
-        //     backText.y(backRect.height() / 2 - backText.height() / 2);
-        // }
-
         this.group.add(this.backSquare);
 
         // progress bar (same style as room)
@@ -161,7 +141,7 @@ export class Minigame2Entrance2ScreenView implements View {
 
         // results modal
         this.resultsGroup = new Konva.Group({ visible: false });
-        const resultsBg = new Konva.Rect({ x: STAGE_WIDTH / 2 - 500, y: STAGE_HEIGHT / 2 - 250, width: 1000, height: 500, fill: "#2b2b2bff", opacity: 0.95, cornerRadius: 12, stroke: "black", strokeWidth: 2 });
+        const resultsBg = new Konva.Rect({ x: 170, y: 226, width: 1200, height: 600, fill: "#2b2b2bff", opacity: 0.95, cornerRadius: 12, stroke: "black", strokeWidth: 2 });
         const resultsText = new Konva.Text({ x: STAGE_WIDTH / 2 - 500 + 200, y: STAGE_HEIGHT / 2 - 250 + 100, width: 400, text: "Time's up!", fontSize: 40, fontFamily: "Arial", fill: "#ffffff", align: "center" });
         resultsText.offsetX(resultsText.width() / 2);
         const restartGroup = new Konva.Group({ x: STAGE_WIDTH / 2 - 170, y: STAGE_HEIGHT / 2 + 170 });

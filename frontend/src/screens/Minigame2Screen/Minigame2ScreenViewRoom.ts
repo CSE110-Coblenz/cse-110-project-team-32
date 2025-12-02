@@ -174,7 +174,7 @@ export class Minigame2RoomScreenView implements View {
 
         // results modal
         this.resultsGroup = new Konva.Group({ visible: false });
-        const resultsBg = new Konva.Rect({ x: STAGE_WIDTH / 2 - 500, y: STAGE_HEIGHT / 2 - 250, width: 1000, height: 500, fill: "#2b2b2bff", opacity: 0.95, cornerRadius: 12, stroke: "black", strokeWidth: 2 });
+        const resultsBg = new Konva.Rect({ x: 170, y: 226, width: 1200, height: 600, fill: "#2b2b2bff", opacity: 0.95, cornerRadius: 12, stroke: "black", strokeWidth: 2 });
         const resultsText = new Konva.Text({ x: STAGE_WIDTH / 2 - 500 + 200, y: STAGE_HEIGHT / 2 - 250 + 100, width: 400, text: "Time's up!", fontSize: 40, fontFamily: "Arial", fill: "#ffffff", align: "center" });
         this.resultsText2 = new Konva.Text({ x: STAGE_WIDTH / 2 - 500 + 200, y: STAGE_HEIGHT / 2 - 250 + 200, width: 400, text: "You got:", fontSize: 40, fontFamily: "Arial", fill: "#ffffff", align: "center" });
         resultsText.offsetX(resultsText.width() / 2);

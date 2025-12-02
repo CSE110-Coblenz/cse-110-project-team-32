@@ -135,7 +135,7 @@ export function getRegularQuestion(level: number, limit: number = 5): Question[]
   return questiondb
     .prepare(`
       SELECT * FROM questions
-      WHERE level = ? AND isTest = 0
+      WHERE level = ? AND isTest = 0 AND isMinigame = 0
       ORDER BY RANDOM()
       LIMIT ?
     `)
@@ -146,7 +146,7 @@ export function getTestQuestion(level: number): Question | null {
   return questiondb
     .prepare(`
       SELECT * FROM questions
-      WHERE level = ? AND isTest = 1
+      WHERE level = ? AND isTest = 1 AND isMinigame = 0
       ORDER BY RANDOM()
       LIMIT 1
     `)

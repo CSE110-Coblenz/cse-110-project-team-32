@@ -3,7 +3,7 @@ import { User } from "../models/user";
 import path from "path";
 
 // Create or open the SQLite database file
-const userdb = new Database(path.join(__dirname, "/user.db"));
+const userdb = new Database(path.join(__dirname, "../../data/user.db"));
 
 // Create the "users" table if it doesn’t already exist
 userdb.prepare(`

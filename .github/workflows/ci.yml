@@ -16,6 +16,7 @@ jobs:
             # It runs the package.json file inside of the backend folder
             - run: cd backend && npm ci
             # It runs the TypeScript compiler but it doesn't output any .js files
+            - run: npm install --save-dev typescript
             - run: npx tsc --noEmit
             # It runs the tests
             - run: npm test
@@ -37,4 +38,5 @@ jobs:
               run: |
                 cd frontend
                 npm run test || echo "No frontend tests"
+
 

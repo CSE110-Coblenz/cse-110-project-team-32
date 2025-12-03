@@ -39,11 +39,6 @@ export class GameScreenView implements View {
 
 		// Background
 		Konva.Image.fromURL("/levelBackdrop.png", (bg: Konva.Image) => {
-			// image is Konva.Image instance
-			// bg.setAttrs({
-            //     width: STAGE_WIDTH,
-            //     height: STAGE_HEIGHT,
-			// })
             bg.width(STAGE_WIDTH);
             bg.height(STAGE_HEIGHT);
 			this.group.add(bg);
@@ -67,8 +62,6 @@ export class GameScreenView implements View {
                 height: 50,
                 fill: 'white',
                 cornerRadius: 8,
-                // stroke: 'black',
-                // strokeWidth: 5 
             });
             this.group.add(this.progressBar);
 
@@ -76,11 +69,8 @@ export class GameScreenView implements View {
                 x: (STAGE_WIDTH - CONTENT_WIDTH) / 2,
                 y: this.progressBar.y(),
                 width: 0,
-                // width: 50, //for texting, initialize should be 0
                 height: 50,
                 fill: 'green',
-                // stroke: 'black',
-                // strokeWidth: 5
             });
             this.group.add(this.progressFill);
 
@@ -320,7 +310,6 @@ export class GameScreenView implements View {
                 x: contentBox.x() + contentBox.width()/20,
                 y: contentBox.y() + contentBox.height()/8,
                 width: (contentBox.width()/10)*9,
-                // width: contentBox.width(),
                 height: (contentBox.height()/10)*5,
                 fill: '',
                 stroke:'black',

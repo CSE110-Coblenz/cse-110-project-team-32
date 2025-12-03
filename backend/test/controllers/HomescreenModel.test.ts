@@ -46,16 +46,19 @@ describe("HomeScreenModel", () => {
    * tests fallback/ default level is 1
    */
   it("falls back to level 1 when currLevel is undefined", () => {
-    mockUserStore.getState.mockReturnValueOnce({
+    // Set the mock BEFORE creating the model
+    mockUserStore.getState.mockReturnValue({
       username: "testuser",
       currLevel: undefined as unknown as number,
     });
 
-    model.init();
+    // Create a new model instance with the updated mock
+    const testModel = new HomeScreenModel();
+    testModel.init();
 
-    expect(model.getCurrLevel()).toBe(1);
+    expect(testModel.getCurrLevel()).toBe(1);  // ← Use testModel, not model
 
-    const games = model.getMiniGames();
+    const games = testModel.getMiniGames();    // ← Use testModel, not model
     expect(games.length).toBe(3);
     expect(games[0]!.unlocked).toBe(true);
     expect(games[1]!.unlocked).toBe(false);

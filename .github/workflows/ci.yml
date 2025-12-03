@@ -3,40 +3,59 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-    build:
-        # set up the virtual machine to run on
-        runs-on: ubuntu-latest
-        steps:
-            # The virtual machine gets the entire repository from github
-            - uses: actions/checkout@v4
-            # The virtual machine installs node
-            - uses: actions/setup-node@v4
-              with:
-                node-version: '20'
-            # It runs the package.json file inside of the backend folder
-            - run: cd backend && npm ci
-            # It runs the TypeScript compiler but it doesn't output any .js files
-            - run: npm install --save-dev typescript
-            - run: npx tsc --noEmit
-            # It runs the tests
-            - run: npm test
+  build:
+    runs-on: ubuntu-latest
 
-            # Install frontend dependencies
-            - name: Install frontend dependencies
-              run: |
-                cd frontend
-                npm ci
+    steps:
+      # Get repository
+      - uses: actions/checkout@v4
 
-            # Type-check frontend (if using TypeScript)
-            - name: Type check frontend
-              run: |
-                cd frontend
-            # npx tsc --noEmit (uncomment if want to test the unuse variables and types)
+      # Install Node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-            # Run frontend tests
-            - name: Test frontend
-              run: |
-                cd frontend
-                npm run test || echo "No frontend tests"
+      # -------------------------
+      # Backend
+      # -------------------------
+
+      # Install backend dependencies
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      # Type-check backend
+      - name: Type check backend
+        run: |
+          cd backend
+          npx tsc --noEmit
+
+      # Run backend tests
+      - name: Test backend
+        run: |
+          cd backend
+          npm test
 
 
+      # -------------------------
+      # Frontend
+      # -------------------------
+
+      # Install frontend dependencies
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      # Type-check frontend (optional — leave commented if not needed)
+      - name: Type check frontend
+        run: |
+          cd frontend
+          # npx tsc --noEmit
+
+      # Run frontend tests
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm run test || echo "No frontend tests"

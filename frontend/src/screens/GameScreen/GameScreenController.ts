@@ -44,6 +44,7 @@ export class GameScreenController extends ScreenController {
 	 */
 	async startGame(level: number) {
 		this.model.setLevel(level);
+		this.view.updateBackground(level);
 		this.view.resetProgress();
 		await this.model.loadQuestions();
 

@@ -19,6 +19,7 @@ export class GameScreenView implements View {
     private testTitle!: Konva.Text;
     private modeBox!: Konva.Rect;
     private modeText!: Konva.Text;
+    private background!: Konva.Image;
 
     private levelText!: Konva.Text;
     private questionBoxText!: Konva.Text;
@@ -44,6 +45,7 @@ export class GameScreenView implements View {
             //     width: STAGE_WIDTH,
             //     height: STAGE_HEIGHT,
 			// })
+            this.background = bg;
             bg.width(STAGE_WIDTH);
             bg.height(STAGE_HEIGHT);
 			this.group.add(bg);
@@ -55,7 +57,7 @@ export class GameScreenView implements View {
                 width: CONTENT_WIDTH,
                 height: CONTENT_HEIGHT,
                 fill: "#ebe8e1",
-                opacity: 0.9,
+                opacity: 0.6,
                 cornerRadius: 8,
             });
             this.group.add(contentBox);
@@ -67,6 +69,7 @@ export class GameScreenView implements View {
                 height: 50,
                 fill: 'white',
                 cornerRadius: 8,
+                opacity: 0.6,
                 // stroke: 'black',
                 // strokeWidth: 5 
             });
@@ -79,6 +82,7 @@ export class GameScreenView implements View {
                 // width: 50, //for texting, initialize should be 0
                 height: 50,
                 fill: 'green',
+                opacity: 0.6,
                 // stroke: 'black',
                 // strokeWidth: 5
             });
@@ -532,6 +536,33 @@ export class GameScreenView implements View {
         }
         this.group.getLayer()?.draw();
     }
+
+    updateBackground(level: number) {
+        const levelImages: Record<number, string> = {
+            1: "/bg_level1.png",
+            2: "/bg_level2.jpg",
+            3: "/bg_level3.png",
+            4: "/bg_level4.jpg",
+            5: "/bg_level5.jpg",
+        };
+    
+        const url = levelImages[level] ?? "/bg_level1.png";
+    
+        Konva.Image.fromURL(url, (newBg) => {
+            newBg.width(STAGE_WIDTH);
+            newBg.height(STAGE_HEIGHT);
+    
+            this.group.add(newBg);
+            newBg.moveToBottom();
+    
+            // remove old background
+            this.background.destroy();
+            this.background = newBg;
+    
+            this.group.getLayer()?.batchDraw();
+        });
+    }
+    
 
     showComplete():void{
         this.completeScreen.show();

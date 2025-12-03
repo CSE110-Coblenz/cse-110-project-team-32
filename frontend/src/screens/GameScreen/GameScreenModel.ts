@@ -4,8 +4,6 @@
 
 import { userStore } from "../../context/UserState";
 import type { Question } from "../../types";
-import { userStore } from "../../context/UserState";
-
 
 export class GameScreenModel {
 	private level;

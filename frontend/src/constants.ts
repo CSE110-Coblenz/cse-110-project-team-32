@@ -1,8 +1,10 @@
 // This script contains all constants
 
 // Stage dimensions
+// fallback to 1024x768 if screen is undefined (e.g., in tests/Node)
 export const STAGE_WIDTH = screen.width;
 export const STAGE_HEIGHT = screen.height;
+
 
 // Content dimensions
 export const CONTENT_WIDTH = 1200;

@@ -100,13 +100,13 @@ export const getUser = async(req: Request, res: Response) => {
 // Route handler to get user by username
 export const getUserByUsernameHandler = async (req: Request, res: Response) => {
     try {
-        const { username } = req.params;
+        const { username } = req.params; //extracts username from request
 
         if (!username) {
             return res.status(400).json({ error: "Username is required" });
         }
 
-        const user = getUserByUsername(username);
+        const user = getUserByUsername(username); // get user row from DB
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -116,7 +116,7 @@ export const getUserByUsernameHandler = async (req: Request, res: Response) => {
             id: user.id,
             username: user.username,
             currLevel: user.currLevel
-        });
+        }); // returns the successful response with the user data
 
     } catch (err) {
         res.status(500).json({ error: (err as Error).message });
@@ -125,16 +125,20 @@ export const getUserByUsernameHandler = async (req: Request, res: Response) => {
 
 // put route
 export const updateCurrLevelByUsernameHandler = (req: Request, res: Response) => {
-  const { username } = req.params;
-  const { currLevel } = req.body;
+  const { username } = req.params; // extracts username from request
+  const { currLevel } = req.body; // extracts currLevel from request
 
   if (!username) return res.status(400).json({ error: "Username required" });
   if (currLevel === undefined) return res.status(400).json({ error: "currLevel required" });
 
-  const success = updateCurrLevelByUsername(username, currLevel);
+  const success = updateCurrLevelByUsername(username, currLevel); // updates the currLevel number
   if (!success) return res.status(404).json({ error: "User not found" });
 
-  res.status(200).json({ message: "Level updated", currLevel });
+  res.status(200).json({ message: "Level updated", currLevel }); // successful return message
 };
 
+
+// 200 -> OK
+// 400 -> bad request (param missing)
+// 404 -> not found (resource missing)
 

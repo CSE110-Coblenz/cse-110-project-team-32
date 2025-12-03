@@ -42,7 +42,7 @@ const questions = [
   [1, "What is 9 - 3?", "6", "Subtract 3 from 9.", 0, 0],
   [1, "What is 8 - 5?", "3", "Take away 5 from 8.", 0, 0],
   [1, "What is 10 - 7?", "3", "How many left if you take 7 from 10?", 0, 0],
-  [1, "What is 15 - 6?", "9", "Subtract 6 from 15.", 1],
+  [1, "What is 15 - 6?", "9", "Subtract 6 from 15.", 1, 0],
   [1, "What is 9 - 7?", "2", "Take 7 away from 9.", 0, 0],
   // LEVEL 2: Single digit multiplication
   [2, "What is 3 × 4?", "12", "Multiply 3 by 4.", 0, 0],
@@ -176,11 +176,11 @@ const questions = [
     [3, "What is [(10 + 4) / (14 * 2 - 26)] * 4?", "28", "No hint", 0, 1],
     [3, "What is 10² + 3²?", "109", "No hint", 0, 1],
     [3, "What is 2² * 2²?", "16", "No hint", 0, 1],
-    [3, "What is (2 + 3²) * 1²²⁴?", "11", "No hint", 0, 1],
-    [3, "What is 2⁸?", "256", "No hint", 0, 1],
+    [3, "What is 2 + 3²?", "11", "No hint", 0, 1],
+    [3, "What is 2 * 2 * 2 * 2?", "16", "No hint", 0, 1],
     [3, "What is 3 * 3 * 3?", "27", "No hint", 0, 1],
-    [3, "What is [6² + √(13) + ²10 + 3π]⁽³⁻³⁾ ?", "1", "No hint", 0, 1],
-    [3, "What is {5 * 2[6 + (2 * 2)] + [3² + (5 + 2)]}?", "116", "No hint", 0, 1],
+    [3, "What is [15]⁽³⁻³⁾ ?", "1", "No hint", 0, 1],
+    [3, "What is (5 * 2) + 4?", "14", "No hint", 0, 1],
     [3, "What is (7 * 9) + 3?", "66", "No hint", 0, 1],
 
   ];

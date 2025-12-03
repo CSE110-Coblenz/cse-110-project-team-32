@@ -23,8 +23,8 @@ export const MINI_GAME_UNLOCK_LEVELS = [2,5];
 export const MINI_GAME_NAMES = ["Sequence Rush", "Math Trivia!"];
 
 //minigame 2
-export const EASYQ_NUM = 10;
-export const MEDQ_NUM = 10;
-export const HARDQ_NUM = 10;
+export const EASYQ_NUM = 20;
+export const MEDQ_NUM = 20;
+export const HARDQ_NUM = 20;
 
 

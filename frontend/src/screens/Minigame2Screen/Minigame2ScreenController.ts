@@ -47,6 +47,8 @@ export class Minigame2ScreenController extends ScreenController {
 
         this.viewEntrance2.onBack = () => {
             // return to intro screen
+            this.stopTimer();
+            this.startTimer();
             this.viewEntrance2.hide();
             this.model.updateScreenToRestart();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
@@ -57,7 +59,6 @@ export class Minigame2ScreenController extends ScreenController {
             // hide any results modal that may be visible
             this.startTimer();
             this.viewEntrance2.hideResultsBox?.();
-            this.viewRoom.hideResultsBox?.();
             this.model.resetMinigame();
             this.model.updateScreenToRestart();
             this.screenSwitcher.switchToScreen({ type: this.model.getScreen() });
@@ -74,6 +75,7 @@ export class Minigame2ScreenController extends ScreenController {
         }
 
         this.viewEntrance2.onCompleteExit = () => {
+            this.viewEntrance2.hideResultsBox?.();
             this.model.updateScreenToLeave();
             this.screenSwitcher.switchToScreen({ type: "home" });
             this.viewEntrance.hide();
@@ -138,6 +140,7 @@ export class Minigame2ScreenController extends ScreenController {
         }
 
         this.viewRoom.onCompleteExit = () => {
+            this.viewRoom.hideResultsBox?.();
             this.model.updateScreenToLeave();
             this.screenSwitcher.switchToScreen({ type: "home" });
             this.viewRoom.hide();

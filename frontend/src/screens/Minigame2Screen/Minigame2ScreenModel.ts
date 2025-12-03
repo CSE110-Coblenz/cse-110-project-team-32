@@ -22,7 +22,7 @@ export class Minigame2ScreenModel {
         this.questionNum = 0;
         this.timeCounter = null;
         this.timerId = null;
-        this.maxTime = 3;
+        this.maxTime = 50;
         this.easyQuestions = [];
         this.mediumQuestions = [];
         this.hardQuestions = [];

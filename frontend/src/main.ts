@@ -149,7 +149,9 @@ class App implements ScreenSwitcher {
         this.loginController.hide();
         this.gameController.hide();
 		this.minigame1Controller.getView().hide();
-        this.minigame2Controller.getView().hide();
+        this.minigame1Controller.getView().hide();
+        this.minigame2Controller.getView2().hide();
+        this.minigame2Controller.getView3().hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {

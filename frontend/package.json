@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest --run",
+    "test:ui": "vitest --ui"
   },
   "repository": {
     "type": "git",
@@ -24,12 +25,14 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.10.0",
+    "jsdom": "^27.2.0",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "vitest": "^4.0.14"
   },
   "dependencies": {
     "better-sqlite3": "^12.4.1",
-    "konva": "^10.0.8",
+    "konva": "^10.0.12",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   }

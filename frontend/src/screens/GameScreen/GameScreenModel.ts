@@ -4,6 +4,8 @@
 
 import { userStore } from "../../context/UserState";
 import type { Question } from "../../types";
+import { userStore } from "../../context/UserState";
+
 
 export class GameScreenModel {
 	private level;
@@ -50,6 +52,10 @@ export class GameScreenModel {
 		return this.currentQuestionIndex;
 	}
 
+	setCurrentQuestionIndex(currQIndex: number): void {
+		this.currentQuestionIndex = currQIndex;
+	}
+
 	getTotalQuestions(): number {
 		return this.questions.length;
 	}
@@ -73,7 +79,9 @@ export class GameScreenModel {
 				this.currentQuestionIndex++;
 				return "next";
 			} else {
-				this.incrementUserLevel(); 
+				if(this.level == userStore.getCurrLevel() && this.level != 5){
+					this.incrementUserLevel(); 
+				}
 				return "complete"; // level complete
 			}
 		} else {

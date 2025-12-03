@@ -11,7 +11,7 @@ Go to /frontend and run ```npm install```
 
 Go to /backend and run ```mkdir data```  
 
-Go to /backend/data and do run ```npx tsx question_db.ts``` (only type this command if you don't have the question database already loaded)
+Go to /backend/src/data and run ```npx tsx question_db.ts``` and ```npx tsx user_db.ts``` (only type these commands if you don't have the databases under backend/data)
 
 Go to /backend and create a ```.env``` file. Here, you will type the following contents:
 

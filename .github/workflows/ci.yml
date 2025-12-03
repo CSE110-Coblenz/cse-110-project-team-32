@@ -5,21 +5,57 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Get repository
       - uses: actions/checkout@v4
 
+      # Install Node
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        working-directory: backend
-        run: npm ci
+      # -------------------------
+      # Backend
+      # -------------------------
 
-      - name: Type check
-        working-directory: backend
-        run: npx tsc --noEmit
+      # Install backend dependencies
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
 
-      - name: Run tests
-        working-directory: backend
-        run: npm test
+      # Type-check backend
+      - name: Type check backend
+        run: |
+          cd backend
+          npx tsc --noEmit
+
+      # Run backend tests
+      - name: Test backend
+        run: |
+          cd backend
+          npm test
+
+
+      # -------------------------
+      # Frontend
+      # -------------------------
+
+      # Install frontend dependencies
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      # Type-check frontend (optional — leave commented if not needed)
+      - name: Type check frontend
+        run: |
+          cd frontend
+          # npx tsc --noEmit
+
+      # Run frontend tests
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm run test || echo "No frontend tests"

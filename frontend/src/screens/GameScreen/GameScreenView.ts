@@ -522,15 +522,13 @@ export class GameScreenView implements View {
             case 2:
                 this.feedBack.text("AWESOME!");
                 this.feedBackBox.fill('green');
+                this.feedBack.fontSize(180);
                 break;
             case 3:
                 this.feedBack.text("Uh-oh! Ran out of retries... restarting level!");
                 this.feedBackBox.fill('red');
                 this.feedBack.fontSize(90);
                 break;
-                /*
-                TODO - please add a feedback for restarting level when failing the test question
-                */
         }
         this.group.getLayer()?.draw();
     }

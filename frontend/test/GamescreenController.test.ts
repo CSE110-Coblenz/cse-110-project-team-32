@@ -34,7 +34,7 @@ const mockViewMethods = {
 };
 
 vi.mock("../src/screens/GameScreen/GameScreenModel", () => ({
-  GameScreenModel: vi.fn().mockImplementation(() => {
+  GameScreenModel: vi.fn().mockImplementation(function () {
     // IMPORTANT: return a *new object each time*
     return { ...mockModelMethods };
   }),
@@ -42,7 +42,7 @@ vi.mock("../src/screens/GameScreen/GameScreenModel", () => ({
 
 
 vi.mock("../src/screens/GameScreen/GameScreenView", () => ({
-  GameScreenView: vi.fn().mockImplementation(() => {
+  GameScreenView: vi.fn().mockImplementation(function () {
     return { ...mockViewMethods };
   }),
 }));

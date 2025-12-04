@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { Question } from "../models/question";
 import path from "path";
 
-const questiondb = new Database(path.join(__dirname, "../../data/question.db"));
+const questiondb = new Database(path.join(__dirname, "/question.db"));
 
 // create the questions table if it doesn’t exist
 questiondb.prepare(`
@@ -59,8 +59,8 @@ const questions = [
   [2, "What is 4 × 9?", "36", "Add 9 four times.", 0, 0],
   [2, "What is 5 × 5?", "25", "Add 5 five times.", 0, 0],
   [2, "What is 6 × 5?", "30", "Add 6 five times.", 0, 0],
-  [2, "What is 7 × 5?", "30", "Add 5 six times.", 0, 0],
-  [2, "What is 5 × 8?", "30", "Add 8 five times.", 0, 0],
+  [2, "What is 7 × 5?", "35", "Add 5 six times.", 0, 0],
+  [2, "What is 5 × 8?", "40", "Add 8 five times.", 0, 0],
   [2, "What is 5 × 9?", "45", "Add 9 five times.", 0, 0],
   [2, "What is 6 × 6?", "36", "Add 6 six times.", 0, 0],
   [2, "What is 7 × 6?", "42", "Add 7 six times.", 0, 0],
@@ -81,16 +81,16 @@ const questions = [
   [3, "What is 6 × 15?", "90", "Add six 15s six.", 0, 0],
   [3, "What is 5 × 14?", "70", "Add five 14s.", 0, 0],
   [3, "What is 8 × 12?", "96", "8 twelves.", 0, 0], 
-  [3, "what is 15 × 3?", "45", "add 15 three times.", 0, 0],
-  [3, "what is 12 × 5?", "60", "add 12 five times.", 0, 0],
-  [3, "what is 11 × 4?", "44", "add 11 four times.", 0, 0],
-  [3, "what is 18 × 2?", "36", "what is 18+18?", 0, 0],
+  [3, "What is 15 × 3?", "45", "add 15 three times.", 0, 0],
+  [3, "What is 12 × 5?", "60", "add 12 five times.", 0, 0],
+  [3, "What is 11 × 4?", "44", "add 11 four times.", 0, 0],
+  [3, "What is 18 × 2?", "36", "what is 18+18?", 0, 0],
   [3, "What is 9 × 20?", "180", "No hint this time!", 1, 0],
   [3, "What is 7 × 10?", "70", "No hint this time!", 1, 0],
   [3, "What is 10 × 6?", "60", "No hint this time!", 1, 0],
   // LEVEL 4: simple division
   [4, "What is 12 ÷ 3?", "4", "How many 3s in 12?", 0, 0],
-  [4, "What is 20 ÷ 5?", "4", "How many 5s in 12?.", 0, 0],
+  [4, "What is 20 ÷ 5?", "4", "How many 5s in 20?.", 0, 0],
   [4, "What is 18 ÷ 6?", "3", "How many 6s in 18?", 0, 0],
   [4, "What is 54 ÷ 6?", "9", "6 times what is 54?", 0, 0],
   [4, "What is 24 ÷ 8?", "3", "8 times what is 24?", 0, 0],

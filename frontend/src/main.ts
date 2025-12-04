@@ -88,24 +88,20 @@ class App implements ScreenSwitcher {
 	 */
 	private scaleStageToFit(): void {
 		// Use Math.max instead of Math.min for “cover” behavior
-		const scale1 = window.innerWidth / STAGE_WIDTH;
-        const scale2 = window.innerHeight / STAGE_HEIGHT;
+		const scale = Math.max(window.innerWidth / STAGE_WIDTH, window.innerHeight / STAGE_HEIGHT);
 	  
 		// Scale the entire stage
-		this.stage.scale({ x: scale1, y: scale2 });
+		this.stage.scale({ x: scale, y: scale });
 	  
 		// Resize visible area
-		this.stage.width(STAGE_WIDTH * scale1);
-		this.stage.height(STAGE_HEIGHT * scale2);
+		this.stage.width(STAGE_WIDTH * scale);
+		this.stage.height(STAGE_HEIGHT * scale);
 	  
 		// Center it
-		this.stage.x((window.innerWidth - STAGE_WIDTH * scale1) / 2);
-		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale2) / 2);
+		this.stage.x((window.innerWidth - STAGE_WIDTH * scale) / 2);
+		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale) / 2);
 	  
 		this.stage.draw();
-
-        // updates login screen with resized window to resize username/password fields
-        this.loginController.getView().updateStageScale(scale1);
 	  }
 
 

@@ -13,15 +13,17 @@ vi.mock("../src/context/UserState.ts", () => ({
 
 vi.mock("../src/screens/LoginScreen/LoginScreenView.ts", () => {
   return {
-    LoginScreenView: vi.fn().mockImplementation((onLogin, onSignup) => ({
-      show: vi.fn(),
-      hide: vi.fn(),
-      clearInputs: vi.fn(),
-      showSignupModal: vi.fn(),
-      prefillLoginFields: vi.fn(),
-      __onLogin: onLogin,
-      __onSignup: onSignup,
-    })),
+    LoginScreenView: vi.fn().mockImplementation(function (onLogin, onSignup) {
+      return {
+        show: vi.fn(),
+        hide: vi.fn(),
+        clearInputs: vi.fn(),
+        showSignupModal: vi.fn(),
+        prefillLoginFields: vi.fn(),
+        __onLogin: onLogin,
+        __onSignup: onSignup,
+      };
+    }),
   };
 });
 
@@ -29,10 +31,12 @@ vi.mock("../src/screens/LoginScreen/LoginScreenModel.ts", () => {
   const setUsername = vi.fn();
   const setPassword = vi.fn();
   return {
-    LoginScreenModel: vi.fn().mockImplementation(() => ({
-      setUsername,
-      setPassword,
-    })),
+    LoginScreenModel: vi.fn().mockImplementation(function () {
+      return {
+        setUsername,
+        setPassword,
+      };
+    }),
   };
 });
 

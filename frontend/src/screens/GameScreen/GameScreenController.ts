@@ -19,7 +19,6 @@ export class GameScreenController extends ScreenController {
 		this.view = new GameScreenView();
 
 		this.view.onExit = () => {
-            // console.log("Exit button clicked");
 			
             this.screenSwitcher.switchToScreen({ type: "home" });
 			this.view.resetHint();
@@ -55,10 +54,6 @@ export class GameScreenController extends ScreenController {
 		this.view.updateQuestion(currentQuestion, currentQuestionIndex, totalQuestions, retriesLeft);
 		this.view.updateLevel(this.model.getLevel());
 		this.view.initializeAnswer(); //clean the answerbox(it contains user and password)
-		
-		// console.log("Loaded questions:", this.model.getTotalQuestions());
-		// console.log("Current question:", this.model.getCurrentQuestion());
-		
 		this.view.show();
 	}
 

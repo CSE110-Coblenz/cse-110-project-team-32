@@ -4,6 +4,7 @@ import { HomeScreenController } from "./screens//HomeScreen/HomeScreenController
 import { GameScreenController } from "./screens//GameScreen/GameScreenController";
 import { LoginScreenController } from "./screens/LoginScreen/LoginScreenController";
 import { Minigame1ScreenController } from "./screens/Minigame1Screen/Minigame1ScreenController";
+import { Minigame2ScreenController } from "./screens/Minigame2Screen/Minigame2ScreenController";
 import { STAGE_WIDTH, STAGE_HEIGHT } from "./constants";
 
 /**
@@ -24,6 +25,7 @@ class App implements ScreenSwitcher {
     private gameController: GameScreenController;
     private loginController: LoginScreenController;
 	private minigame1Controller: Minigame1ScreenController;
+    private minigame2Controller: Minigame2ScreenController;
 
     constructor(container: string) {
         // Initialize Konva stage (the main canvas)
@@ -46,6 +48,7 @@ class App implements ScreenSwitcher {
         this.gameController = new GameScreenController(this);
         this.loginController = new LoginScreenController(this);
 		this.minigame1Controller = new Minigame1ScreenController(this, this.layer);
+        this.minigame2Controller = new Minigame2ScreenController(this);
 
         // Add all screen groups to the layer
         // All screens exist simultaneously but only one is visible at a time
@@ -53,6 +56,9 @@ class App implements ScreenSwitcher {
         this.layer.add(this.gameController.getView().getGroup());
         this.layer.add(this.loginController.getView().getGroup());
 		this.layer.add(this.minigame1Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView2().getGroup());
+        this.layer.add(this.minigame2Controller.getView3().getGroup());
         
         // Draw the layer (render everything to the canvas)
         this.layer.draw();
@@ -82,23 +88,24 @@ class App implements ScreenSwitcher {
 	 */
 	private scaleStageToFit(): void {
 		// Use Math.max instead of Math.min for “cover” behavior
-		const scale = Math.max(
-		  window.innerWidth / STAGE_WIDTH,
-		  window.innerHeight / STAGE_HEIGHT
-		);
+		const scale1 = window.innerWidth / STAGE_WIDTH;
+        const scale2 = window.innerHeight / STAGE_HEIGHT;
 	  
 		// Scale the entire stage
-		this.stage.scale({ x: scale, y: scale });
+		this.stage.scale({ x: scale1, y: scale2 });
 	  
 		// Resize visible area
-		this.stage.width(STAGE_WIDTH * scale);
-		this.stage.height(STAGE_HEIGHT * scale);
+		this.stage.width(STAGE_WIDTH * scale1);
+		this.stage.height(STAGE_HEIGHT * scale2);
 	  
 		// Center it
-		this.stage.x((window.innerWidth - STAGE_WIDTH * scale) / 2);
-		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale) / 2);
+		this.stage.x((window.innerWidth - STAGE_WIDTH * scale1) / 2);
+		this.stage.y((window.innerHeight - STAGE_HEIGHT * scale2) / 2);
 	  
 		this.stage.draw();
+
+        // updates login screen with resized window to resize username/password fields
+        this.loginController.getView().updateStageScale(scale1);
 	  }
 
 
@@ -114,6 +121,8 @@ class App implements ScreenSwitcher {
         this.layer.add(this.homeController.getView().getGroup());
         this.layer.add(this.loginController.getView().getGroup());
         this.layer.add(this.gameController.getView().getGroup());
+        this.layer.add(this.minigame1Controller.getView().getGroup());
+        this.layer.add(this.minigame2Controller.getView().getGroup());
 
       // Render the layer
       this.layer.draw();
@@ -140,6 +149,9 @@ class App implements ScreenSwitcher {
         this.loginController.hide();
         this.gameController.hide();
 		this.minigame1Controller.getView().hide();
+        this.minigame1Controller.getView().hide();
+        this.minigame2Controller.getView2().hide();
+        this.minigame2Controller.getView3().hide();
 
         // Show the requested screen based on the screen type
         switch (screen.type) {
@@ -159,8 +171,22 @@ class App implements ScreenSwitcher {
 			case "minigame":
                 if (screen.game === "Sequence Rush") {
                     this.minigame1Controller.getView().show();
-                    // this.minigame1Controller.startGame?.();
+                } else if (screen.game == "Math Trivia!") {
+                    this.minigame2Controller.startMinigame2Entrance();
+                    this.minigame2Controller.getView().show();
                 }
+                break; 
+            case "intro":
+                this.minigame2Controller.show();
+                this.minigame2Controller.startMinigame2Entrance();
+                break;
+            case "pick":
+                this.minigame2Controller.show2();
+                this.minigame2Controller.startMinigame2Entrance2();
+                break;
+            case "question":
+                this.minigame2Controller.show3();
+                this.minigame2Controller.startNewQuestion();
                 break;
         }
     }

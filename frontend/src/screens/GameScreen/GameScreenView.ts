@@ -79,7 +79,6 @@ export class GameScreenView implements View {
                 x: (STAGE_WIDTH - CONTENT_WIDTH) / 2,
                 y: this.progressBar.y(),
                 width: 0,
-                // width: 50, //for texting, initialize should be 0
                 height: 50,
                 fill: 'green',
                 opacity: 0.6,
@@ -324,7 +323,6 @@ export class GameScreenView implements View {
                 x: contentBox.x() + contentBox.width()/20,
                 y: contentBox.y() + contentBox.height()/8,
                 width: (contentBox.width()/10)*9,
-                // width: contentBox.width(),
                 height: (contentBox.height()/10)*5,
                 fill: '',
                 stroke:'black',

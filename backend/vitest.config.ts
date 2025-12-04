@@ -5,6 +5,6 @@ dotenv.config(); // loads backend/.env
 
 export default defineConfig({
   test: {
-    environment: "node",
+    setupFiles: ["test/controllers/env.ts"],
   },
 });

@@ -1,10 +1,14 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { signup, login } from "../../src/controllers/user";
 import { getUserByUsername, addUser } from "../../src/data/user_db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 //----------------------------------------- Helper functions -----------------------------------------------------------
+beforeAll(() => {
+    process.env.JWT_SECRET = "test-secret";
+})
+
 vi.mock("../../src/data/user_db", () => ({
   getUserByUsername: vi.fn(),
   addUser: vi.fn(),

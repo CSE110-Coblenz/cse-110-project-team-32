@@ -18,8 +18,7 @@ export class GameScreenController extends ScreenController {
 		this.model = new GameScreenModel();
 		this.view = new GameScreenView();
 
-		this.view.onExit = () => {
-			
+		this.view.onExit = () => {	
             this.screenSwitcher.switchToScreen({ type: "home" });
 			this.view.resetHint();
 			this.view.hideComplete();
@@ -42,6 +41,7 @@ export class GameScreenController extends ScreenController {
 	 * Start the game
 	 */
 	async startGame(level: number) {
+		this.view.updateBackground(level);
 		this.model.setLevel(level);
 		this.view.resetProgress();
 		await this.model.loadQuestions();

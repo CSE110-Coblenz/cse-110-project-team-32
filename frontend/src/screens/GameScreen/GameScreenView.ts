@@ -17,8 +17,8 @@ export class GameScreenView implements View {
     private cursorIndex: number = 0;//position of cursor
     private measureText!: Konva.Text; //measure length of answer
     private testTitle!: Konva.Text;
-    private modeBox!: Konva.Rect;
-    private modeText!: Konva.Text;
+    private background!: Konva.Image;
+
 
     private levelText!: Konva.Text;
     private questionBoxText!: Konva.Text;
@@ -38,10 +38,11 @@ export class GameScreenView implements View {
 		this.group = new Konva.Group({ visible: false });
 
 		// Background
-		Konva.Image.fromURL("/levelBackdrop.png", (bg: Konva.Image) => {
+		Konva.Image.fromURL("/bg_1.png", (bg: Konva.Image) => {
+            this.background = bg;
             bg.width(STAGE_WIDTH);
             bg.height(STAGE_HEIGHT);
-			this.group.add(bg);
+            this.group.add(bg);
 
             // box with questions and answers should be in the middle of the screen
             const contentBox = new Konva.Rect({
@@ -50,7 +51,7 @@ export class GameScreenView implements View {
                 width: CONTENT_WIDTH,
                 height: CONTENT_HEIGHT,
                 fill: "#ebe8e1",
-                opacity: 0.9,
+                opacity: 0.8,
                 cornerRadius: 8,
             });
             this.group.add(contentBox);
@@ -62,6 +63,7 @@ export class GameScreenView implements View {
                 height: 50,
                 fill: 'white',
                 cornerRadius: 8,
+                opacity: 0.8,
             });
             this.group.add(this.progressBar);
 
@@ -71,6 +73,7 @@ export class GameScreenView implements View {
                 width: 0,
                 height: 50,
                 fill: 'green',
+                opacity: 0.8,
             });
             this.group.add(this.progressFill);
 
@@ -465,6 +468,20 @@ export class GameScreenView implements View {
         this.group.getLayer()?.batchDraw();
     }
 
+    updateBackground(level: number) {
+        const url = `/bg_${level}.png`;
+        Konva.Image.fromURL(url, (newBg: Konva.Image) => {
+            newBg.width(STAGE_WIDTH);
+            newBg.height(STAGE_HEIGHT);
+    
+            // Replace existing background
+            this.background.image(newBg.image());
+    
+            // Force redraw
+            this.background.getLayer()?.batchDraw();
+        });
+    }
+    
     /*
         Update the location of cursor
     */
@@ -531,9 +548,8 @@ export class GameScreenView implements View {
         this.completeScreen.hide();
         this.completeText.hide();
     }
-    
 
-	/**
+    /**
 	 * Show the screen
 	 */
 	show(): void {
